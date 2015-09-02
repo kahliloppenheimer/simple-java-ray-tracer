@@ -1,4 +1,4 @@
-package edu.brandeis.cs.cosi155b;
+package edu.brandeis.cs.cosi155b.geometry;
 
 /**
  * A edu.brandeis.cs.cosi155b.Ray3D consists of a point and a (normalized) direction.

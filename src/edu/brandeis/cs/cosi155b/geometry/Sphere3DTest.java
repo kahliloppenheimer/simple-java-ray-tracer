@@ -1,9 +1,7 @@
-package edu.brandeis.cs.cosi155b;
+package edu.brandeis.cs.cosi155b.geometry;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.*;
 import java.util.Random;
 
 import static org.junit.Assert.*;

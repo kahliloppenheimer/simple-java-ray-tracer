@@ -1,4 +1,4 @@
-package edu.brandeis.cs.cosi155b;
+package edu.brandeis.cs.cosi155b.graphics;
 
 import javax.swing.SwingUtilities;
 import javax.swing.JFrame;

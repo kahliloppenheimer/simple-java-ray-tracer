@@ -1,4 +1,4 @@
-package edu.brandeis.cs.cosi155b;
+package edu.brandeis.cs.cosi155b.graphics;
 
 /**
  a canvas is any Java object that supports these methods

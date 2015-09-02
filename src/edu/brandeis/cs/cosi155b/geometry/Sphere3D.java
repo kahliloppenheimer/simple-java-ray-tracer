@@ -1,6 +1,4 @@
-package edu.brandeis.cs.cosi155b;
-
-import java.math.BigDecimal;
+package edu.brandeis.cs.cosi155b.geometry;
 
 /**
  * Created by kahliloppenheimer on 9/1/15.
