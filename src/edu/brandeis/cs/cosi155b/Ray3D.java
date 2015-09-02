@@ -5,9 +5,8 @@ package edu.brandeis.cs.cosi155b;
  */
 
 public class Ray3D {
-    public Point3D start;
-    public Point3D direction;
-
+    private final Point3D start;
+    private final Point3D direction;
 
     /**
      * This represents a 3D ray with a specified start and direction.
@@ -15,9 +14,10 @@ public class Ray3D {
      */
     public Ray3D(Point3D start, Point3D direction) {
         if(direction.length() != 1) {
-            throw new IllegalArgumentException("Direction vector must be normalized unit vector!");
+            direction = direction.normalize();
         }
-
+        this.start = start;
+        this.direction = direction;
     }
 
     /**
@@ -25,11 +25,19 @@ public class Ray3D {
      */
 
     public Point3D atTime(double t) {
-        return null;
+        return start.add(direction.scale(t));
     }
 
     public static void main(String[] args) {
          /* put in some tests here */
+    }
+
+    public Point3D getStart() {
+        return start;
+    }
+
+    public Point3D getDirection() {
+        return direction;
     }
 }
 

@@ -5,9 +5,31 @@ package edu.brandeis.cs.cosi155b;
  */
 public class RayHit {
     // distance along ray to the first intersection
-    public double distance;
+    private final double distance;
     // point at which the ray first intersects the object
-    public Point3D iPoint;
+    private final Point3D iPoint;
     // object that the ray intersects
-    public Object3D obj;
+    private final Object3D obj;
+
+    public RayHit(double distance, Point3D iPoint, Object3D obj) {
+        this.distance = distance;
+        this.iPoint = iPoint;
+        this.obj = obj;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public Point3D getPoint() {
+        return iPoint;
+    }
+
+    public Object3D getObj() {
+        return obj;
+    }
+
+    public String toString() {
+        return String.format("RH[d = %.2f / p = %s / obj = %s]", distance, iPoint, obj.getClass().getName());
+    }
 }
