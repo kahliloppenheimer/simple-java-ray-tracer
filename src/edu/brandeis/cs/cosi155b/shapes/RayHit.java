@@ -1,4 +1,4 @@
-package edu.brandeis.cs.cosi155b.geometry;
+package edu.brandeis.cs.cosi155b.shapes;
 
 /**
  * Record properties of intersection of a ray with an object

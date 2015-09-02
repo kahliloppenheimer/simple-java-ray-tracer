@@ -1,4 +1,4 @@
-package edu.brandeis.cs.cosi155b.geometry;
+package edu.brandeis.cs.cosi155b.shapes;
 
 import org.junit.Test;
 

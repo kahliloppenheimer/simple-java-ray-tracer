@@ -1,16 +1,22 @@
-package edu.brandeis.cs.cosi155b.geometry;
+package edu.brandeis.cs.cosi155b.shapes;
 
 /**
  * Created by kahliloppenheimer on 9/1/15.
  */
 public class Sphere3D implements Object3D {
 
-    public Point3D center;
-    public double radius;
+    private final Point3D center;
+    private final double radius;
+    // Material of the inside of the sphere
+    private final Material inside;
+    // Material of the outside of the sphere
+    private final Material outside;
 
-    public Sphere3D(Point3D center, double radius) {
+    public Sphere3D(Point3D center, double radius, Material inside, Material outside) {
         this.center = center;
         this.radius = radius;
+        this.inside = inside;
+        this.outside = outside;
     }
 
     @Override
@@ -43,4 +49,23 @@ public class Sphere3D implements Object3D {
             return null;
         }
     }
+
+    @Override
+    public Material getInsideMaterial() {
+        return this.inside;
+    }
+
+    @Override
+    public Material getOutsideMaterial() {
+        return this.outside;
+    }
+
+    public Point3D getCenter() {
+        return this.center;
+    }
+
+    public double getRadius() {
+        return this.radius;
+    }
+
 }

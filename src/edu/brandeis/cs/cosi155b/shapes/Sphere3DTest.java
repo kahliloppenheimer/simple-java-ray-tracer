@@ -1,4 +1,4 @@
-package edu.brandeis.cs.cosi155b.geometry;
+package edu.brandeis.cs.cosi155b.shapes;
 
 import org.junit.Test;
 
@@ -12,7 +12,19 @@ import static org.junit.Assert.*;
 public class Sphere3DTest {
 
     private static final double DELTA = .000001;
-    private static final Sphere3D unitSphere = new Sphere3D(new Point3D(0, 0, 0), 1);
+    private static final Sphere3D unitSphere = new Sphere3D(new Point3D(0, 0, 0), 1, new Material(.5, 5), new Material(.5, 5));
+
+    @Test
+    public void testInsiderMaterial() {
+        assertEquals(unitSphere.getInsideMaterial().getColor(), .5, DELTA);
+        assertEquals(unitSphere.getInsideMaterial().getShininess(), 5);
+    }
+
+    @Test
+    public void testOutsideMaterial() {
+        assertEquals(unitSphere.getOutsideMaterial().getColor(), .5, DELTA);
+        assertEquals(unitSphere.getOutsideMaterial().getShininess(), 5);
+    }
 
     @Test
     public void testRayIntersectFromInside() {
