@@ -3,6 +3,9 @@ package edu.brandeis.cs.cosi155b;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.awt.*;
+import java.util.Random;
+
 import static org.junit.Assert.*;
 
 /**
@@ -33,10 +36,24 @@ public class Sphere3DTest {
 
     @Test
     public void testRayIntersectTwiceFromOutside() {
-        Ray3D r = new Ray3D(new Point3D(0, -2, 0), new Point3D(0, 1, 0));
+        for(int i  = 0; i < 100; ++i) {
+            Point3D p = getRandPointBiggerThan(1);
+            Ray3D ray = new Ray3D(p, p.scale(-1));
+            RayHit rh = unitSphere.rayIntersect(ray);
+            assertNotNull(rh);
+            assertTrue(rh.getDistance() < p.length());
+        }
+    }
+
+    @Test
+    public void testRayDoesNotIntersectSphere() {
+        Ray3D r = new Ray3D(new Point3D(0, -2, 0), new Point3D(0, -1, 0));
         RayHit rh = unitSphere.rayIntersect(r);
-        assertNotNull(rh);
-        assertEquals(rh.getDistance(), 1, DELTA);
-        assertEquals(rh.getPoint(), new Point3D(0, -1, 0));
+        assertNull(rh);
+    }
+
+    private static Point3D getRandPointBiggerThan(int i) {
+        Random rand = new Random();
+        return new Point3D(rand.nextInt(100) + i, rand.nextInt(100) + i, rand.nextInt(100) + i);
     }
 }

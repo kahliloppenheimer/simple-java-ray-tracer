@@ -32,8 +32,8 @@ public class Sphere3D implements Object3D {
             timeOfFirstIntersection = -1 * b / (2 * a);
         } // Potentially two intersections
         else if (determinant > 0) {
-            double t1 = -1 * b - Math.sqrt(determinant) / (2 * a);
-            double t2 = -1 * b + Math.sqrt(determinant) / (2 * a);
+            double t1 = (-1 * b - Math.sqrt(determinant)) / (2 * a);
+            double t2 = (-1 * b + Math.sqrt(determinant)) / (2 * a);
             timeOfFirstIntersection = t1 > 0 && t2 > 0 ? t1 : t2;
         }
 
