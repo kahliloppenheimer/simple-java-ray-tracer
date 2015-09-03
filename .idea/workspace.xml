@@ -4,6 +4,7 @@
     <list default="true" id="b7656be8-cadc-4a47-85ab-a97e8c9bc2c5" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/brandeis/cs/cosi155b/graphics/MyCanvas3D.java" afterPath="$PROJECT_DIR$/src/edu/brandeis/cs/cosi155b/graphics/MyCanvas3D.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/edu/brandeis/cs/cosi155b/graphics/RayTracer.java" afterPath="$PROJECT_DIR$/src/edu/brandeis/cs/cosi155b/graphics/RayTracer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="SimpleRayTracer.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -786,12 +787,12 @@
       <option name="number" value="Default" />
       <updated>1441136291398</updated>
       <workItem from="1441136293049" duration="12015000" />
-      <workItem from="1441200145321" duration="19000000" />
+      <workItem from="1441200145321" duration="19014000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31015000" />
+    <option name="totallyTimeSpent" value="31029000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="773" extended-state="6" />
