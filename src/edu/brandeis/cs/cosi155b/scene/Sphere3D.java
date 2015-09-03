@@ -62,6 +62,10 @@ public class Sphere3D implements Object3D {
         return this.outside;
     }
 
+    public Point3D getNormal(Point3D point) {
+        return point.subtract(center);
+    }
+
     public Point3D getCenter() {
         return this.center;
     }

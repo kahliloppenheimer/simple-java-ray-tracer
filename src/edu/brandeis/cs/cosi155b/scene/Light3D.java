@@ -11,6 +11,9 @@ public class Light3D {
     private final double intensity;
 
     public Light3D(Point3D location, double intensity) {
+        if(intensity < -.00001 || intensity > 1.000001) {
+            throw new IllegalArgumentException("Lighting intensity must be between 0.0 and 1.0");
+        }
         this.location = location;
         this.intensity = intensity;
     }

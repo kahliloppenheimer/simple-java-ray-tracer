@@ -17,4 +17,16 @@ public class Pixel {
     public Color getColor() {
         return color;
     }
+
+    public Pixel scale(double lightingVal) {
+        if(lightingVal > 1.000001 || lightingVal < -.000001) {
+            throw new IllegalArgumentException("Lighting val must be between 0.0 and 1.0");
+        }
+        float[] newComponents = new float[3];
+        newComponents = color.getColorComponents(newComponents);
+        for(int i = 0; i < newComponents.length; ++i) {
+            newComponents[i] = (float) (newComponents[i] * lightingVal);
+        }
+        return new Pixel(new Color(newComponents[0], newComponents[1], newComponents[2]));
+    }
 }

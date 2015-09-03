@@ -2,6 +2,7 @@ package edu.brandeis.cs.cosi155b.scene;
 
 import org.junit.Test;
 
+import java.awt.*;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -12,17 +13,17 @@ import static org.junit.Assert.*;
 public class Sphere3DTest {
 
     private static final double DELTA = .000001;
-    private static final Sphere3D unitSphere = new Sphere3D(new Point3D(0, 0, 0), 1, new Material(.5, 5), new Material(.5, 5));
+    private static final Sphere3D unitSphere = new Sphere3D(new Point3D(0, 0, 0), 1, new Material(Color.RED, 5), new Material(Color.RED, 5));
 
     @Test
     public void testInsiderMaterial() {
-        assertEquals(unitSphere.getInsideMaterial().getColor(), .5, DELTA);
+        assertEquals(unitSphere.getInsideMaterial().getColor(), Color.RED);
         assertEquals(unitSphere.getInsideMaterial().getShininess(), 5);
     }
 
     @Test
     public void testOutsideMaterial() {
-        assertEquals(unitSphere.getOutsideMaterial().getColor(), .5, DELTA);
+        assertEquals(unitSphere.getOutsideMaterial().getColor(), Color.RED);
         assertEquals(unitSphere.getOutsideMaterial().getShininess(), 5);
     }
 

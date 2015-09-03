@@ -21,8 +21,12 @@ public class RayTracer {
         SimpleFrame3D frame = new SimpleFrame3D(new Point3D(-1, -1, -1), 2, 2, 400, 400);
         Camera3D camera = new Camera3D(new Point3D(0, 0, 0), new Point3D(0, 0, -1));
         List<Object3D> objects = new ArrayList<>();
-        objects.add(new Sphere3D(new Point3D(0, 0, -2), 1, null, null));
-        RayTracer rt = new RayTracer(frame, camera, objects, null);
+        objects.add(new Sphere3D(new Point3D(-.5, -.5, -2), .5, null, new Material(Color.RED, 0)));
+        objects.add(new Sphere3D(new Point3D(.5, .5, -2), .5, null, new Material(Color.YELLOW, 0)));
+        List<Light3D> lights = new ArrayList<>();
+        lights.add(new Light3D(new Point3D(0, -2, 2), 1));
+        // lights.add(new Light3D(new Point3D(-1, -1, -1), .2));
+        RayTracer rt = new RayTracer(frame, camera, objects, lights);
         SimpleFrame3D rendered = rt.render();
         display(rendered);
     }
@@ -36,8 +40,7 @@ public class RayTracer {
 
         SwingUtilities.invokeLater(() -> createAndShowGUI(canvas));
 
-        System.out.println("Sleeping!");
-        Thread.sleep(2000);
+        Thread.sleep(1000);
 
         for(int i = 0; i < rendered.getWidthPx(); ++i) {
             for(int j = 0; j < rendered.getHeightPx(); ++j) {
@@ -100,9 +103,17 @@ public class RayTracer {
                 }
                 // Color the pixel depending on which object was hit
                 if (closest != null) {
-                    cloned.setPixel(i, j, new Pixel(Color.RED));
+                    Point3D point = closest.getPoint();
+                    Point3D normal = closest.getObj().getNormal(point);
+                    double lightingSum = 0.0;
+                    for(Light3D l : lights) {
+                        lightingSum += closest.getObj().getOutsideMaterial().diffuse(l, normal);
+                    }
+                    double lightingVal = lightingSum / lights.size();
+                    Pixel lighted = new Pixel(closest.getObj().getOutsideMaterial().getColor()).scale(lightingVal);
+                    cloned.setPixel(i, j, lighted);
                 } else {
-                    cloned.setPixel(i, j, new Pixel(Color.BLUE));
+                    cloned.setPixel(i, j, new Pixel(Color.WHITE));
                 }
             }
         }
