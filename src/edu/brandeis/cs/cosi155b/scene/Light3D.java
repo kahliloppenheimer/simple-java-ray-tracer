@@ -7,7 +7,7 @@ package edu.brandeis.cs.cosi155b.scene;
  */
 public class Light3D {
 
-    private final Point3D location;
+    private Point3D location;
     private final double intensity;
 
     public Light3D(Point3D location, double intensity) {
@@ -20,6 +20,10 @@ public class Light3D {
 
     public Point3D getLocation() {
         return location;
+    }
+
+    public void setLocation(Point3D p) {
+        this.location = p;
     }
 
     public double getIntensity() {

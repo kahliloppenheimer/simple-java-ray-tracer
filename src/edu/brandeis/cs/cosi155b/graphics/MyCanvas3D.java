@@ -16,7 +16,7 @@ import javax.swing.JPanel;
  * @author tim
  * 
  */
-public class MyCanvas3D extends JPanel {
+public class MyCanvas3D extends JPanel implements Canvas3D {
 
 	/*
 	 * buffer is the image that will be drawn on the JPanel

@@ -9,8 +9,8 @@ package edu.brandeis.cs.cosi155b.graphics;
 **/
  
 public interface Canvas3D {
-    public int height();
-    public int width();
+    public int getHeight();
+    public int getWidth();
     public void drawPixel(int i, int j, java.awt.Color c);
     public void refresh();
 }
