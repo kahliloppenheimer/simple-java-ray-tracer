@@ -18,7 +18,7 @@ public class RayTracer {
     private List<Light3D> lights;
 
     public static void main(String[] args) throws InterruptedException {
-        SimpleFrame3D frame = new SimpleFrame3D(new Point3D(-1, -1, -1), 2, 2, 400, 400);
+        SimpleFrame3D frame = new SimpleFrame3D(new Point3D(-1, -1, -1), 2, 2, 800, 800);
         Camera3D camera = new Camera3D(new Point3D(0, 0, 0), new Point3D(0, 0, -1));
         List<Object3D> objects = new ArrayList<>();
         objects.add(new Sphere3D(new Point3D(-.5, -.5, -2), .5, null, new Material(Color.RED, 0)));
@@ -36,7 +36,6 @@ public class RayTracer {
         System.out.println("WidthPx = " + rendered.getWidthPx() + "\theight = " + rendered.getHeightPx());
         MyCanvas3D canvas = new MyCanvas3D(rendered.getWidthPx(), rendered.getHeightPx());
         System.out.println("Width = " + canvas.getWidth() + "\theight = " + canvas.getHeight());
-
 
         SwingUtilities.invokeLater(() -> createAndShowGUI(canvas));
 
@@ -62,7 +61,7 @@ public class RayTracer {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.add(canvas);
         System.out.println("Width = " + canvas.getWidth() + "\theight = " + canvas.getHeight());
-        f.setSize(400, 400);
+        f.setSize(canvas.getWidth(), canvas.getHeight());
         f.setVisible(true);
     }
 

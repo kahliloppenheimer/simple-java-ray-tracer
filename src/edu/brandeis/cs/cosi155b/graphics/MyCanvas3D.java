@@ -30,12 +30,12 @@ public class MyCanvas3D extends JPanel {
 	private int bufferheight;
 
 	/** returns the width of the image **/
-	public int width() {
+	public int getWidth() {
 		return bufferwidth;
 	}
 
 	/** return the height of the image **/
-	public int height() {
+	public int getHeight() {
 		return bufferheight;
 	}
 
