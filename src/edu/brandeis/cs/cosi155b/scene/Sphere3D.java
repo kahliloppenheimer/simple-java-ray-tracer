@@ -1,4 +1,4 @@
-package edu.brandeis.cs.cosi155b.shapes;
+package edu.brandeis.cs.cosi155b.scene;
 
 /**
  * Created by kahliloppenheimer on 9/1/15.
@@ -41,12 +41,14 @@ public class Sphere3D implements Object3D {
             timeOfFirstIntersection = t1 > 0 && t2 > 0 ? t1 : t2;
         }
 
-        if(timeOfFirstIntersection > 0) {
+        if (timeOfFirstIntersection > 0) {
             Point3D intersection = ray.atTime(timeOfFirstIntersection);
             double distance = ray.getStart().subtract(intersection).length();
             return new RayHit(distance, intersection, this);
         } else {
-            return null;
+            return new RayHit(Double.POSITIVE_INFINITY,
+                    new Point3D(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY),
+                    this);
         }
     }
 

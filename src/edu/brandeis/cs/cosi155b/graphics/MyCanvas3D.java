@@ -26,7 +26,8 @@ public class MyCanvas3D extends JPanel {
 								// Graphics element for the buffer
 
 	/* the width, height, and size of the buffer */
-	private int bufferwidth = 400, bufferheight = 600;
+	private int bufferwidth;
+	private int bufferheight;
 
 	/** returns the width of the image **/
 	public int width() {

@@ -1,6 +1,6 @@
 package edu.brandeis.cs.cosi155b.graphics;
 
-import edu.brandeis.cs.cosi155b.shapes.Point3D;
+import edu.brandeis.cs.cosi155b.scene.Point3D;
 
 /**
  * Created by kahliloppenheimer on 9/2/15.

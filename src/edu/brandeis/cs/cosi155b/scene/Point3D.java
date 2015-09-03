@@ -1,4 +1,4 @@
-package edu.brandeis.cs.cosi155b.shapes;
+package edu.brandeis.cs.cosi155b.scene;
 
 /**
  * A edu.brandeis.cs.cosi155b.Point3D is a triple of doubles that can represent a point or a vector.

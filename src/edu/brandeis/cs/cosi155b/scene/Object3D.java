@@ -1,4 +1,4 @@
-package edu.brandeis.cs.cosi155b.shapes;
+package edu.brandeis.cs.cosi155b.scene;
 
 /**
  * Represents a 3D object in the scene
