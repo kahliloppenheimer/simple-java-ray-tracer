@@ -14,14 +14,14 @@ public class RayTracer {
 
     private SimpleFrame3D frame;
     private Camera3D camera;
-    private List<Object3D> objects;
-
+    private Scene3D scene;
     private List<Light3D> lights;
 
-    public RayTracer(SimpleFrame3D frame, Camera3D camera, List<Object3D> objects, List<Light3D> lights) {
+
+    public RayTracer(SimpleFrame3D frame, Camera3D camera, Scene3D scene, List<Light3D> lights) {
         this.frame = frame;
         this.camera = camera;
-        this.objects = objects;
+        this.scene = scene;
         this.lights = lights;
     }
 
@@ -46,7 +46,7 @@ public class RayTracer {
                 // Find the closest object that this ray intersects
                 RayHit closest = null;
                 double closestDistance = Double.POSITIVE_INFINITY;
-                for (Object3D o : objects) {
+                for (Object3D o : scene) {
                     RayHit intersection = o.rayIntersect(visionVec);
                     if (intersection.getDistance() < closestDistance) {
                         closestDistance = intersection.getDistance();
@@ -61,11 +61,11 @@ public class RayTracer {
                     for(Light3D l : lights) {
                         lightingSum += closest.getObj().getOutsideMaterial().diffuse(l, normal);
                     }
-                    double lightingVal = lightingSum / lights.size();
+                    double lightingVal = lightingSum;
                     Pixel lighted = new Pixel(closest.getObj().getOutsideMaterial().getColor()).scale(lightingVal);
                     cloned.setPixel(i, j, lighted);
                 } else {
-                    cloned.setPixel(i, j, new Pixel(Color.WHITE));
+                    cloned.setPixel(i, j, new Pixel(Color.BLACK));
                 }
             }
         }

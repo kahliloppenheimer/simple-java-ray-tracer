@@ -11,19 +11,21 @@ import java.util.List;
  * Created by kahliloppenheimer on 9/4/15.
  */
 public class MovingLightsDemo {
+
+    private static final Scene3D sampleScene = new Scene3D(
+            new Sphere3D(new Point3D(0, -.5, -2), .5, null, new Material(Color.RED, 0)),
+            new Sphere3D(new Point3D(0, .5, -2), .5, null, new Material(Color.YELLOW, 0)),
+            new Sphere3D(new Point3D(-.5, -1.5, -2), .5, null, new Material(Color.PINK, 0)));
+
     public static void main(String[] args) throws InterruptedException {
         double radius = Math.sqrt(2);
         double radians = 0;
         SimpleFrame3D frame = new SimpleFrame3D(new Point3D(-1, -1, -1), 2, 2, 800, 800);
         Camera3D camera = new Camera3D(new Point3D(0, 0, 0), new Point3D(0, 0, -1));
-        List<Object3D> objects = new ArrayList<>();
-        objects.add(new Sphere3D(new Point3D(0, 1, -2), .5, null, new Material(Color.RED, 0)));
-        objects.add(new Sphere3D(new Point3D(1, -.5, -2), .5, null, new Material(Color.YELLOW, 0)));
-        objects.add(new Sphere3D(new Point3D(-.5, -1.5, -2), .5, null, new Material(Color.PINK, 0)));
         List<Light3D> lights = new ArrayList<>();
         lights.add(new Light3D(new Point3D(-2, -2.5, 1), 1));
         // lights.add(new Light3D(new Point3D(-1, -1, -1), .2));
-        RayTracer rt = new RayTracer(frame, camera, objects, lights);
+        RayTracer rt = new RayTracer(frame, camera, sampleScene, lights);
         SimpleFrame3D rendered = rt.render();
         Canvas3D canvas = display(rendered);
 
