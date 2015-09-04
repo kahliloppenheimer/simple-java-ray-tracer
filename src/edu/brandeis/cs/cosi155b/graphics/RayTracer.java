@@ -14,27 +14,29 @@ public class RayTracer {
 
     private SimpleFrame3D frame;
     private Camera3D camera;
-    private List<Object3D> objects;
+    private Scene3D scene;
 
+    @Deprecated
     public void setLights(List<Light3D> lights) {
         this.lights = lights;
     }
 
     private List<Light3D> lights;
 
+    private static final Scene3D sampleScene = new Scene3D(
+            new Sphere3D(new Point3D(0, -.5, -2), .5, null, new Material(Color.RED, 0)),
+            new Sphere3D(new Point3D(0, .5, -2), .5, null, new Material(Color.YELLOW, 0)),
+            new Sphere3D(new Point3D(-.5, -1.5, -2), .5, null, new Material(Color.PINK, 0)));
+
     public static void main(String[] args) throws InterruptedException {
         double radius = Math.sqrt(2);
         double radians = 0;
-        SimpleFrame3D frame = new SimpleFrame3D(new Point3D(-1, -1, -1), 2, 2, 800, 800);
+        SimpleFrame3D frame = new SimpleFrame3D(new Point3D(-1, -1, -1), 3, 3, 900, 800);
         Camera3D camera = new Camera3D(new Point3D(0, 0, 0), new Point3D(0, 0, -1));
-        List<Object3D> objects = new ArrayList<>();
-        objects.add(new Sphere3D(new Point3D(0, -.5, -2), .5, null, new Material(Color.RED, 0)));
-        objects.add(new Sphere3D(new Point3D(0, .5, -2), .5, null, new Material(Color.YELLOW, 0)));
-        objects.add(new Sphere3D(new Point3D(-.5, -1.5, -2), .5, null, new Material(Color.PINK, 0)));
         List<Light3D> lights = new ArrayList<>();
-        lights.add(new Light3D(new Point3D(1, 1, 1), 1));
+        lights.add(new Light3D(new Point3D(.5, .78, .1), 1));
         // lights.add(new Light3D(new Point3D(-1, -1, -1), .2));
-        RayTracer rt = new RayTracer(frame, camera, objects, lights);
+        RayTracer rt = new RayTracer(frame, camera, sampleScene, lights);
         SimpleFrame3D rendered = rt.render();
         Canvas3D canvas = display(rendered);
 
@@ -83,10 +85,10 @@ public class RayTracer {
         f.setVisible(true);
     }
 
-    public RayTracer(SimpleFrame3D frame, Camera3D camera, List<Object3D> objects, List<Light3D> lights) {
+    public RayTracer(SimpleFrame3D frame, Camera3D camera, Scene3D scene, List<Light3D> lights) {
         this.frame = frame;
         this.camera = camera;
-        this.objects = objects;
+        this.scene = scene;
         this.lights = lights;
     }
 
@@ -111,7 +113,7 @@ public class RayTracer {
                 // Find the closest object that this ray intersects
                 RayHit closest = null;
                 double closestDistance = Double.POSITIVE_INFINITY;
-                for (Object3D o : objects) {
+                for (Object3D o : scene) {
                     RayHit intersection = o.rayIntersect(visionVec);
                     if (intersection.getDistance() < closestDistance) {
                         closestDistance = intersection.getDistance();
@@ -126,11 +128,11 @@ public class RayTracer {
                     for(Light3D l : lights) {
                         lightingSum += closest.getObj().getOutsideMaterial().diffuse(l, normal);
                     }
-                    double lightingVal = lightingSum / lights.size();
+                    double lightingVal = lightingSum;
                     Pixel lighted = new Pixel(closest.getObj().getOutsideMaterial().getColor()).scale(lightingVal);
                     cloned.setPixel(i, j, lighted);
                 } else {
-                    cloned.setPixel(i, j, new Pixel(Color.WHITE));
+                    cloned.setPixel(i, j, new Pixel(Color.BLACK));
                 }
             }
         }
