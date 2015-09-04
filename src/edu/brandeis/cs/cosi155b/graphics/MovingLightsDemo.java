@@ -12,33 +12,55 @@ import java.util.List;
  */
 public class MovingLightsDemo {
 
-    private static final Scene3D sampleScene = new Scene3D(
-            new Sphere3D(new Point3D(0, -.5, -2), .5, null, new Material(Color.RED, 0)),
+    private static Scene3D sampleScene = new Scene3D(
+            new Sphere3D(new Point3D(2, -.5, -5), .5, null, new Material(Color.RED, 0)),
             new Sphere3D(new Point3D(0, .5, -2), .5, null, new Material(Color.YELLOW, 0)),
             new Sphere3D(new Point3D(-.5, -1.5, -2), .5, null, new Material(Color.PINK, 0)));
+    private static final int FRAMES_TO_RENDER = 32;
 
     public static void main(String[] args) throws InterruptedException {
+        List<SimpleFrame3D> toDisplay = new ArrayList<>();
         double radius = Math.sqrt(2);
         double radians = 0;
-        SimpleFrame3D frame = new SimpleFrame3D(new Point3D(-1, -1, -1), 2, 2, 800, 800);
+        SimpleFrame3D frame = new SimpleFrame3D(new Point3D(-1, -1, -1), 2, 2, 400, 400);
         Camera3D camera = new Camera3D(new Point3D(0, 0, 0), new Point3D(0, 0, -1));
         List<Light3D> lights = new ArrayList<>();
         lights.add(new Light3D(new Point3D(-2, -2.5, 1), 1));
         // lights.add(new Light3D(new Point3D(-1, -1, -1), .2));
         RayTracer rt = new RayTracer(frame, camera, sampleScene, lights);
         SimpleFrame3D rendered = rt.render();
-        Canvas3D canvas = display(rendered);
+        toDisplay.add(rendered);
 
-        while(true) {
-            System.out.println("Radians = " + radians);
-            radians += Math.PI / 4;
+        for(int i = 0; i < FRAMES_TO_RENDER; ++i) {
+            System.out.println((i + 1) + " / " + FRAMES_TO_RENDER + " rendered");
+            radians += Math.PI / FRAMES_TO_RENDER / 2;
+
+            Sphere3D sphere = (Sphere3D) sampleScene.remove(0);
+            Sphere3D sphere2 = (Sphere3D) sampleScene.remove(0);
+            Sphere3D sphere3 = (Sphere3D) sampleScene.remove(0);
+            sampleScene.add(0, sphere.translate(0, 0, .05));
+            sampleScene.add(1, sphere2.translate(0, 0, -.05));
+            sampleScene.add(2, sphere3.translate(.02, .02, .02));
+            /*
+            sampleScene.add(2, new Sphere3D(new Point3D(sphere3.getCenter().getX() + Math.cos(radians), sphere3.getCenter().getY() + Math.sin(radius), 0),
+                    sphere3.getRadius(),
+                    sphere3.getInsideMaterial(),kjj
+                    sphere3.getOutsideMaterial()));
+                    */
+
             lights.remove(0);
-            lights.add(new Light3D(new Point3D(2 * Math.cos(radians), 2 * Math.sin(radians), .5), 1));
-            System.out.println("We have " + lights.size() + " lights");
+            lights.add(new Light3D(new Point3D(-1, radius * Math.sin(radians), radius * Math.cos(radians)), 1));
             rendered = rt.render();
-            display(rendered, canvas);
+            toDisplay.add(rendered);
         }
 
+        Canvas3D canvas = display(toDisplay.remove(0));
+        while(true) {
+            System.out.println("Starting scene!");
+            for (SimpleFrame3D f : toDisplay) {
+                display(f, canvas);
+            }
+        }
     }
 
     private static Canvas3D display(SimpleFrame3D rendered) throws InterruptedException {

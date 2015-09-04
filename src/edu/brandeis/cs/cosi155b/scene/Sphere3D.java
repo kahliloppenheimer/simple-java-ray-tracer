@@ -52,6 +52,10 @@ public class Sphere3D implements Object3D {
         }
     }
 
+    public Sphere3D translate(double x, double y, double z) {
+        return new Sphere3D(new Point3D(center.getX() + x, center.getY() + y, center.getZ() + z), radius, inside, outside);
+    }
+
     @Override
     public Material getInsideMaterial() {
         return this.inside;
