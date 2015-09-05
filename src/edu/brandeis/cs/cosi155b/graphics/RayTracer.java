@@ -16,7 +16,7 @@ public class RayTracer {
     private Scene3D scene;
     private List<Light3D> lights;
 
-    private static final int ANTI_ALIASING_FACTOR = 32;
+    private static final int ANTI_ALIASING_FACTOR = 8;
 
 
     public RayTracer(SimpleFrame3D frame, Camera3D camera, Scene3D scene, List<Light3D> lights) {
@@ -40,8 +40,8 @@ public class RayTracer {
 
         for (int i = 0; i < cloned.getWidthPx(); ++i) {
             for (int j = 0; j < cloned.getHeightPx(); ++j) {
-                float[] colorSum = new float[3];
-                float[] componentsToSum = new float[3];
+                float[] runningColorSum = new float[3];
+                float[] nextColorToAdd = new float[3];
                 for(int k = 0; k < ANTI_ALIASING_FACTOR; ++k) {
                     // Create the ray from the camera to the pixel in the frame we are currently coloring
                     double randWDelta = Math.random() * wDelta;
@@ -51,16 +51,14 @@ public class RayTracer {
                             .subtract(camera.getLocation()));
 
                     Optional<RayHit> closest = findFirstIntersection(visionVec, scene);
-                    if(closest.isPresent()) {
-                        Pixel lighted = lightPixel(closest, lights);
-                        lighted.getColor().getColorComponents(componentsToSum);
-                    }
+                    Color lighted = lightPixel(closest);
+                    lighted.getColorComponents(nextColorToAdd);
 
                     for (int q = 0; q < 3; ++q) {
-                        colorSum[q] += componentsToSum[q];
+                        runningColorSum[q] += nextColorToAdd[q];
                     }
                 }
-                float[] colorAverage = {colorSum[0] / ANTI_ALIASING_FACTOR, colorSum[1] / ANTI_ALIASING_FACTOR, colorSum[2] / ANTI_ALIASING_FACTOR};
+                float[] colorAverage = {runningColorSum[0] / ANTI_ALIASING_FACTOR, runningColorSum[1] / ANTI_ALIASING_FACTOR, runningColorSum[2] / ANTI_ALIASING_FACTOR};
                 cloned.setPixel(i, j, new Pixel(new Color(colorAverage[0], colorAverage[1], colorAverage[2])));
             }
         }
@@ -71,26 +69,22 @@ public class RayTracer {
      * Takes in a given RayHit intersection and a collection of lights and returns a
      * pixel with the proper lighted color
      *
-     * @param closest
-     * @param lights
+     * @param optClosest the RayHit with the shortest distance for the given pixel
      * @return
      */
-    private Pixel lightPixel(Optional<RayHit> optClosest, List<Light3D> lights) {
+    private Color lightPixel(Optional<RayHit> optClosest) {
         // Color the pixel depending on which object was hit
         if (optClosest.isPresent()) {
             RayHit closest = optClosest.get();
             Point3D point = closest.getPoint();
             Point3D normal = closest.getObj().getNormal(point);
-            double lightingSum = 0.0;
+            Color lighted = closest.getObj().getOutsideMaterial().getColor();
             for (Light3D l : lights) {
-                lightingSum += closest.getObj().getOutsideMaterial().diffuse(l, normal);
+                lighted = l.lightPixel(lighted, l.diffuse(normal), scene.getAmbient());
             }
-            double lightingVal = lightingSum;
-            Pixel lighted = new Pixel(closest.getObj().getOutsideMaterial().getColor()).scale(lightingVal);
-            // Add each pixel value to our running sum for ANIT_Aliasing to average after
             return lighted;
         } else {
-            return new Pixel(Color.BLACK);
+            return scene.getBackgroundColor();
         }
     }
 
