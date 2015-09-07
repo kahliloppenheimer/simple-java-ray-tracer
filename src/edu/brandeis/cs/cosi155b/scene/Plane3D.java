@@ -34,4 +34,14 @@ public class Plane3D implements Object3D {
     public Material getOutsideMaterial() {
         return back;
     }
+
+    @Override
+    public void translate(double x, double y, double z) {
+
+    }
+
+    @Override
+    public void setLocation(double x, double y, double z) {
+
+    }
 }

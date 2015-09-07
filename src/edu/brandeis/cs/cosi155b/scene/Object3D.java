@@ -35,4 +35,22 @@ public interface Object3D {
      * @return
      */
     Material getOutsideMaterial();
+
+    /**
+     * Translates the given object by each of the specified units
+     *
+     * @param x
+     * @param y
+     * @param z
+     */
+    void translate(double x, double y, double z);
+
+    /**
+     * Sets the location of the given object to the following coordinates
+     *
+     * @param x
+     * @param y
+     * @param z
+     */
+    void setLocation(double x, double y, double z);
 }

@@ -20,18 +20,6 @@ public class Light3D {
     }
 
     /**
-     * TODO: Implement specular light
-     *
-     * @param lightVec
-     * @param normal
-     * @param eyeVec
-     * @return
-     */
-    public double specular(Point3D normal, Point3D eyeVec) {
-        return 0.0;
-    }
-
-    /**
      * Returns the diffuse lighting value given a vector from the point on the object
      * to the light source and the normal vector to that point from the object.
      *
@@ -49,6 +37,22 @@ public class Light3D {
         }
 
         return Math.max(lightVec.dot(normal), 0);
+    }
+
+    /**
+     * Returns the specular light from a point with the given normal vector, vector from the viewing
+     * point to the point, vector from the light to the point, and hardness value (small int)
+     *
+     * @param lightVec
+     * @param normal
+     * @param eyeVec
+     * @param hardness
+     * @return
+     */
+    public double specular(Point3D lightVec, Point3D normal, Point3D eyeVec, Material m) {
+        Point3D reflected = lightVec.subtract(normal.scale(2).scale(normal.dot(lightVec)));
+        Point3D v = normal.scale(2).scale(normal.scale(-1).dot(lightVec));
+        return Math.max(m.getSpecularIntensity() * Math.pow(reflected.dot(v), m.getShininess()), 0);
     }
 
     public Point3D getLocation() {
@@ -72,15 +76,22 @@ public class Light3D {
      * @param ambient Ambient light for the entire scene
      * @return
      */
-    public Color lightPixel(Color pixelColor, double diffuseCoefficient, Color ambient) {
-        float[] pixelRgb = new float[3];
+    public Color lightPixel(Color prevPixelColor, Color materialColor, double diffuseCoefficient, double specularCoefficient, Color ambient) {
+        float[] materialRgb = new float[3];
         float[] lightRgb = new float[3];
         float[] ambientRgb = new float[3];
-        pixelColor.getColorComponents(pixelRgb);
+        float[] pixelRgb = new float[3];
+        materialColor.getColorComponents(materialRgb);
         getColor().getColorComponents(lightRgb);
         ambient.getColorComponents(ambientRgb);
+        prevPixelColor.getColorComponents(pixelRgb);
         for(int i = 0; i < 3; ++i) {
-            pixelRgb[i] = Math.min((float) (pixelRgb[i] * lightRgb[i] * diffuseCoefficient + ambientRgb[i]), (float) 1.0);
+            // Add ambient if it hasn't already been accounted for
+            if(pixelRgb[i] < .000001) {
+                pixelRgb[i] += ambientRgb[i];
+            }
+            pixelRgb[i] = (float) Math.min(pixelRgb[i] + (materialRgb[i] * lightRgb[i] * diffuseCoefficient)
+                    + (materialRgb[i] * lightRgb[i] * specularCoefficient), .999999999);
         }
         return new Color(pixelRgb[0], pixelRgb[1], pixelRgb[2]);
     }

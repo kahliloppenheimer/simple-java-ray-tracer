@@ -11,13 +11,13 @@ public class Material {
 
     private final Color color;
     private final int shininess;
+    private final double specularIntensity;
 
-    public Material(Color color, int shininess) {
+    public Material(Color color, int shininess, double specularIntensity) {
         this.color = color;
         this.shininess = shininess;
+        this.specularIntensity = specularIntensity;
     }
-
-
 
     public Color getColor() {
         return color;
@@ -25,5 +25,9 @@ public class Material {
 
     public int getShininess() {
         return shininess;
+    }
+
+    public double getSpecularIntensity() {
+        return specularIntensity;
     }
 }
