@@ -5,7 +5,7 @@ package edu.brandeis.cs.cosi155b.scene;
  */
 public class Sphere3D implements Object3D {
 
-    private final Point3D center;
+    private Point3D center;
     private final double radius;
     // Material of the inside of the sphere
     private final Material inside;
@@ -52,6 +52,10 @@ public class Sphere3D implements Object3D {
         }
     }
 
+    public void translate(double x, double y, double z) {
+        this.center.translate(x, y, z);
+    }
+
     @Override
     public Material getInsideMaterial() {
         return this.inside;
@@ -63,7 +67,7 @@ public class Sphere3D implements Object3D {
     }
 
     public Point3D getNormal(Point3D point) {
-        return point.subtract(center);
+        return point.subtract(center).normalize();
     }
 
     public Point3D getCenter() {
@@ -72,6 +76,10 @@ public class Sphere3D implements Object3D {
 
     public double getRadius() {
         return this.radius;
+    }
+
+    public void setLocation(double x, double y, double z) {
+        this.center = new Point3D(x, y, z);
     }
 
 }

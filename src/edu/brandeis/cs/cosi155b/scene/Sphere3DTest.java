@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 public class Sphere3DTest {
 
     private static final double DELTA = .000001;
-    private static final Sphere3D unitSphere = new Sphere3D(new Point3D(0, 0, 0), 1, new Material(Color.RED, 5), new Material(Color.RED, 5));
+    private static final Sphere3D unitSphere = new Sphere3D(new Point3D(0, 0, 0), 1, new Material(Color.RED, 5, 1.0), new Material(Color.RED, 5, 1.0));
 
     @Test
     public void testInsiderMaterial() {
@@ -60,7 +60,7 @@ public class Sphere3DTest {
     public void testRayDoesNotIntersectSphere() {
         Ray3D r = new Ray3D(new Point3D(0, -2, 0), new Point3D(0, -1, 0));
         RayHit rh = unitSphere.rayIntersect(r);
-        assertNull(rh);
+        assertTrue(rh.getDistance() == Double.POSITIVE_INFINITY);
     }
 
     private static Point3D getRandPointBiggerThan(int i) {

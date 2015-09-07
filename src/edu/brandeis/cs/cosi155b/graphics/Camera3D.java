@@ -8,18 +8,13 @@ import edu.brandeis.cs.cosi155b.scene.Point3D;
 public class Camera3D {
 
     private final Point3D location;
-    private final Point3D direction;
 
-    public Camera3D(Point3D location, Point3D direction) {
+    public Camera3D(Point3D location) {
         this.location = location;
-        this.direction = direction;
     }
 
     public Point3D getLocation() {
         return location;
     }
 
-    public Point3D getDirection() {
-        return direction;
-    }
 }
