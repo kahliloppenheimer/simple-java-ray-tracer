@@ -17,11 +17,11 @@ public class MovingLightsDemo {
     private static Scene3D sampleScene = new Scene3D(
             Color.BLACK,
             new Color((float) .05, (float) .05, (float) .05),
-            new Sphere3D(new Point3D(2, -.5, -5), .5, null, new Material(Color.RED, 0, 0)),
-            new Sphere3D(new Point3D(-1, .5, -2), .5, null, new Material(Color.YELLOW, 0, 0)),
-            new Sphere3D(new Point3D(-.5, -.5, -2), .5, null, new Material(Color.WHITE, 0, 0)),
-            new Sphere3D(new Point3D(-1, 3, -4), .5, null, new Material(Color.CYAN, 0, 0)),
-            new Sphere3D(new Point3D(1, 1, -5), 1, null, new Material(Color.GREEN, 0, 0)));
+            new Sphere3D(new Point3D(2, -.5, -5), .5, null, new Material(Color.RED, 1)),
+            new Sphere3D(new Point3D(-1, .5, -2), .5, null, new Material(Color.YELLOW, 1)),
+            new Sphere3D(new Point3D(-.5, -.5, -2), .5, null, new Material(Color.WHITE, 1)),
+            new Sphere3D(new Point3D(-1, 3, -4), .5, null, new Material(Color.CYAN, 1)),
+            new Sphere3D(new Point3D(1, 1, -5), 1, null, new Material(Color.GREEN, 1)));
 
     public static void main(String[] args) throws InterruptedException {
         /*

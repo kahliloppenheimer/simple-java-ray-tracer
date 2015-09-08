@@ -10,24 +10,22 @@ import edu.brandeis.cs.cosi155b.graphics.Color;
 public class Material {
 
     private final Color color;
-    private final int shininess;
-    private final double specularIntensity;
+    private final int hardness;
 
-    public Material(Color color, int shininess, double specularIntensity) {
+    public Material(Color color, int hardness) {
+        if(hardness < 1 || hardness > 511) {
+            throw new IllegalArgumentException("Hardness must be an integer between 1 and 511");
+        }
         this.color = color;
-        this.shininess = shininess;
-        this.specularIntensity = specularIntensity;
+        this.hardness = hardness;
     }
 
     public Color getColor() {
         return color;
     }
 
-    public int getShininess() {
-        return shininess;
+    public int getHardness() {
+        return hardness;
     }
 
-    public double getSpecularIntensity() {
-        return specularIntensity;
-    }
 }

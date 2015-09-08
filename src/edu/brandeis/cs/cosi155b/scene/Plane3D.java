@@ -16,23 +16,19 @@ public class Plane3D implements Object3D {
     }
 
     @Override
-    public RayHit rayIntersect(Ray3D ray) {
-        // Check to make sure ray is not parallel to plane
-        /*
-        if(normal.dot(ray.getDirection()) < .000001 && normal.dot(ray.getDirection()) > -.0000001) {
-            return new RayHit(Double.POSITIVE_INFINITY, null, this);
+    public RayHit rayIntersect(Ray3D r) {
+        double dn = (r.getDirection()).dot(normal);
+        double t = (point.subtract(r.getStart())).dot(normal) / dn;
+        if(dn == 0.0 || t <= 0) {
+            return new RayHit(r, Double.POSITIVE_INFINITY, null, this);
+        } else {
+            return new RayHit(r, r.atTime(t).subtract(r.getStart()).length(), r.atTime(t), this);
         }
-        */
-
-        double t = normal.dot(ray.getStart().subtract(point)) / normal.dot(ray.getDirection());
-        Point3D intersection = ray.atTime(t);
-        double distance = ray.getStart().subtract(intersection).length();
-        return new RayHit(distance,intersection,this);
     }
 
     @Override
-    public Point3D getNormal(Point3D point) {
-        return normal.scale(-1);
+    public Point3D getNormal(Ray3D ray) {
+        return ray.getDirection().dot(normal) < 0.0 ? normal.scale(1).normalize() : normal.scale(-1).normalize();
 //        return normal.dot(point) > 0 ? normal : normal.scale(-1);
     }
 

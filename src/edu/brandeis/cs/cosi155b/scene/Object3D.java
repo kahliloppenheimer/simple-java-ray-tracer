@@ -15,12 +15,14 @@ public interface Object3D {
     RayHit rayIntersect(Ray3D ray);
 
     /**
-     * Returns the vector normal to the point on the given object
+     * Returns the vector normal to the point on the object at the intersection
+     * of the object with the given ray.
      *
-     * @param point
+     *
+     * @param ray ray to intersect with object
      * @return
      */
-    Point3D getNormal(Point3D point);
+    Point3D getNormal(Ray3D ray);
 
     /**
      * Returns the Material of the inside of the shape

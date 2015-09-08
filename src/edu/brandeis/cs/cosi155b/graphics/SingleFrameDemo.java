@@ -10,24 +10,16 @@ import java.util.List;
  */
 public class SingleFrameDemo {
 
-    private static final int ANTI_ALIASING = 4;
-
-    private static Scene3D sampleScene = new Scene3D(
-            Color.BLACK,
-            new Color((float) .05, (float) .05, (float) .05),
-            new Sphere3D(new Point3D(2, -.5, -5), .5, null, new Material(Color.RED, 0, 1.0)),
-            new Sphere3D(new Point3D(-1, .5, -2), .5, null, new Material(Color.YELLOW, 0, 1.0)),
-            new Sphere3D(new Point3D(-.5, -1.5, -2), .5, null, new Material(Color.PINK, 0, 1.0)),
-            new Sphere3D(new Point3D(-1, 3, -4), .5, null, new Material(Color.CYAN, 0, 1.0)));
+    private static final int ANTI_ALIASING = 8;
 
     public static void main(String[] args) throws InterruptedException {
         SimpleFrame3D frame = new SimpleFrame3D(new Point3D(-.5, -.5, -1), 1, 1, 400, 400);
         Camera3D camera = new Camera3D(new Point3D(0, 0, 0));
         Scene3D scene = new Scene3D(Color.BLACK, new Color((float) .05, (float) .05, (float) .05),
-                new Sphere3D(new Point3D(1, 1, -5), 1, null, new Material(Color.red, 0, 0)),
-                new Plane3D(new Point3D(0, -1, 0), new Point3D(0, 1, 0), new Material(Color.GREEN, 0, 0)));
+                new Sphere3D(new Point3D(1, 1, -5), 1, null, new Material(Color.red, 1)),
+                new Plane3D(new Point3D(1.5, 0, 0), new Point3D(-1, 0, 0), new Material(Color.magenta, 1)),
+                new Plane3D(new Point3D(0, -1, 0), new Point3D(0, 1, 0), new Material(Color.GREEN, 1)));
         List<Light3D> lights = new ArrayList<>();
-        lights.add(new Light3D(new Point3D(0, 0, 0), Color.WHITE));
         lights.add(new Light3D(new Point3D(2, 1, 0), Color.WHITE));
         RayTracer rt = new RayTracer(frame, camera, scene, lights);
         SimpleFrame3D rendered = rt.render(ANTI_ALIASING);

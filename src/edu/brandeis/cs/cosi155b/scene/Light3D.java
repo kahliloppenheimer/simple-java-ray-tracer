@@ -26,8 +26,11 @@ public class Light3D {
      * @param normal normal vector to point on object
      * @return
      */
-    public double diffuse(Point3D point, Point3D normal) {
+    public double diffuse(RayHit rh) {
+        Point3D point = rh.getPoint();
+        Point3D normal = rh.getObj().getNormal(rh.getRay());
         Point3D lightVec = getLocation().subtract(point);
+
         if(lightVec.length() != 1) {
             lightVec = lightVec.normalize();
         }
@@ -40,19 +43,20 @@ public class Light3D {
     }
 
     /**
-     * Returns the specular light from a point with the given normal vector, vector from the viewing
-     * point to the point, vector from the light to the point, and hardness value (small int)
+     * Returns the specular light at a given RayHit with the given light and eye positions
      *
-     * @param lightVec
-     * @param normal
-     * @param eyeVec
-     * @param hardness
+     * @param lightPos
+     * @param eyePos
+     * @param rh
      * @return
      */
-    public double specular(Point3D lightVec, Point3D normal, Point3D eyeVec, Material m) {
-        Point3D reflected = lightVec.subtract(normal.scale(2).scale(normal.dot(lightVec)));
-        Point3D v = normal.scale(2).scale(normal.scale(-1).dot(lightVec));
-        return Math.max(m.getSpecularIntensity() * Math.pow(reflected.dot(v), m.getShininess()), 0);
+    public double specular(Point3D lightPos, Point3D eyePos, RayHit rh) {
+        Point3D eyeVec = eyePos.subtract(rh.getPoint()).normalize();
+        Point3D incomingLight = rh.getPoint().subtract(lightPos);
+        Point3D normal = rh.getObj().getNormal(rh.getRay());
+        Point3D reflected = incomingLight.subtract(normal.scale(2).scale(normal.dot(incomingLight))).normalize();
+        int hardness = rh.getObj().getOutsideMaterial().getHardness();
+        return  Math.max(Math.pow(reflected.dot(eyeVec), hardness), 0);
     }
 
     public Point3D getLocation() {
@@ -77,18 +81,20 @@ public class Light3D {
      * @return
      */
     public Color phongIllumination(Color prevPixelColor, Color materialColor, double diffuseCoefficient, double specularCoefficient) {
-        specularCoefficient = 0;
-        float[] materialRgb = new float[3];
-        float[] lightRgb = new float[3];
-        float[] pixelRgb = new float[3];
-        materialColor.getColorComponents(materialRgb);
-        getColor().getColorComponents(lightRgb);
-        prevPixelColor.getColorComponents(pixelRgb);
-
-        for(int i = 0; i < 3; ++i) {
-            pixelRgb[i] = (float) Math.min(pixelRgb[i] + (materialRgb[i] * lightRgb[i] * diffuseCoefficient)
-                    + (materialRgb[i] * lightRgb[i] * specularCoefficient), .999999999);
-        }
-        return new Color(pixelRgb[0], pixelRgb[1], pixelRgb[2]);
+//        specularCoefficient = 0;
+//        float[] materialRgb = new float[3];
+//        float[] lightRgb = new float[3];
+//        float[] pixelRgb = new float[3];
+//        materialColor.getColorComponents(materialRgb);
+//        getColor().getColorComponents(lightRgb);
+//        prevPixelColor.getColorComponents(pixelRgb);
+//
+//        for(int i = 0; i < 3; ++i) {
+//            pixelRgb[i] = (float) Math.min(pixelRgb[i] + (materialRgb[i] * lightRgb[i] * diffuseCoefficient)
+//                    + (materialRgb[i] * lightRgb[i] * specularCoefficient), .999999999);
+//        }
+//        return new Color(pixelRgb[0], pixelRgb[1], pixelRgb[2]);
+        return prevPixelColor.add( materialColor.multiply(getColor()).scaleFloat((float) diffuseCoefficient));
+//                             .add( materialColor.multiply(getColor()).scaleFloat((float) specularCoefficient)));
     }
 }

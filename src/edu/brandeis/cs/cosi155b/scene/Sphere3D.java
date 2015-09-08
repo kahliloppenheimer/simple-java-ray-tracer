@@ -44,9 +44,9 @@ public class Sphere3D implements Object3D {
         if (timeOfFirstIntersection > 0) {
             Point3D intersection = ray.atTime(timeOfFirstIntersection);
             double distance = ray.getStart().subtract(intersection).length();
-            return new RayHit(distance, intersection, this);
+            return new RayHit(ray, distance, intersection, this);
         } else {
-            return new RayHit(Double.POSITIVE_INFINITY,
+            return new RayHit(ray, Double.POSITIVE_INFINITY,
                     new Point3D(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY),
                     this);
         }
@@ -66,8 +66,9 @@ public class Sphere3D implements Object3D {
         return this.outside;
     }
 
-    public Point3D getNormal(Point3D point) {
-        return point.subtract(center).normalize();
+    @Override
+    public Point3D getNormal(Ray3D ray) {
+        return rayIntersect(ray).getPoint().subtract(center).normalize();
     }
 
     public Point3D getCenter() {

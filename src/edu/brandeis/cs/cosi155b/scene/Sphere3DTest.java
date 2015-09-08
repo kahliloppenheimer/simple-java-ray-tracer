@@ -13,18 +13,18 @@ import static org.junit.Assert.*;
 public class Sphere3DTest {
 
     private static final double DELTA = .000001;
-    private static final Sphere3D unitSphere = new Sphere3D(new Point3D(0, 0, 0), 1, new Material(Color.RED, 5, 1.0), new Material(Color.RED, 5, 1.0));
+    private static final Sphere3D unitSphere = new Sphere3D(new Point3D(0, 0, 0), 1, new Material(Color.RED, 55), new Material(Color.RED, 55));
 
     @Test
     public void testInsiderMaterial() {
         assertEquals(unitSphere.getInsideMaterial().getColor(), Color.RED);
-        assertEquals(unitSphere.getInsideMaterial().getShininess(), 5);
+        assertEquals(unitSphere.getInsideMaterial().getHardness(), 5);
     }
 
     @Test
     public void testOutsideMaterial() {
         assertEquals(unitSphere.getOutsideMaterial().getColor(), Color.RED);
-        assertEquals(unitSphere.getOutsideMaterial().getShininess(), 5);
+        assertEquals(unitSphere.getOutsideMaterial().getHardness(), 5);
     }
 
     @Test

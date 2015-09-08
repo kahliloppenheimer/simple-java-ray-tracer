@@ -38,7 +38,7 @@ public class RayTracer {
             for (int j = 0; j < cloned.getHeightPx(); ++j) {
                 float[] runningColorSum = new float[3];
                 float[] nextColorToAdd = new float[3];
-                for(int k = 0; k < antiAliasFactor; ++k) {
+                for (int k = 0; k < antiAliasFactor; ++k) {
                     // Create the ray from the camera to the pixel in the frame we are currently coloring
                     double randWDelta = Math.random() * wDelta;
                     double randHDelta = Math.random() * hDelta;
@@ -72,27 +72,15 @@ public class RayTracer {
         // Color the pixel depending on which object was hit
         if (optClosest.isPresent()) {
             RayHit closest = optClosest.get();
-            Point3D point = closest.getPoint();
-            // We have to give the correct normal for plane since there
-            // are two options
-            if(closest.getObj() instanceof Plane3D) {
-
-            }
-            Point3D normal = closest.getObj().getNormal(point);
             Material material = closest.getObj().getOutsideMaterial();
             Color lighted = scene.getAmbient().multiply(material.getColor());
             for (Light3D l : lights) {
-                Point3D lightVec = point.subtract(l.getLocation());
-                Point3D shadowVec = lightVec.scale(-1);
-                Point3D eyeVec = camera.getLocation().subtract(point);
-                // Check to see if point is cast in shadow by other object
-//                Optional<RayHit> closestObj = findFirstIntersection(new Ray3D(point, shadowVec), scene);
-//                if(!closestObj.isPresent() || closestObj.get().getDistance() > shadowVec.length()) {
-                    lighted = l.phongIllumination(lighted,
-                            material.getColor(),
-                            l.diffuse(point, normal),
-                            l.specular(lightVec, normal, eyeVec, material));
-//                }
+                lighted = l.phongIllumination(
+                        lighted,
+                        material.getColor(),
+                        l.diffuse(closest),
+                        l.specular(l.getLocation(), camera.getLocation(), closest)
+                );
             }
             return lighted;
         } else {
