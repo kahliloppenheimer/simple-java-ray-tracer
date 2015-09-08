@@ -5,8 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
  * this creates a JPanel with a backbuffer Image which the user can draw on.
@@ -69,6 +68,24 @@ public class MyCanvas3D extends JPanel implements Canvas3D {
 		buffer = this.createImage(bufferwidth, bufferheight);
 	}
 
+	/**
+	 * Renders the given frame in a JPanel
+	 *
+	 * @param rendered
+	 */
+	public void paintFrame(SimpleFrame3D rendered) {
+		// Make sure the given frame fits in this canvas
+		if(rendered.getWidthPx() != getWidth() || rendered.getHeightPx() != getHeight()) {
+			buffer = this.createImage(rendered.getWidthPx(), rendered.getHeightPx());
+		}
+		// Otherwise just fill it in
+		for(int i = 0; i < rendered.getWidthPx(); ++i) {
+			for(int j = 0; j < rendered.getHeightPx(); ++j) {
+				drawPixel(i, getHeight() - j - 1, rendered.getPixel(i, j).getColor());
+			}
+		}
+	}
+
 	/** set the preferred size of the component **/
 	public Dimension getPreferredSize() {
 		return new Dimension(400, 600);
@@ -94,6 +111,19 @@ public class MyCanvas3D extends JPanel implements Canvas3D {
 		paintSquare();
 		bufferg.drawImage(buffer, 0, 0, this);
 		bufferg.drawString("This is my PA01 demo!", 100, 200);
+	}
+
+	/*
+     * here we create a window, add the canvas,
+     * set the window size and make it visible!
+     */
+	public void createAndShowGUI() {
+		JFrame f = new JFrame("PA01 Demo");
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.add(this);
+		System.out.println("Width = " + getWidth() + "\theight = " + getHeight());
+		f.setSize(getWidth(), getHeight());
+		f.setVisible(true);
 	}
 
 	/* draw some other shapes on the screen */

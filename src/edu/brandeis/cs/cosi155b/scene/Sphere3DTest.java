@@ -1,8 +1,8 @@
 package edu.brandeis.cs.cosi155b.scene;
 
+import edu.brandeis.cs.cosi155b.graphics.Color;
 import org.junit.Test;
 
-import java.awt.*;
 import java.util.Random;
 
 import static org.junit.Assert.*;

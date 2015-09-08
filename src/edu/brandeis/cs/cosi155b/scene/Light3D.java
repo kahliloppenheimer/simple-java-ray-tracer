@@ -1,8 +1,6 @@
 package edu.brandeis.cs.cosi155b.scene;
 
-import edu.brandeis.cs.cosi155b.graphics.Pixel;
-
-import java.awt.*;
+import edu.brandeis.cs.cosi155b.graphics.Color;
 
 /**
  * Represents a simple light source with a location and an intensity
@@ -23,11 +21,13 @@ public class Light3D {
      * Returns the diffuse lighting value given a vector from the point on the object
      * to the light source and the normal vector to that point from the object.
      *
+     *
+     * @param point
      * @param normal normal vector to point on object
      * @return
      */
-    public double diffuse(Point3D normal) {
-        Point3D lightVec = getLocation();
+    public double diffuse(Point3D point, Point3D normal) {
+        Point3D lightVec = getLocation().subtract(point);
         if(lightVec.length() != 1) {
             lightVec = lightVec.normalize();
         }
@@ -72,24 +72,20 @@ public class Light3D {
      * hits and the diffuseCoefficient of that collision.
      *
      * @param pixelColor
-     * @param diffuseCoefficient
      * @param ambient Ambient light for the entire scene
+     * @param diffuseCoefficient
      * @return
      */
-    public Color lightPixel(Color prevPixelColor, Color materialColor, double diffuseCoefficient, double specularCoefficient, Color ambient) {
+    public Color phongIllumination(Color prevPixelColor, Color materialColor, double diffuseCoefficient, double specularCoefficient) {
+        specularCoefficient = 0;
         float[] materialRgb = new float[3];
         float[] lightRgb = new float[3];
-        float[] ambientRgb = new float[3];
         float[] pixelRgb = new float[3];
         materialColor.getColorComponents(materialRgb);
         getColor().getColorComponents(lightRgb);
-        ambient.getColorComponents(ambientRgb);
         prevPixelColor.getColorComponents(pixelRgb);
+
         for(int i = 0; i < 3; ++i) {
-            // Add ambient if it hasn't already been accounted for
-            if(pixelRgb[i] < .000001) {
-                pixelRgb[i] += ambientRgb[i];
-            }
             pixelRgb[i] = (float) Math.min(pixelRgb[i] + (materialRgb[i] * lightRgb[i] * diffuseCoefficient)
                     + (materialRgb[i] * lightRgb[i] * specularCoefficient), .999999999);
         }

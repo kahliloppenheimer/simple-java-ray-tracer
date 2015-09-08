@@ -1,6 +1,6 @@
 package edu.brandeis.cs.cosi155b.scene;
 
-import java.awt.*;
+import edu.brandeis.cs.cosi155b.graphics.Color;
 
 /**
  * Represents the material of a given shape, including its color and how shiny it is

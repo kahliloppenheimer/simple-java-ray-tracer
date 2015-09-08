@@ -1,6 +1,7 @@
 package edu.brandeis.cs.cosi155b.scene;
 
-import java.awt.*;
+import edu.brandeis.cs.cosi155b.graphics.Color;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 

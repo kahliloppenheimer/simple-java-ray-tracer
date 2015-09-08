@@ -2,7 +2,6 @@ package edu.brandeis.cs.cosi155b.graphics;
 
 import edu.brandeis.cs.cosi155b.scene.*;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +47,7 @@ public class RayTracer {
                             .subtract(camera.getLocation()));
 
                     Optional<RayHit> closest = findFirstIntersection(visionVec, scene);
-                    Color lighted = computeColor(closest);
+                    Color lighted = colorHit(closest);
                     lighted.getColorComponents(nextColorToAdd);
 
                     for (int q = 0; q < 3; ++q) {
@@ -69,22 +68,31 @@ public class RayTracer {
      * @param optClosest the RayHit with the shortest distance for the given pixel
      * @return
      */
-    private Color computeColor(Optional<RayHit> optClosest) {
+    private Color colorHit(Optional<RayHit> optClosest) {
         // Color the pixel depending on which object was hit
         if (optClosest.isPresent()) {
             RayHit closest = optClosest.get();
             Point3D point = closest.getPoint();
+            // We have to give the correct normal for plane since there
+            // are two options
+            if(closest.getObj() instanceof Plane3D) {
+
+            }
             Point3D normal = closest.getObj().getNormal(point);
             Material material = closest.getObj().getOutsideMaterial();
-            Color lighted = new Color(0, 0, 0);
+            Color lighted = scene.getAmbient().multiply(material.getColor());
             for (Light3D l : lights) {
                 Point3D lightVec = point.subtract(l.getLocation());
+                Point3D shadowVec = lightVec.scale(-1);
                 Point3D eyeVec = camera.getLocation().subtract(point);
-                lighted = l.lightPixel(lighted,
-                        material.getColor(),
-                        l.diffuse(normal),
-                        l.specular(lightVec, normal, eyeVec, material),
-                        scene.getAmbient());
+                // Check to see if point is cast in shadow by other object
+//                Optional<RayHit> closestObj = findFirstIntersection(new Ray3D(point, shadowVec), scene);
+//                if(!closestObj.isPresent() || closestObj.get().getDistance() > shadowVec.length()) {
+                    lighted = l.phongIllumination(lighted,
+                            material.getColor(),
+                            l.diffuse(point, normal),
+                            l.specular(lightVec, normal, eyeVec, material));
+//                }
             }
             return lighted;
         } else {
