@@ -10,15 +10,15 @@ import java.util.List;
  */
 public class SingleFrameDemo {
 
-    private static final int ANTI_ALIASING = 8;
+    private static final int ANTI_ALIASING = 12;
 
     public static void main(String[] args) throws InterruptedException {
         SimpleFrame3D frame = new SimpleFrame3D(new Point3D(-.5, -.5, -1), 1, 1, 400, 400);
         Camera3D camera = new Camera3D(new Point3D(0, 0, 0));
         Scene3D scene = new Scene3D(Color.BLACK, new Color((float) .05, (float) .05, (float) .05),
-                new Sphere3D(new Point3D(1, 1, -5), 1, null, new Material(Color.red, 1)),
-                new Plane3D(new Point3D(1.5, 0, 0), new Point3D(-1, 0, 0), new Material(Color.magenta, 1)),
-                new Plane3D(new Point3D(0, -1, 0), new Point3D(0, 1, 0), new Material(Color.GREEN, 1)));
+                new Sphere3D(new Point3D(1, 1, -5), 1, null, new Material(Color.red, 50)),
+                new Plane3D(new Point3D(0, -1, 0), new Point3D(0, 1, 0), new Material(Color.GREEN, 1)),
+                new Sphere3D(new Point3D(-3, 0, -8), 1, null, new Material(Color.pink, 25)));
         List<Light3D> lights = new ArrayList<>();
         lights.add(new Light3D(new Point3D(2, 1, 0), Color.WHITE));
         RayTracer rt = new RayTracer(frame, camera, scene, lights);

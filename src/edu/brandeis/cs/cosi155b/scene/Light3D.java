@@ -9,6 +9,11 @@ import edu.brandeis.cs.cosi155b.graphics.Color;
  */
 public class Light3D {
 
+    // Percentage brightness that specular lighting should get. Lower numbers
+    // yield a "duller" effect, while higher numbers yield a more artificial
+    // "plastic-y" effect
+    private static final double SPECULAR_INTENSITY = .25;
+
     private Point3D location;
     private final Color color;
 
@@ -50,13 +55,23 @@ public class Light3D {
      * @param rh
      * @return
      */
+//    public double specular(Point3D lightPos, Point3D eyePos, RayHit rh) {
+//        Point3D eyeVec = eyePos.subtract(rh.getPoint()).normalize();
+//        Point3D incomingLight = rh.getPoint().subtract(lightPos);
+//        Point3D normal = rh.getObj().getNormal(rh.getRay());
+//        Point3D reflected = incomingLight.subtract(normal.scale(2).scale(normal.dot(incomingLight))).normalize();
+//        int hardness = rh.getObj().getOutsideMaterial().getHardness();
+//        return  Math.max(Math.pow(reflected.dot(eyeVec), hardness), 0);
+//    }
+
     public double specular(Point3D lightPos, Point3D eyePos, RayHit rh) {
+        Point3D lightVec = lightPos.subtract(rh.getPoint()).normalize();
         Point3D eyeVec = eyePos.subtract(rh.getPoint()).normalize();
-        Point3D incomingLight = rh.getPoint().subtract(lightPos);
         Point3D normal = rh.getObj().getNormal(rh.getRay());
-        Point3D reflected = incomingLight.subtract(normal.scale(2).scale(normal.dot(incomingLight))).normalize();
-        int hardness = rh.getObj().getOutsideMaterial().getHardness();
-        return  Math.max(Math.pow(reflected.dot(eyeVec), hardness), 0);
+        Point3D lProjectedOntoN = normal.scale(lightVec.dot(normal));
+        Point3D lProjectedOntoPlane = lightVec.subtract(lProjectedOntoN);
+        Point3D reflectedLight = lightVec.subtract(lProjectedOntoPlane.scale(2)).normalize();
+        return Math.pow(Math.max(reflectedLight.dot(eyeVec), 0), rh.getObj().getOutsideMaterial().getHardness());
     }
 
     public Point3D getLocation() {
@@ -94,7 +109,6 @@ public class Light3D {
 //                    + (materialRgb[i] * lightRgb[i] * specularCoefficient), .999999999);
 //        }
 //        return new Color(pixelRgb[0], pixelRgb[1], pixelRgb[2]);
-        return prevPixelColor.add( materialColor.multiply(getColor()).scaleFloat((float) diffuseCoefficient));
-//                             .add( materialColor.multiply(getColor()).scaleFloat((float) specularCoefficient)));
-    }
+        return prevPixelColor.add( materialColor.multiply(getColor()).scaleFloat((float) diffuseCoefficient))
+                             .add( materialColor.multiply(getColor()).scaleFloat((float) specularCoefficient).scaleFloat((float) SPECULAR_INTENSITY)); }
 }
