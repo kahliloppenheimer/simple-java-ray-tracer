@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 public class Sphere3DTest {
 
     private static final double DELTA = .000001;
-    private static final Sphere3D unitSphere = new Sphere3D(new Point3D(0, 0, 0), 1, new Material(Color.RED, 55), new Material(Color.RED, 55));
+    private static final Sphere3D unitSphere = new Sphere3D(new Point3D(0, 0, 0), 1, new Material(Color.RED, 55, .25), new Material(Color.RED, 55, .25));
 
     @Test
     public void testInsiderMaterial() {

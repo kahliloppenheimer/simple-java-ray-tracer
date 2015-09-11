@@ -15,11 +15,11 @@ public class RayTracer {
     private Scene3D scene;
     private List<Light3D> lights;
 
-    public RayTracer(SimpleFrame3D frame, Camera3D camera, Scene3D scene, List<Light3D> lights) {
+    public RayTracer(SimpleFrame3D frame, Camera3D camera, Scene3D scene) {
         this.frame = frame;
         this.camera = camera;
         this.scene = scene;
-        this.lights = lights;
+        this.lights = scene.getLights();
     }
 
     public SimpleFrame3D render(int antiAliasFactor) {
@@ -99,7 +99,7 @@ public class RayTracer {
     private Optional<RayHit> findFirstIntersection(Ray3D visionVec, Scene3D scene) {
         RayHit closest = null;
         double closestDistance = Double.POSITIVE_INFINITY;
-        for (Object3D o : scene) {
+        for (Object3D o : scene.getObjects()) {
             RayHit intersection = o.rayIntersect(visionVec);
             if (intersection.getDistance() < closestDistance) {
                 closestDistance = intersection.getDistance();

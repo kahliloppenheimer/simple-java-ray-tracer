@@ -96,19 +96,12 @@ public class Light3D {
      * @return
      */
     public Color phongIllumination(Color prevPixelColor, Color materialColor, double diffuseCoefficient, double specularCoefficient) {
-//        specularCoefficient = 0;
-//        float[] materialRgb = new float[3];
-//        float[] lightRgb = new float[3];
-//        float[] pixelRgb = new float[3];
-//        materialColor.getColorComponents(materialRgb);
-//        getColor().getColorComponents(lightRgb);
-//        prevPixelColor.getColorComponents(pixelRgb);
-//
-//        for(int i = 0; i < 3; ++i) {
-//            pixelRgb[i] = (float) Math.min(pixelRgb[i] + (materialRgb[i] * lightRgb[i] * diffuseCoefficient)
-//                    + (materialRgb[i] * lightRgb[i] * specularCoefficient), .999999999);
+        if(specularCoefficient * SPECULAR_INTENSITY > diffuseCoefficient) {
+            diffuseCoefficient = 1 - SPECULAR_INTENSITY * specularCoefficient;
+        }
+//        } else {
+//            specularCoefficient = Math.min(1 - diffuseCoefficient, specularCoefficient);
 //        }
-//        return new Color(pixelRgb[0], pixelRgb[1], pixelRgb[2]);
         return prevPixelColor.add( materialColor.multiply(getColor()).scaleFloat((float) diffuseCoefficient))
-                             .add( materialColor.multiply(getColor()).scaleFloat((float) specularCoefficient).scaleFloat((float) SPECULAR_INTENSITY)); }
+                             .add( getColor().scaleFloat((float) specularCoefficient).scaleFloat((float) SPECULAR_INTENSITY)); }
 }
