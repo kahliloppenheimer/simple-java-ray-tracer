@@ -9,14 +9,17 @@ public class RayHit {
     // distance along ray to the first intersection
     private final double distance;
     // point at which the ray first intersects the object
-    private final Point3D iPoint;
+    private final Vector iPoint;
+    // Normal vector to object at the point that the ray intersects the object
+    private final Vector normal;
     // object that the ray intersects
     private final Object3D obj;
 
-    public RayHit(Ray3D ray, double distance, Point3D iPoint, Object3D obj) {
+    public RayHit(Ray3D ray, double distance, Vector iPoint, Vector normal, Object3D obj) {
         this.ray = ray;
         this.distance = distance;
         this.iPoint = iPoint;
+        this.normal = normal.normalize();
         this.obj = obj;
     }
 
@@ -24,7 +27,7 @@ public class RayHit {
         return distance;
     }
 
-    public Point3D getPoint() {
+    public Vector getPoint() {
         return iPoint;
     }
 
@@ -38,5 +41,9 @@ public class RayHit {
 
     public Ray3D getRay() {
         return ray;
+    }
+
+    public Vector getNormal() {
+        return normal;
     }
 }

@@ -1,5 +1,7 @@
 package edu.brandeis.cs.cosi155b.scene;
 
+import java.util.Optional;
+
 /**
  * Represents a 3D object in the scene
  */
@@ -12,17 +14,7 @@ public interface Object3D {
      * @param ray
      * @return
      */
-    RayHit rayIntersect(Ray3D ray);
-
-    /**
-     * Returns the vector normal to the point on the object at the intersection
-     * of the object with the given ray.
-     *
-     *
-     * @param ray ray to intersect with object
-     * @return
-     */
-    Point3D getNormal(Ray3D ray);
+    Optional<RayHit> rayIntersect(Ray3D ray);
 
     /**
      * Returns the Material of the inside of the shape

@@ -19,8 +19,8 @@ public class MatrixTest {
 
     @Before
     public void setup() {
-        identity = new Matrix(new double[][] {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}});
-        zero = new Matrix(new double[][] {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}});
+        identity = new Matrix(new double[][] {{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}});
+        zero = new Matrix(new double[][] {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}});
         rand = new Random();
     }
 
@@ -35,29 +35,29 @@ public class MatrixTest {
 
     @Test
     public void testGetRow() throws Exception {
-        assertEquals(new Point3D(1, 0, 0), identity.getRow(0));
-        assertEquals(new Point3D(0, 1, 0), identity.getRow(1));
-        assertEquals(new Point3D(0, 0, 1), identity.getRow(2));
+        assertEquals(new Vector(1, 0, 0), identity.getRow(0));
+        assertEquals(new Vector(0, 1, 0), identity.getRow(1));
+        assertEquals(new Vector(0, 0, 1), identity.getRow(2));
     }
 
     @Test
     public void testGetColumn() throws Exception {
-        assertEquals(new Point3D(1, 0, 0), identity.getColumn(0));
-        assertEquals(new Point3D(0, 1, 0), identity.getColumn(1));
-        assertEquals(new Point3D(0, 0, 1), identity.getColumn(2));
+        assertEquals(new Vector(1, 0, 0), identity.getColumn(0));
+        assertEquals(new Vector(0, 1, 0), identity.getColumn(1));
+        assertEquals(new Vector(0, 0, 1), identity.getColumn(2));
     }
 
     @Test
     public void testVectorMultiplication() throws Exception {
-        Point3D vector = new Point3D(1, 2, 3);
+        Vector vector = new Vector(1, 2, 3);
         assertEquals(identity.multiply(vector), vector);
-        assertEquals(zero.multiply(vector), new Point3D(0, 0, 0));
+        assertEquals(zero.multiply(vector), new Vector(0, 0, 0));
         for(int i = 0; i < 100; ++i) {
             double a = rand.nextDouble() * rand.nextInt(100);
             double b = rand.nextDouble() * rand.nextInt(100);
             double c = rand.nextDouble() * rand.nextInt(100);
-            Point3D vec = new Point3D(a, b, c);
-            assertEquals(identity.multiply(vector), new Point3D(a, b, c));
+            Vector vec = new Vector(a, b, c);
+            assertEquals(identity.multiply(vec), new Vector(a, b, c));
         }
     }
 

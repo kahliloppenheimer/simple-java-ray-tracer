@@ -5,15 +5,15 @@ package edu.brandeis.cs.cosi155b.scene;
  */
 
 public class Ray3D {
-    private final Point3D start;
-    private final Point3D direction;
+    private final Vector start;
+    private final Vector direction;
 
     /**
      * This represents a 3D ray with a specified start and direction.
      * The direction of a ray is a normalized vector.
      */
-    public Ray3D(Point3D start, Point3D direction) {
-        if(direction.length() != 1) {
+    public Ray3D(Vector start, Vector direction) {
+        if(direction.magnitude() != 1) {
             direction = direction.normalize();
         }
         this.start = start;
@@ -24,7 +24,7 @@ public class Ray3D {
      * This returns the point along the ray t units from its origin p
      */
 
-    public Point3D atTime(double t) {
+    public Vector atTime(double t) {
         return start.add(direction.scale(t));
     }
 
@@ -32,11 +32,11 @@ public class Ray3D {
          /* put in some tests here */
     }
 
-    public Point3D getStart() {
+    public Vector getStart() {
         return start;
     }
 
-    public Point3D getDirection() {
+    public Vector getDirection() {
         return direction;
     }
 }

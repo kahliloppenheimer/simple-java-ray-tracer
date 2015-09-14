@@ -1,19 +1,19 @@
 package edu.brandeis.cs.cosi155b.graphics;
 
-import edu.brandeis.cs.cosi155b.scene.Point3D;
+import edu.brandeis.cs.cosi155b.scene.Vector;
 
 /**
  * Created by kahliloppenheimer on 9/2/15.
  */
 public class Camera3D {
 
-    private final Point3D location;
+    private final Vector location;
 
-    public Camera3D(Point3D location) {
+    public Camera3D(Vector location) {
         this.location = location;
     }
 
-    public Point3D getLocation() {
+    public Vector getLocation() {
         return location;
     }
 

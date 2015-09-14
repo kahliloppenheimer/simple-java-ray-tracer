@@ -1,6 +1,6 @@
 package edu.brandeis.cs.cosi155b.graphics;
 
-import edu.brandeis.cs.cosi155b.scene.Point3D;
+import edu.brandeis.cs.cosi155b.scene.Vector;
 
 /**
  * Represents the frame that the 3d scene is projected onto. This
@@ -9,7 +9,7 @@ import edu.brandeis.cs.cosi155b.scene.Point3D;
  * Created by kahliloppenheimer on 9/2/15.
  */
 public class SimpleFrame3D {
-    private final Point3D bottomLeftCorner;
+    private final Vector bottomLeftCorner;
     // Width and height in terms of coordinates in grid
     private final double width;
     private final double height;
@@ -17,18 +17,18 @@ public class SimpleFrame3D {
     // and height are broken into
     private final int widthPx;
     private final int heightPx;
-    private Pixel[][] pixels;
+    private Color[][] pixels;
 
-    public SimpleFrame3D(Point3D bottomLeftCorner, double width, double height, int widthPx, int heightPx) {
+    public SimpleFrame3D(Vector bottomLeftCorner, double width, double height, int widthPx, int heightPx) {
         this.bottomLeftCorner = bottomLeftCorner;
         this.width = width;
         this.height = height;
         this.widthPx = widthPx;
         this.heightPx = heightPx;
-        this.pixels = new Pixel[widthPx][heightPx];
+        this.pixels = new Color[widthPx][heightPx];
     }
 
-    public Point3D getBottomLeftCorner() {
+    public Vector getBottomLeftCorner() {
         return bottomLeftCorner;
     }
 
@@ -47,7 +47,7 @@ public class SimpleFrame3D {
      * @param y
      * @return
      */
-    public Pixel getPixel(int x, int y) {
+    public Color getPixel(int x, int y) {
         return pixels[x][y];
     }
 
@@ -58,8 +58,8 @@ public class SimpleFrame3D {
      * @param y
      * @param p
      */
-    public void setPixel(int x, int y, Pixel p) {
-        pixels[x][y] = p;
+    public void setPixel(int x, int y, Color c) {
+        pixels[x][y] = c;
     }
 
     public int getWidthPx() {

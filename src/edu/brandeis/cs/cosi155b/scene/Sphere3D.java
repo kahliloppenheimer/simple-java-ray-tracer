@@ -1,18 +1,20 @@
 package edu.brandeis.cs.cosi155b.scene;
 
+import java.util.Optional;
+
 /**
  * Created by kahliloppenheimer on 9/1/15.
  */
 public class Sphere3D implements Object3D {
 
-    private Point3D center;
+    private Vector center;
     private final double radius;
     // Material of the inside of the sphere
     private final Material inside;
     // Material of the outside of the sphere
     private final Material outside;
 
-    public Sphere3D(Point3D center, double radius, Material inside, Material outside) {
+    public Sphere3D(Vector center, double radius, Material inside, Material outside) {
         this.center = center;
         this.radius = radius;
         this.inside = inside;
@@ -20,13 +22,13 @@ public class Sphere3D implements Object3D {
     }
 
     @Override
-    public RayHit rayIntersect(Ray3D ray) {
+    public Optional<RayHit> rayIntersect(Ray3D ray) {
         // coefficients for the quadratic equation we have to solve to find the intersection
         // ax^2 + bx + c = 0
         double a, b, c;
-        a = Math.pow(ray.getDirection().length(), 2);
+        a = Math.pow(ray.getDirection().magnitude(), 2);
         b = ray.getDirection().scale(2).dot(ray.getStart().subtract(this.center));
-        c = Math.pow(ray.getStart().subtract(this.center).length(), 2) - Math.pow(this.radius, 2);
+        c = Math.pow(ray.getStart().subtract(this.center).magnitude(), 2) - Math.pow(this.radius, 2);
 
         double determinant = Math.pow(b, 2) - 4 * a * c;
         double timeOfFirstIntersection = -1;
@@ -42,13 +44,12 @@ public class Sphere3D implements Object3D {
         }
 
         if (timeOfFirstIntersection > 0) {
-            Point3D intersection = ray.atTime(timeOfFirstIntersection);
-            double distance = ray.getStart().subtract(intersection).length();
-            return new RayHit(ray, distance, intersection, this);
+            Vector intersection = ray.atTime(timeOfFirstIntersection);
+            double distance = ray.getStart().subtract(intersection).magnitude();
+            Vector normal = intersection.subtract(center).normalize();
+            return Optional.of(new RayHit(ray, distance, intersection, normal, this));
         } else {
-            return new RayHit(ray, Double.POSITIVE_INFINITY,
-                    new Point3D(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY),
-                    this);
+            return Optional.empty();
         }
     }
 
@@ -66,12 +67,7 @@ public class Sphere3D implements Object3D {
         return this.outside;
     }
 
-    @Override
-    public Point3D getNormal(Ray3D ray) {
-        return rayIntersect(ray).getPoint().subtract(center).normalize();
-    }
-
-    public Point3D getCenter() {
+    public Vector getCenter() {
         return this.center;
     }
 
@@ -80,7 +76,7 @@ public class Sphere3D implements Object3D {
     }
 
     public void setLocation(double x, double y, double z) {
-        this.center = new Point3D(x, y, z);
+        this.center = new Vector(x, y, z);
     }
 
 }

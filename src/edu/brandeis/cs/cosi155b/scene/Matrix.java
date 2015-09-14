@@ -4,6 +4,7 @@ package edu.brandeis.cs.cosi155b.scene;
  * Created by kahliloppenheimer on 9/10/15.
  */
 public class Matrix {
+
     private final double[][] entries;
 
     public Matrix (double[][] entries) {
@@ -20,8 +21,8 @@ public class Matrix {
      * @param i
      * @return
      */
-    public Point3D getRow(int i) {
-        return new Point3D(entries[i][0], entries[i][1], entries[i][2]);
+    public Vector getRow(int i) {
+        return new Vector(entries[i][0], entries[i][1], entries[i][2], entries[i][3]);
     }
 
     /**
@@ -30,8 +31,8 @@ public class Matrix {
      * @param j
      * @return
      */
-    public Point3D getColumn(int j) {
-        return new Point3D(entries[0][j], entries[1][j], entries[2][j]);
+    public Vector getColumn(int j) {
+        return new Vector(entries[0][j], entries[1][j], entries[2][j], entries[3][j]);
     }
 
     /**
@@ -41,10 +42,14 @@ public class Matrix {
      * @param vector
      * @return
      */
-    public Point3D multiply(Point3D vector) {
-        return new Point3D( getRow(0).dot(vector),
+    public Vector multiply(Vector vector) {
+        if(getColumnCount() != 4) {
+            throw new IllegalArgumentException(vector + " must have magnitude " + getColumnCount());
+        }
+        return new Vector( getRow(0).dot(vector),
                             getRow(1).dot(vector),
-                            getRow(2).dot(vector) );
+                            getRow(2).dot(vector),
+                            getRow(3).dot(vector));
     }
 
     /**
@@ -55,13 +60,39 @@ public class Matrix {
      * @return
      */
     public Matrix multiply(Matrix other) {
-        double[][] entries = new double[3][3];
-        for(int i = 0; i <= 2; ++i) {
-            for(int j = 0; j <= 2; ++j) {
+        if(getColumnCount() != other.getRowCount()) {
+            throw new IllegalArgumentException(other + " must have " + getColumnCount() + " rows!");
+        }
+        double[][] entries = new double[getRowCount()][other.getColumnCount()];
+        for(int i = 0; i <= getRowCount(); ++i) {
+            for(int j = 0; j <= other.getColumnCount(); ++j) {
                 entries[i][j] = getRow(i).dot(other.getColumn(j));
             }
         }
         return new Matrix(entries);
+    }
+
+
+    public Matrix transpose() {
+//        double[][] transposed = new double[]
+        return null;
+
+    }
+
+    public int getRowCount() {
+        return entries.length;
+    }
+
+    public int getColumnCount() {
+        return entries[0].length;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < getRowCount(); ++i) {
+            sb.append(getRow(i).toString());
+        }
+        return sb.toString();
     }
 
 }

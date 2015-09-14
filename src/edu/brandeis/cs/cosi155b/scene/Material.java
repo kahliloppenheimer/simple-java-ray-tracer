@@ -34,4 +34,7 @@ public class Material {
         return hardness;
     }
 
+    public double getSpecularIntensity() {
+        return specularIntensity;
+    }
 }

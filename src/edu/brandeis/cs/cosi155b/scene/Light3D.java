@@ -14,10 +14,10 @@ public class Light3D {
     // "plastic-y" effect
     private static final double SPECULAR_INTENSITY = .25;
 
-    private Point3D location;
+    private Vector location;
     private final Color color;
 
-    public Light3D(Point3D location, Color color) {
+    public Light3D(Vector location, Color color) {
         this.location = location;
         this.color = color;
     }
@@ -32,15 +32,15 @@ public class Light3D {
      * @return
      */
     public double diffuse(RayHit rh) {
-        Point3D point = rh.getPoint();
-        Point3D normal = rh.getObj().getNormal(rh.getRay());
-        Point3D lightVec = getLocation().subtract(point);
+        Vector point = rh.getPoint();
+        Vector normal = rh.getNormal();
+        Vector lightVec = getLocation().subtract(point);
 
-        if(lightVec.length() != 1) {
+        if(lightVec.magnitude() != 1) {
             lightVec = lightVec.normalize();
         }
 
-        if(normal.length() != 1) {
+        if(normal.magnitude() != 1) {
             normal = normal.normalize();
         }
 
@@ -55,30 +55,30 @@ public class Light3D {
      * @param rh
      * @return
      */
-//    public double specular(Point3D lightPos, Point3D eyePos, RayHit rh) {
-//        Point3D eyeVec = eyePos.subtract(rh.getPoint()).normalize();
-//        Point3D incomingLight = rh.getPoint().subtract(lightPos);
-//        Point3D normal = rh.getObj().getNormal(rh.getRay());
-//        Point3D reflected = incomingLight.subtract(normal.scale(2).scale(normal.dot(incomingLight))).normalize();
+//    public double specular(Vector lightPos, Vector eyePos, RayHit rh) {
+//        Vector eyeVec = eyePos.subtract(rh.getPoint()).normalize();
+//        Vector incomingLight = rh.getPoint().subtract(lightPos);
+//        Vector normal = rh.getObj().getNormal(rh.getRay());
+//        Vector reflected = incomingLight.subtract(normal.scale(2).scale(normal.dot(incomingLight))).normalize();
 //        int hardness = rh.getObj().getOutsideMaterial().getHardness();
 //        return  Math.max(Math.pow(reflected.dot(eyeVec), hardness), 0);
 //    }
 
-    public double specular(Point3D lightPos, Point3D eyePos, RayHit rh) {
-        Point3D lightVec = lightPos.subtract(rh.getPoint()).normalize();
-        Point3D eyeVec = eyePos.subtract(rh.getPoint()).normalize();
-        Point3D normal = rh.getObj().getNormal(rh.getRay());
-        Point3D lProjectedOntoN = normal.scale(lightVec.dot(normal));
-        Point3D lProjectedOntoPlane = lightVec.subtract(lProjectedOntoN);
-        Point3D reflectedLight = lightVec.subtract(lProjectedOntoPlane.scale(2)).normalize();
+    public double specular(Vector eyePos, RayHit rh) {
+        Vector lightVec = getLocation().subtract(rh.getPoint()).normalize();
+        Vector eyeVec = eyePos.subtract(rh.getPoint()).normalize();
+        Vector normal = rh.getNormal();
+        Vector lProjectedOntoN = normal.scale(lightVec.dot(normal));
+        Vector lProjectedOntoPlane = lightVec.subtract(lProjectedOntoN);
+        Vector reflectedLight = lightVec.subtract(lProjectedOntoPlane.scale(2)).normalize();
         return Math.pow(Math.max(reflectedLight.dot(eyeVec), 0), rh.getObj().getOutsideMaterial().getHardness());
     }
 
-    public Point3D getLocation() {
+    public Vector getLocation() {
         return location;
     }
 
-    public void setLocation(Point3D newLoc) {
+    public void setLocation(Vector newLoc) {
         this.location = newLoc;
     }
 
@@ -95,13 +95,13 @@ public class Light3D {
      * @param diffuseCoefficient
      * @return
      */
-    public Color phongIllumination(Color prevPixelColor, Color materialColor, double diffuseCoefficient, double specularCoefficient) {
+    public Color phongIllumination(RayHit rh, Vector cameraPos) {
+        double diffuseCoefficient = diffuse(rh);
+        double specularCoefficient = specular(cameraPos, rh);
         if(specularCoefficient * SPECULAR_INTENSITY > diffuseCoefficient) {
             diffuseCoefficient = 1 - SPECULAR_INTENSITY * specularCoefficient;
         }
-//        } else {
-//            specularCoefficient = Math.min(1 - diffuseCoefficient, specularCoefficient);
-//        }
-        return prevPixelColor.add( materialColor.multiply(getColor()).scaleFloat((float) diffuseCoefficient))
-                             .add( getColor().scaleFloat((float) specularCoefficient).scaleFloat((float) SPECULAR_INTENSITY)); }
+        Material m = rh.getObj().getOutsideMaterial();
+        return m.getColor().multiply(getColor()).scaleFloat((float) diffuseCoefficient)
+                             .add( getColor().scaleFloat((float) specularCoefficient).scaleFloat((float) m.getSpecularIntensity())); }
 }

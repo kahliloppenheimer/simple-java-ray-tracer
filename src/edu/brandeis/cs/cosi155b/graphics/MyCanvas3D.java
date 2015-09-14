@@ -81,7 +81,7 @@ public class MyCanvas3D extends JPanel implements Canvas3D {
 		// Otherwise just fill it in
 		for(int i = 0; i < rendered.getWidthPx(); ++i) {
 			for(int j = 0; j < rendered.getHeightPx(); ++j) {
-				drawPixel(i, getHeight() - j - 1, rendered.getPixel(i, j).getColor());
+				drawPixel(i, getHeight() - j - 1, rendered.getPixel(i, j));
 			}
 		}
 	}
@@ -121,7 +121,6 @@ public class MyCanvas3D extends JPanel implements Canvas3D {
 		JFrame f = new JFrame("PA01 Demo");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.add(this);
-		System.out.println("Width = " + getWidth() + "\theight = " + getHeight());
 		f.setSize(getWidth(), getHeight());
 		f.setVisible(true);
 	}

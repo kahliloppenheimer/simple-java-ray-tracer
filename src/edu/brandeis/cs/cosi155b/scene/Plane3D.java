@@ -1,35 +1,32 @@
 package edu.brandeis.cs.cosi155b.scene;
 
+import java.util.Optional;
+
 /**
  * Created by edenzik on 9/3/15.
  * If dn > 0
  */
 public class Plane3D implements Object3D {
-    private final Point3D normal;
-    private final Point3D point;
+    private final Vector normal;
+    private final Vector point;
     private final Material front;
 
-    public Plane3D(Point3D point, Point3D normal, Material front) {
+    public Plane3D(Vector point, Vector normal, Material front) {
         this.normal = normal;
         this.point = point;
         this.front = front;
     }
 
     @Override
-    public RayHit rayIntersect(Ray3D r) {
+    public Optional<RayHit> rayIntersect(Ray3D r) {
         double dn = (r.getDirection()).dot(normal);
         double t = (point.subtract(r.getStart())).dot(normal) / dn;
         if(dn == 0.0 || t <= 0) {
-            return new RayHit(r, Double.POSITIVE_INFINITY, null, this);
+            return Optional.empty();
         } else {
-            return new RayHit(r, r.atTime(t).subtract(r.getStart()).length(), r.atTime(t), this);
+            Vector normal = r.getDirection().dot(this.normal) < 0.0 ? this.normal.scale(1) : this.normal.scale(-1);
+            return Optional.of(new RayHit(r, r.atTime(t).subtract(r.getStart()).magnitude(), r.atTime(t), normal, this));
         }
-    }
-
-    @Override
-    public Point3D getNormal(Ray3D ray) {
-        return ray.getDirection().dot(normal) < 0.0 ? normal.scale(1).normalize() : normal.scale(-1).normalize();
-//        return normal.dot(point) > 0 ? normal : normal.scale(-1);
     }
 
     @Override

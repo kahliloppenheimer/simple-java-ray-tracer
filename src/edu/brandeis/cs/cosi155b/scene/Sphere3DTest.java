@@ -3,6 +3,7 @@ package edu.brandeis.cs.cosi155b.scene;
 import edu.brandeis.cs.cosi155b.graphics.Color;
 import org.junit.Test;
 
+import java.util.Optional;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -13,7 +14,7 @@ import static org.junit.Assert.*;
 public class Sphere3DTest {
 
     private static final double DELTA = .000001;
-    private static final Sphere3D unitSphere = new Sphere3D(new Point3D(0, 0, 0), 1, new Material(Color.RED, 55, .25), new Material(Color.RED, 55, .25));
+    private static final Sphere3D unitSphere = new Sphere3D(new Vector(0, 0, 0), 1, new Material(Color.RED, 55, .25), new Material(Color.RED, 55, .25));
 
     @Test
     public void testInsiderMaterial() {
@@ -29,42 +30,42 @@ public class Sphere3DTest {
 
     @Test
     public void testRayIntersectFromInside() {
-        Ray3D r = new Ray3D(new Point3D(0, 0, 0), new Point3D(1, 1, 1));
-        RayHit rh = unitSphere.rayIntersect(r);
-        assertNotNull(rh);
-        assertEquals(rh.getDistance(), 1, DELTA);
-        assertEquals(rh.getPoint(), new Point3D(1, 1, 1).normalize());
+        Ray3D r = new Ray3D(new Vector(0, 0, 0), new Vector(1, 1, 1));
+        Optional<RayHit> rh = unitSphere.rayIntersect(r);
+        assertTrue(rh.isPresent());
+        assertEquals(rh.get().getDistance(), 1, DELTA);
+        assertEquals(rh.get().getPoint(), new Vector(1, 1, 1).normalize());
     }
 
     @Test
     public void testRayIntersectOnceFromOutside() {
-        Ray3D r = new Ray3D(new Point3D(-1, 1, 0), new Point3D(1, 0, 0));
-        RayHit rh = unitSphere.rayIntersect(r);
-        assertNotNull(rh);
-        assertEquals(rh.getDistance(), 1, DELTA);
-        assertEquals(rh.getPoint(), new Point3D(0, 1, 0));
+        Ray3D r = new Ray3D(new Vector(-1, 1, 0), new Vector(1, 0, 0));
+        Optional<RayHit> rh = unitSphere.rayIntersect(r);
+        assertTrue(rh.isPresent());
+        assertEquals(rh.get().getDistance(), 1, DELTA);
+        assertEquals(rh.get().getPoint(), new Vector(0, 1, 0));
     }
 
     @Test
     public void testRayIntersectTwiceFromOutside() {
         for(int i  = 0; i < 100; ++i) {
-            Point3D p = getRandPointBiggerThan(1);
+            Vector p = getRandPointBiggerThan(1);
             Ray3D ray = new Ray3D(p, p.scale(-1));
-            RayHit rh = unitSphere.rayIntersect(ray);
-            assertNotNull(rh);
-            assertTrue(rh.getDistance() < p.length());
+            Optional<RayHit> rh = unitSphere.rayIntersect(ray);
+            assertTrue(rh.isPresent());
+            assertTrue(rh.get().getDistance() < p.magnitude());
         }
     }
 
     @Test
     public void testRayDoesNotIntersectSphere() {
-        Ray3D r = new Ray3D(new Point3D(0, -2, 0), new Point3D(0, -1, 0));
-        RayHit rh = unitSphere.rayIntersect(r);
-        assertTrue(rh.getDistance() == Double.POSITIVE_INFINITY);
+        Ray3D r = new Ray3D(new Vector(0, -2, 0), new Vector(0, -1, 0));
+        Optional<RayHit> rh = unitSphere.rayIntersect(r);
+        assertFalse(rh.isPresent());
     }
 
-    private static Point3D getRandPointBiggerThan(int i) {
+    private static Vector getRandPointBiggerThan(int i) {
         Random rand = new Random();
-        return new Point3D(rand.nextInt(100) + i, rand.nextInt(100) + i, rand.nextInt(100) + i);
+        return new Vector(rand.nextInt(100) + i, rand.nextInt(100) + i, rand.nextInt(100) + i);
     }
 }
