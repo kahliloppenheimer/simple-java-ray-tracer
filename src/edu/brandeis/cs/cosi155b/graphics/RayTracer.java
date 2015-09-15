@@ -23,7 +23,7 @@ public class RayTracer {
         this.lights = scene.getLights();
     }
 
-    public SimpleFrame3D render(int antiAliasFactor, int numThreads) throws InterruptedException {
+    public SimpleFrame3D render(boolean shadowsEnabled, int antiAliasFactor, int numThreads) throws InterruptedException {
         SimpleFrame3D cloned = new SimpleFrame3D(
                 this.frame.getBottomLeftCorner(),
                 this.frame.getWidth(),
@@ -52,7 +52,7 @@ public class RayTracer {
                                     .translate(i * wDelta - randWDelta, j * hDelta - randHDelta, 0)
                                     .subtract(camera.getLocation()));
 
-                            Color traced = traceRay(nextRay);
+                            Color traced = traceRay(nextRay, shadowsEnabled);
                             traced.getColorComponents(nextColorToAdd);
 
                             for (int q = 0; q < 3; ++q) {
@@ -82,9 +82,10 @@ public class RayTracer {
      * goes through should be
      *
      * @param nextRay
+     * @param shadowsEnabled
      * @return
      */
-    private Color traceRay(Ray3D nextRay) {
+    private Color traceRay(Ray3D nextRay, boolean shadowsEnabled) {
         Optional<RayHit> optClosest = findFirstIntersection(nextRay, scene);
         // Color the pixel depending on which object was hit
         if (optClosest.isPresent()) {
@@ -94,7 +95,7 @@ public class RayTracer {
             Color lighted = scene.getAmbient().multiply(material.getColor());
             for (Light3D l : lights) {
                 // Check to see if shadow should be cast
-                if(!isObjectBetweenLightAndPoint(l, closest.getPoint())) {
+                if(!shadowsEnabled || !isObjectBetweenLightAndPoint(l, closest.getPoint())) {
                     lighted = lighted.add(l.phongIllumination(closest, camera.getLocation()));
                 }
             }
