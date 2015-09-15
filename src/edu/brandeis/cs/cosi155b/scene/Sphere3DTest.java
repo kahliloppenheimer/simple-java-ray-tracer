@@ -31,7 +31,7 @@ public class Sphere3DTest {
     @Test
     public void testRayIntersectFromInside() {
         Ray3D r = new Ray3D(new Vector(0, 0, 0), new Vector(1, 1, 1));
-        Optional<RayHit> rh = unitSphere.rayIntersect(r);
+        Optional<RayHit> rh = unitSphere.untransformedIntersection(r);
         assertTrue(rh.isPresent());
         assertEquals(rh.get().getDistance(), 1, DELTA);
         assertEquals(rh.get().getPoint(), new Vector(1, 1, 1).normalize());
@@ -40,7 +40,7 @@ public class Sphere3DTest {
     @Test
     public void testRayIntersectOnceFromOutside() {
         Ray3D r = new Ray3D(new Vector(-1, 1, 0), new Vector(1, 0, 0));
-        Optional<RayHit> rh = unitSphere.rayIntersect(r);
+        Optional<RayHit> rh = unitSphere.untransformedIntersection(r);
         assertTrue(rh.isPresent());
         assertEquals(rh.get().getDistance(), 1, DELTA);
         assertEquals(rh.get().getPoint(), new Vector(0, 1, 0));
@@ -51,7 +51,7 @@ public class Sphere3DTest {
         for(int i  = 0; i < 100; ++i) {
             Vector p = getRandPointBiggerThan(1);
             Ray3D ray = new Ray3D(p, p.scale(-1));
-            Optional<RayHit> rh = unitSphere.rayIntersect(ray);
+            Optional<RayHit> rh = unitSphere.untransformedIntersection(ray);
             assertTrue(rh.isPresent());
             assertTrue(rh.get().getDistance() < p.magnitude());
         }
@@ -60,7 +60,7 @@ public class Sphere3DTest {
     @Test
     public void testRayDoesNotIntersectSphere() {
         Ray3D r = new Ray3D(new Vector(0, -2, 0), new Vector(0, -1, 0));
-        Optional<RayHit> rh = unitSphere.rayIntersect(r);
+        Optional<RayHit> rh = unitSphere.untransformedIntersection(r);
         assertFalse(rh.isPresent());
     }
 

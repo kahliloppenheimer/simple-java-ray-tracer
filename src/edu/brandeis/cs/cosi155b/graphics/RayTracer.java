@@ -130,7 +130,7 @@ public class RayTracer {
         RayHit closest = null;
         double closestDistance = Double.POSITIVE_INFINITY;
         for (Object3D o : scene.getObjects()) {
-            Optional<RayHit> intersection = o.rayIntersect(visionVec);
+            Optional<RayHit> intersection = o.findIntersection(visionVec);
             if (intersection.isPresent() && intersection.get().getDistance() < closestDistance) {
                 closestDistance = intersection.get().getDistance();
                 closest = intersection.get();

@@ -1,11 +1,16 @@
 package edu.brandeis.cs.cosi155b.scene;
 
+import java.util.Arrays;
+
 /**
  * Created by kahliloppenheimer on 9/10/15.
  */
 public class Matrix {
 
     private final double[][] entries;
+    public static final Matrix IDENTITY = new Matrix(new double[][] {{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}});
+    public static final Matrix ZERO = new Matrix(new double[][] {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}});
+
 
     public Matrix (double[][] entries) {
         this.entries = entries;
@@ -46,10 +51,10 @@ public class Matrix {
         if(getColumnCount() != 4) {
             throw new IllegalArgumentException(vector + " must have magnitude " + getColumnCount());
         }
-        return new Vector( getRow(0).dot(vector),
-                            getRow(1).dot(vector),
-                            getRow(2).dot(vector),
-                            getRow(3).dot(vector));
+        return new Vector( getRow(0).dot4D(vector),
+                            getRow(1).dot4D(vector),
+                            getRow(2).dot4D(vector),
+                            getRow(3).dot4D(vector));
     }
 
     /**
@@ -64,19 +69,33 @@ public class Matrix {
             throw new IllegalArgumentException(other + " must have " + getColumnCount() + " rows!");
         }
         double[][] entries = new double[getRowCount()][other.getColumnCount()];
-        for(int i = 0; i <= getRowCount(); ++i) {
-            for(int j = 0; j <= other.getColumnCount(); ++j) {
-                entries[i][j] = getRow(i).dot(other.getColumn(j));
+        int numRows = getRowCount();
+        int numCols = getColumnCount();
+        for(int i = 0; i < numRows; ++i) {
+            for(int j = 0; j < numCols; ++j) {
+                entries[i][j] = getRow(i).dot4D(other.getColumn(j));
             }
         }
         return new Matrix(entries);
     }
 
 
+    /**
+     * Returns the transpose of this matrix, i.e. the matrix formed by using every column
+     * of this matrix as the rows of the returned matrix.
+     *
+     * @return
+     */
     public Matrix transpose() {
-//        double[][] transposed = new double[]
-        return null;
-
+        int numRows = getRowCount();
+        int numCols = getColumnCount();
+        double[][] transposed = new double[numRows][numCols];
+        for(int i = 0; i < numRows; ++i) {
+            for(int j = 0; j < numCols; ++j) {
+                transposed[i][j] = entries[j][i];
+            }
+        }
+        return new Matrix(transposed);
     }
 
     public int getRowCount() {
@@ -93,6 +112,21 @@ public class Matrix {
             sb.append(getRow(i).toString());
         }
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Matrix matrix = (Matrix) o;
+
+        return Arrays.deepEquals(entries, matrix.entries);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(entries);
     }
 
 }

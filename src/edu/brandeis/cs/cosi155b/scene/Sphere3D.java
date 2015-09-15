@@ -5,7 +5,7 @@ import java.util.Optional;
 /**
  * Created by kahliloppenheimer on 9/1/15.
  */
-public class Sphere3D implements Object3D {
+public class Sphere3D extends Object3D {
 
     private Vector center;
     private final double radius;
@@ -22,7 +22,7 @@ public class Sphere3D implements Object3D {
     }
 
     @Override
-    public Optional<RayHit> rayIntersect(Ray3D ray) {
+    public Optional<RayHit> untransformedIntersection(Ray3D ray) {
         // coefficients for the quadratic equation we have to solve to find the intersection
         // ax^2 + bx + c = 0
         double a, b, c;
@@ -47,7 +47,7 @@ public class Sphere3D implements Object3D {
             Vector intersection = ray.atTime(timeOfFirstIntersection);
             double distance = ray.getStart().subtract(intersection).magnitude();
             Vector normal = intersection.subtract(center).normalize();
-            return Optional.of(new RayHit(ray, distance, intersection, normal, this));
+            return Optional.of(new RayHit(ray, timeOfFirstIntersection, distance, intersection, normal, this));
         } else {
             return Optional.empty();
         }

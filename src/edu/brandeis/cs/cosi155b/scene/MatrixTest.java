@@ -67,4 +67,25 @@ public class MatrixTest {
         assertEquals(identity.multiply(zero), zero);
         assertEquals(zero.multiply(identity), zero);
     }
+
+    @Test
+    public void testTranspose() {
+        assertEquals(identity.transpose(), identity);
+        assertEquals(zero.transpose(), zero);
+
+        Matrix m = new Matrix(new double[][] {
+                {1, 0, 1, 0},
+                {0, 1, 0, 1},
+                {2, 3, 0, 0},
+                {1, 5, 5, 5}
+        });
+        Matrix transposed = new Matrix(new double[][] {
+                {1, 0, 2, 1},
+                {0, 1, 3, 5},
+                {1, 0, 0, 5},
+                {0, 1, 0, 5}
+        });
+
+        assertEquals(transposed, m.transpose());
+    }
 }

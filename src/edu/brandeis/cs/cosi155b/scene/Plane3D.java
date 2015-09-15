@@ -6,7 +6,7 @@ import java.util.Optional;
  * Created by edenzik on 9/3/15.
  * If dn > 0
  */
-public class Plane3D implements Object3D {
+public class Plane3D extends Object3D {
     private final Vector normal;
     private final Vector point;
     private final Material front;
@@ -18,14 +18,14 @@ public class Plane3D implements Object3D {
     }
 
     @Override
-    public Optional<RayHit> rayIntersect(Ray3D r) {
+    public Optional<RayHit> untransformedIntersection(Ray3D r) {
         double dn = (r.getDirection()).dot(normal);
         double t = (point.subtract(r.getStart())).dot(normal) / dn;
         if(dn == 0.0 || t <= 0) {
             return Optional.empty();
         } else {
             Vector normal = r.getDirection().dot(this.normal) < 0.0 ? this.normal.scale(1) : this.normal.scale(-1);
-            return Optional.of(new RayHit(r, r.atTime(t).subtract(r.getStart()).magnitude(), r.atTime(t), normal, this));
+            return Optional.of(new RayHit(r, t, r.atTime(t).subtract(r.getStart()).magnitude(), r.atTime(t), normal, this));
         }
     }
 
@@ -37,15 +37,5 @@ public class Plane3D implements Object3D {
     @Override
     public Material getOutsideMaterial() {
         return front;
-    }
-
-    @Override
-    public void translate(double x, double y, double z) {
-
-    }
-
-    @Override
-    public void setLocation(double x, double y, double z) {
-
     }
 }

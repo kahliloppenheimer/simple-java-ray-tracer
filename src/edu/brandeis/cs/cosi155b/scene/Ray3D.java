@@ -16,8 +16,8 @@ public class Ray3D {
         if(direction.magnitude() != 1) {
             direction = direction.normalize();
         }
-        this.start = start;
-        this.direction = direction;
+        this.start = new Vector(start.getX(), start.getY(), start.getZ(), 1);
+        this.direction = new Vector(direction.getX(), direction.getY(), direction.getZ(), 0);
     }
 
     /**

@@ -6,6 +6,8 @@ package edu.brandeis.cs.cosi155b.scene;
 public class RayHit {
     // Ray that caused the rayHit
     private final Ray3D ray;
+    // time at which the ray intersected the object
+    private final double time;
     // distance along ray to the first intersection
     private final double distance;
     // point at which the ray first intersects the object
@@ -15,14 +17,18 @@ public class RayHit {
     // object that the ray intersects
     private final Object3D obj;
 
-    public RayHit(Ray3D ray, double distance, Vector iPoint, Vector normal, Object3D obj) {
+    public RayHit(Ray3D ray, double time, double distance, Vector iPoint, Vector normal, Object3D obj) {
         this.ray = ray;
+        this.time = time;
         this.distance = distance;
         this.iPoint = iPoint;
         this.normal = normal.normalize();
         this.obj = obj;
     }
 
+    public double getTime() {
+        return time;
+    }
     public double getDistance() {
         return distance;
     }

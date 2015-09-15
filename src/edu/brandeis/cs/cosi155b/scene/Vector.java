@@ -9,6 +9,9 @@ import java.util.Arrays;
 
 public class Vector {
 
+    // Used for double equality checks
+    private static final double EPSILON = .00000001;
+
     // Coordinates of vector in 3D space
     private final double x;
     private final double y;
@@ -71,12 +74,23 @@ public class Vector {
     }
 
     /**
-     * return the dot product of this point and q
+     * return the dot product of this point and q, ignoring the 4th component
      *
      * @param q
      * @return
      */
     public double dot(Vector q) {
+        return getX() * q.getX() + getY() * q.getY() + getZ() * q.getZ();
+    }
+
+    /**
+     * Returns the dot product of this vector and q, taking the 4th component
+     * into account
+     *
+     * @param q
+     * @return
+     */
+    public double dot4D(Vector q) {
         return getX() * q.getX() + getY() * q.getY() + getZ() * q.getZ() + w * q.w;
     }
 
@@ -101,7 +115,7 @@ public class Vector {
      */
     public Vector normalize() {
         double length = this.magnitude();
-        return new Vector(getX() / length, getY() / length, getZ() / length);
+        return new Vector(getX() / length, getY() / length, getZ() / length, w);
     }
 
     /**
@@ -152,9 +166,9 @@ public class Vector {
 
         Vector vector = (Vector) o;
 
-        if (Double.compare(vector.x, x) != 0) return false;
-        if (Double.compare(vector.y, y) != 0) return false;
-        return Double.compare(vector.z, z) == 0;
+        if (Math.abs(vector.x - x) > EPSILON) return false;
+        if (Math.abs(vector.y - y) > EPSILON) return false;
+        return Math.abs(vector.z - z) < EPSILON;
     }
 
     @Override
