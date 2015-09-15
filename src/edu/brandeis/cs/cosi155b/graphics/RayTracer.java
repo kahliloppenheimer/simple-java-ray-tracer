@@ -35,7 +35,7 @@ public class RayTracer {
         double wDelta = cloned.getWidth() / cloned.getWidthPx();
         double hDelta = cloned.getHeight() / cloned.getHeightPx();
 
-        Stack<Thread> toJoin = new Stack<Thread>();
+        Stack<Thread> toJoin = new Stack<>();
         // Divide up the rendering into multiple threads
         for(int t = 0; t < numThreads; ++t) {
             final int ithPixel = t;

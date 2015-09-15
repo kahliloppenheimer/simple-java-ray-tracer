@@ -21,9 +21,9 @@ public class SingleFrameDemo {
         // Objects in scene
         List<Object3D> objects = new ArrayList<Object3D>();
         Sphere3D sphere1 = new Sphere3D(new Vector(1, 1, -5), 1, null, new Material(Color.red, 10, 1))
-                .transform(LinearTransformation.translate(-1, -1, 0));
-        objects.add(new Plane3D(new Vector(0, -1, 0), new Vector(0, 1, 0), new Material(Color.GREEN, 1, .25)));
-        objects.add(new Sphere3D(new Vector(-3, 0, -8), 1, null, new Material(Color.pink, 10, .7)));
+                .transform(LinearTransformation.scale(1.3, 1, 1).compose(LinearTransformation.translate(-1, 0, 0)));
+//        objects.add(new Plane3D(new Vector(0, -1, 0), new Vector(0, 1, 0), new Material(Color.GREEN, 1, .25)));
+//        objects.add(new Sphere3D(new Vector(-3, 0, -8), 1, null, new Material(Color.pink, 10, .7)));
         objects.add(sphere1);
 
         // Lights in scene
