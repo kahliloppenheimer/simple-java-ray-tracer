@@ -10,21 +10,28 @@ import java.util.List;
  */
 public class SingleFrameDemo {
 
-    private static final int ANTI_ALIASING = 1;
+    private static final int ANTI_ALIASING = 100;
     private static final int NUM_THREADS = 4;
 
     public static void main(String[] args) throws InterruptedException {
 
         Camera3D camera = new Camera3D(new Vector(0, 0, 0));
-        SimpleFrame3D frame = new SimpleFrame3D(new Vector(-.5, -.5, -1), 1, 1, 800, 800);
+        SimpleFrame3D frame = new SimpleFrame3D(new Vector(-1, -1, -1), 2, 2, 800, 800);
 
         // Objects in scene
         List<Object3D> objects = new ArrayList<Object3D>();
-        Sphere3D sphere1 = new Sphere3D(new Vector(1, 1, -5), 1, null, new Material(Color.red, 10, 1))
-                .transform(LinearTransformation.scale(1.3, 1, 1).compose(LinearTransformation.translate(-1, 0, 0)));
+        Sphere3D sphere1 = new Sphere3D(new Vector(-.5, 1, -3), .3, null, new Material(Color.blue, 10, 1))
+                .transform(LinearTransformation.scale(1, 1, 1).compose(LinearTransformation.translate(-1, 0, 0)));
+        Sphere3D sphere2 = new Sphere3D(new Vector(1, 1, -2), .3, null, new Material(Color.red, 10, 1))
+                .transform(LinearTransformation.scale(1, 1, 1).compose(LinearTransformation.translate(-1, 0, 0)));
+        Sphere3D sphere3 = new Sphere3D(new Vector(2.5, 1, -4), .3, null, new Material(Color.green, 10, 1))
+                .transform(LinearTransformation.scale(1, 1, 1).compose(LinearTransformation.translate(-1, 0, 0)));
 //        objects.add(new Plane3D(new Vector(0, -1, 0), new Vector(0, 1, 0), new Material(Color.GREEN, 1, .25)));
 //        objects.add(new Sphere3D(new Vector(-3, 0, -8), 1, null, new Material(Color.pink, 10, .7)));
         objects.add(sphere1);
+        objects.add(sphere2);
+        objects.add(sphere3);
+        objects.add(new Plane3D(new Vector(0, 0, -5), new Vector(0, 1, 1), new Material(Color.blue, 10, .1)));
 
         // Lights in scene
         List<Light3D> lights = new ArrayList<>();
