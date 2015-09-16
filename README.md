@@ -3,19 +3,19 @@ This is my implementation of a Ray tracer built from scratch in Java. Below are 
 list of its current features, and a list of the features that are in the works.
 
 ## Currently Supported Shapes
--Spheres
--Planes
+- Spheres
+- Planes
 
 ## Implemented Features
--Anti-aliasing (with specifiable number of samples per pixel)
--Shadows (with toggle)
--Colored materials and colored lighting
--Diffuse, Specular, and Ambient lighting (all very basic and following Phong model)
--Multi-threaded rendering (with specifiable number of threads)
--Affine transformations (or any linear transformations)
+- Anti-aliasing (with specifiable number of samples per pixel)
+- Shadows (with toggle)
+- Colored materials and colored lighting
+- Diffuse, Specular, and Ambient lighting (all very basic and following Phong model)
+- Multi-threaded rendering (with specifiable number of threads)
+- Affine transformations (or any linear transformations)
 
 ## Developing Features
--Dynamic/soft shadows (sample randomly-distributed rays to determine shading)
--Dynamic ambient lighting (sample randomly-distributed rays to determine ambient light at point)
--More objects (cones, cylinders, etc.)
--Reflections/Refractions
+- Dynamic/soft shadows (sample randomly-distributed rays to determine shading)
+- Dynamic ambient lighting (sample randomly-distributed rays to determine ambient light at point)
+- More objects (cones, cylinders, etc.)
+- Reflections/Refractions
