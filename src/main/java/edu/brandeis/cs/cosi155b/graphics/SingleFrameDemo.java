@@ -10,13 +10,13 @@ import java.util.List;
  */
 public class SingleFrameDemo {
 
-    private static final int ANTI_ALIASING = 100;
+    private static final int ANTI_ALIASING = 4;
     private static final int NUM_THREADS = 4;
 
     public static void main(String[] args) throws InterruptedException {
 
         Camera3D camera = new Camera3D(new Vector(0, 0, 0));
-        SimpleFrame3D frame = new SimpleFrame3D(new Vector(-1, -1, -1), 2, 2, 800, 800);
+        SimpleFrame3D frame = new SimpleFrame3D(new Vector(-1, -1, -1), 2, 2, 400, 400);
 
         // Objects in scene
         List<Object3D> objects = new ArrayList<Object3D>();

@@ -1,10 +1,9 @@
 package edu.brandeis.cs.cosi155b.graphics;
 
 import edu.brandeis.cs.cosi155b.scene.*;
+import edu.brandeis.cs.cosi155b.scene.Vector;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by kahliloppenheimer on 9/2/15.
@@ -16,6 +15,8 @@ public class RayTracer {
     private Scene3D scene;
     private List<Light3D> lights;
 
+    private static final int INIT_ANTI_ALIAS_SAMPLES = 4;
+
     public RayTracer(SimpleFrame3D frame, Camera3D camera, Scene3D scene) {
         this.frame = frame;
         this.camera = camera;
@@ -23,7 +24,7 @@ public class RayTracer {
         this.lights = scene.getLights();
     }
 
-    public SimpleFrame3D render(boolean shadowsEnabled, int antiAliasFactor, int numThreads) throws InterruptedException {
+    public SimpleFrame3D render(boolean shadowsEnabled, int INIT_ANTI_ALIAS_SAMPLES, int numThreads) throws InterruptedException {
         SimpleFrame3D cloned = new SimpleFrame3D(
                 this.frame.getBottomLeftCorner(),
                 this.frame.getWidth(),
@@ -35,6 +36,7 @@ public class RayTracer {
         double wDelta = cloned.getWidth() / cloned.getWidthPx();
         double hDelta = cloned.getHeight() / cloned.getHeightPx();
 
+        Map<Double, Map.Entry<Integer, Integer>> stdevs = new TreeMap<>();
         Stack<Thread> toJoin = new Stack<>();
         // Divide up the rendering into multiple threads
         for(int t = 0; t < numThreads; ++t) {
@@ -44,7 +46,7 @@ public class RayTracer {
                     for (int j = ithPixel; j < cloned.getHeightPx(); j += numThreads) {
                         float[] runningColorSum = new float[3];
                         float[] nextColorToAdd = new float[3];
-                        for (int k = 0; k < antiAliasFactor; ++k) {
+                        for (int k = 0; k < INIT_ANTI_ALIAS_SAMPLES; ++k) {
                             // Create the ray from the camera to the pixel in the frame we are currently coloring
                             double randWDelta = Math.random() * wDelta;
                             double randHDelta = Math.random() * hDelta;
@@ -59,7 +61,7 @@ public class RayTracer {
                                 runningColorSum[q] += nextColorToAdd[q];
                             }
                         }
-                        float[] colorAverage = {runningColorSum[0] / antiAliasFactor, runningColorSum[1] / antiAliasFactor, runningColorSum[2] / antiAliasFactor};
+                        float[] colorAverage = {runningColorSum[0] / INIT_ANTI_ALIAS_SAMPLES, runningColorSum[1] / INIT_ANTI_ALIAS_SAMPLES, runningColorSum[2] / INIT_ANTI_ALIAS_SAMPLES};
                         cloned.setPixel(i, j, new Color(colorAverage[0], colorAverage[1], colorAverage[2]));
                     }
                 }
@@ -115,7 +117,7 @@ public class RayTracer {
      */
     private boolean isObjectBetweenLightAndPoint(Light3D l, Vector point) {
         Vector shadowVec = l.getLocation().subtract(point);
-        Optional<RayHit> closestHit = findFirstIntersection(new Ray3D(point.add(shadowVec.scale(.00001)), shadowVec), scene);
+        Optional<RayHit> closestHit = findFirstIntersection(new Ray3D(point.add(shadowVec.scale(.0001)), shadowVec), scene);
         return closestHit.isPresent() && closestHit.get().getDistance() < shadowVec.magnitude();
     }
 

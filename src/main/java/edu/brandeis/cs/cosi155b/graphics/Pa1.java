@@ -10,7 +10,7 @@ import java.util.List;
  * Created by kahliloppenheimer on 9/15/15.
  */
 public class Pa1 {
-    private static final int ANTI_ALIASING = 500;
+    private static final int ANTI_ALIASING = 4;
     private static final int NUM_THREADS = 4;
 
     public static void main(String[] args) throws InterruptedException {
@@ -20,7 +20,7 @@ public class Pa1 {
 
         // Objects in scene
         List<Object3D> objects = new ArrayList<>();
-        objects.add(new Sphere3D(new Vector(1, 1, -5), 1, null, new Material(Color.WHITE, 100, .2)));
+//        objects.add(new Sphere3D(new Vector(1, 1, -5), 1, null, new Material(Color.WHITE, 100, .2)));
         objects.add(new Plane3D(new Vector(0, -1, 0), new Vector(0, 1, 0), new Material(Color.WHITE, 1, .2)));
         objects.add(new Plane3D(new Vector(1.5, 0, 0), new Vector(-1, 0, 0), new Material(Color.WHITE, 1, .2)));
 
@@ -34,7 +34,7 @@ public class Pa1 {
         RayTracer rt = new RayTracer(frame, camera, scene);
 
         long start = System.currentTimeMillis();
-        SimpleFrame3D rendered = rt.render(false, ANTI_ALIASING, NUM_THREADS);
+        SimpleFrame3D rendered = rt.render(true, ANTI_ALIASING, NUM_THREADS);
         long end = System.currentTimeMillis();
 
         System.out.println("Rendering took " + (end - start) + " ms");
