@@ -1,10 +1,6 @@
 package edu.brandeis.cs.cosi155b.scene;
 
 import edu.brandeis.cs.cosi155b.graphics.Color;
-import javafx.scene.effect.Light;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

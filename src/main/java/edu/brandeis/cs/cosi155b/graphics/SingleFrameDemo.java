@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class SingleFrameDemo {
 
-    private static final int ANTI_ALIASING = 4;
+    private static final int ANTI_ALIASING = 16;
     private static final int NUM_THREADS = 4;
 
     public static void main(String[] args) throws InterruptedException {
@@ -20,9 +20,9 @@ public class SingleFrameDemo {
 
         // Objects in scene
         List<Object3D> objects = new ArrayList<Object3D>();
-        Sphere3D sphere1 = new Sphere3D(new Vector(-.5, 1, -3), .3, null, new Material(Color.blue, 10, 1))
+        Sphere3D sphere1 = new Sphere3D(new Vector(-.5, 1, -3), .4, null, new Material(Color.blue, 10, 1))
                 .transform(LinearTransformation.scale(1, 1, 1).compose(LinearTransformation.translate(-1, 0, 0)));
-        Sphere3D sphere2 = new Sphere3D(new Vector(1, 1, -2), .3, null, new Material(Color.red, 10, 1))
+        Sphere3D sphere2 = new Sphere3D(new Vector(1, 1, -2), .7, null, new Material(Color.red, 10, 1))
                 .transform(LinearTransformation.scale(1, 1, 1).compose(LinearTransformation.translate(-1, 0, 0)));
         Sphere3D sphere3 = new Sphere3D(new Vector(2.5, 1, -4), .3, null, new Material(Color.green, 10, 1))
                 .transform(LinearTransformation.scale(1, 1, 1).compose(LinearTransformation.translate(-1, 0, 0)));
@@ -41,7 +41,7 @@ public class SingleFrameDemo {
         // Whole scene
         Scene3D scene = new Scene3D(objects, lights, Color.BLACK, new Color((float) .075, (float) .075, (float) .075));
 
-        RayTracer rt = new RayTracer(frame, camera, scene);
+        RayTracerCoordinator rt = new RayTracerCoordinator(frame, camera, scene);
 
         long start = System.currentTimeMillis();
         SimpleFrame3D rendered = rt.render(true, ANTI_ALIASING, NUM_THREADS);

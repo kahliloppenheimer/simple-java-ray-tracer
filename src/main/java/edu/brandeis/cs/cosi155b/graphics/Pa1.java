@@ -31,7 +31,7 @@ public class Pa1 {
         // Whole scene
         Scene3D scene = new Scene3D(objects, lights, Color.BLUE, new Color((float) .075, (float) .075, (float) .075));
 
-        RayTracer rt = new RayTracer(frame, camera, scene);
+        RayTracerCoordinator rt = new RayTracerCoordinator(frame, camera, scene);
 
         long start = System.currentTimeMillis();
         SimpleFrame3D rendered = rt.render(true, ANTI_ALIASING, NUM_THREADS);
