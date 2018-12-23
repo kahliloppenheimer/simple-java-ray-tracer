@@ -1,5 +1,5 @@
 # Java Ray Tracer
-This is my implementation of a Ray tracer built from scratch in Java. Below are a list of the objects it can currently render, a list of its current features, and a list of the features that are in the works.
+This is my implementation of a Ray rayTracer built from scratch in Java. Below are a list of the objects it can currently render, a list of its current features, and a list of the features that are in the works.
 
 Here is a sample image the current version rendered:
 
