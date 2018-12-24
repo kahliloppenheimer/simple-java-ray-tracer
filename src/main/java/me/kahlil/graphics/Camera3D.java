@@ -1,20 +1,13 @@
 package me.kahlil.graphics;
 
 import me.kahlil.scene.Vector;
+import org.immutables.value.Value.Immutable;
 
-/**
- * Created by kahliloppenheimer on 9/2/15.
- */
-public class Camera3D {
+/** A representation of a camera positioned at a certain point in the scene. */
+@Immutable
+@JavaStyle
+interface Camera3D {
 
-    private final Vector location;
-
-    public Camera3D(Vector location) {
-        this.location = location;
-    }
-
-    public Vector getLocation() {
-        return location;
-    }
+    Vector getLocation();
 
 }

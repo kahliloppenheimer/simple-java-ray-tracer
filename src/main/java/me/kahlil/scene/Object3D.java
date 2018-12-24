@@ -3,7 +3,7 @@ package me.kahlil.scene;
 import java.util.Optional;
 
 /**
- * Represents a 3D object in the scene
+ * A representation of a 3D object in the scene.
  */
 public abstract class Object3D implements Cloneable {
 
@@ -11,9 +11,6 @@ public abstract class Object3D implements Cloneable {
 
     /**
      * Finds the intersection of the given ray with this potentially transformed object
-     *
-     * @param ray
-     * @return
      */
     public Optional<RayHit> findIntersection(Ray3D ray) {
         // Used to calculate the inverse-transformed ray, but also later to calculate
@@ -25,21 +22,25 @@ public abstract class Object3D implements Cloneable {
             return Optional.empty();
         }
         RayHit inverseIntersection = optInverseIntersection.get();
-        Vector point = transformation.apply(inverseIntersection.getPoint());
+        Vector point = transformation.apply(inverseIntersection.getIntersection());
         Vector normal = transformation.inverseTranspose().apply(inverseIntersection.getNormal());
         // We need to divide the time by the length of the inverse ray direction because
         // we found the intersection of the normalized direction ray
         double time = inverseIntersection.getTime() / inverseRayDirection.magnitude();
         double distance = ray.atTime(time).magnitude();
-        return Optional.of(new RayHit(ray, time, distance, point, normal, this));
+        return Optional.of(ImmutableRayHit.builder()
+            .setRay(ray)
+            .setTime(time)
+            .setDistance(distance)
+            .setIntersection(point)
+            .setNormal(normal)
+            .setObject(this)
+            .build());
     }
 
     /**
      * returns the intersection of the object with the passed
      * Ray3D object, encoded as a RayHit
-     *
-     * @param ray
-     * @return
      */
     public abstract Optional<RayHit> untransformedIntersection(Ray3D ray);
 
@@ -52,15 +53,11 @@ public abstract class Object3D implements Cloneable {
 
     /**
      * Returns the Material of the outside of the shape
-     *
-     * @return
      */
     public abstract Material getOutsideMaterial();
 
     /**
      * Transforms the object by the given linear transformation
-     *
-     * @param lt
      */
     public <V extends Object3D> V transform(LinearTransformation lt) {
         Object3D cloned = null;

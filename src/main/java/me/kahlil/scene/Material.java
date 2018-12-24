@@ -2,11 +2,7 @@ package me.kahlil.scene;
 
 import me.kahlil.graphics.Color;
 
-/**
- * Represents the material of a given shape, including its color and how shiny it is
- *
- * Created by kahliloppenheimer on 9/2/15.
- */
+/** A representation of the material of a given shape. */
 public class Material {
 
     private final Color color;

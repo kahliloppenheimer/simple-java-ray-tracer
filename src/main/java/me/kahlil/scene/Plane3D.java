@@ -3,8 +3,7 @@ package me.kahlil.scene;
 import java.util.Optional;
 
 /**
- * Created by edenzik on 9/3/15.
- * If dn > 0
+ * Representation of a plane in 3-dimensional space.
  */
 public class Plane3D extends Object3D {
     private final Vector normal;
@@ -18,14 +17,21 @@ public class Plane3D extends Object3D {
     }
 
     @Override
-    public Optional<RayHit> untransformedIntersection(Ray3D r) {
-        double dn = (r.getDirection()).dot(normal);
-        double t = (point.subtract(r.getStart())).dot(normal) / dn;
-        if(dn == 0.0 || t <= 0) {
+    public Optional<RayHit> untransformedIntersection(Ray3D ray) {
+        double dn = (ray.getDirection()).dot(normal);
+        double time = (point.subtract(ray.getStart())).dot(normal) / dn;
+        if(dn == 0.0 || time <= 0) {
             return Optional.empty();
         } else {
-            Vector normal = r.getDirection().dot(this.normal) < 0.0 ? this.normal.scale(1) : this.normal.scale(-1);
-            return Optional.of(new RayHit(r, t, r.atTime(t).subtract(r.getStart()).magnitude(), r.atTime(t), normal, this));
+            Vector normal = ray.getDirection().dot(this.normal) < 0.0 ? this.normal.scale(1) : this.normal.scale(-1);
+            return Optional.of(ImmutableRayHit.builder()
+                .setRay(ray)
+                .setTime(time)
+                .setDistance(ray.atTime(time).subtract(ray.getStart()).magnitude())
+                .setIntersection(ray.atTime(time))
+                .setNormal(normal)
+                .setObject(this)
+                .build());
         }
     }
 

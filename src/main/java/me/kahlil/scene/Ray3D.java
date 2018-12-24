@@ -1,7 +1,10 @@
 package me.kahlil.scene;
 
 /**
- * A edu.brandeis.cs.cosi155b.Ray3D consists of a point and a (normalized) direction.
+ * Representation of a ray in 3-dimensional space.
+ *
+ * A ray is simply represented as a Vector of the starting point of the ray, and a vector
+ * of the direction of the ray.
  */
 
 public class Ray3D {

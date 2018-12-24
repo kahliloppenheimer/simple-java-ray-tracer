@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import me.kahlil.scene.ImmutableScene3D;
 import me.kahlil.scene.Light3D;
 import me.kahlil.scene.Material;
 import me.kahlil.scene.Object3D;
@@ -12,15 +13,17 @@ import me.kahlil.scene.Scene3D;
 import me.kahlil.scene.Vector;
 
 /**
- * Created by kahliloppenheimer on 9/15/15.
+ * An initial demo of the ray tracer.
  */
-public class Pa1 {
+public class Demo1 {
     private static final int ANTI_ALIASING = 4;
     private static final int NUM_THREADS = 4;
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
 
-        Camera3D camera = new Camera3D(new Vector(0, 0, 0));
+        Camera3D camera = ImmutableCamera3D.builder()
+            .setLocation(new Vector(0, 0, 0))
+            .build();
         SimpleFrame3D frame = new SimpleFrame3D(new Vector(-.5, -.5, -1), 1, 1, 400, 400);
 
         // Objects in scene
@@ -34,7 +37,12 @@ public class Pa1 {
         lights.add(new Light3D(new Vector(-2, 1, 0), Color.WHITE));
 
         // Whole scene
-        Scene3D scene = new Scene3D(objects, lights, Color.BLUE, new Color((float) .075, (float) .075, (float) .075));
+        Scene3D scene = ImmutableScene3D.builder()
+            .setObjects(objects)
+            .setLights(lights)
+            .setBackgroundColor(Color.BLUE)
+            .setAmbient(new Color((float) .075, (float) .075, (float) .075))
+            .build();
 
         RayTracerCoordinator rt = new RayTracerCoordinator(frame, camera, scene);
 

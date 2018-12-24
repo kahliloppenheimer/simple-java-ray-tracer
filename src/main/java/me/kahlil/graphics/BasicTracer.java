@@ -9,6 +9,7 @@ import me.kahlil.scene.RayHit;
 import me.kahlil.scene.Scene3D;
 import me.kahlil.scene.Vector;
 
+/** Ray tracer that performs single-intersection ray tracing (i.e. no reflection or refraction). */
 class BasicTracer extends RayTracer {
 
   private final Scene3D scene;
@@ -36,12 +37,12 @@ class BasicTracer extends RayTracer {
     // Color the pixel depending on which object was hit
     if (optClosest.isPresent()) {
       RayHit closest = optClosest.get();
-      Material material = closest.getObj().getOutsideMaterial();
+      Material material = closest.getObject().getOutsideMaterial();
       // Initialize color with ambient light
       Color lighted = scene.getAmbient().multiply(material.getColor());
       for (Light3D light : scene.getLights()) {
         // Check to see if shadow should be cast
-        if (!shadowsEnabled || !isObjectBetweenLightAndPoint(light, closest.getPoint())) {
+        if (!shadowsEnabled || !isObjectBetweenLightAndPoint(light, closest.getIntersection())) {
           lighted = lighted.add(light.phongIllumination(closest, camera.getLocation()));
         }
       }

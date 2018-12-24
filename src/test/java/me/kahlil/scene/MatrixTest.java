@@ -8,7 +8,7 @@ import java.util.Random;
 import static org.junit.Assert.*;
 
 /**
- * Created by kahliloppenheimer on 9/10/15.
+ * Unit tests for {@link Matrix}.
  */
 public class MatrixTest {
 

@@ -1,55 +1,24 @@
 package me.kahlil.scene;
 
+import me.kahlil.graphics.JavaStyle;
+import org.immutables.value.Value.Immutable;
+
 /**
- * Record properties of intersection of a ray with an object
+ * Represents the intersection of a ray with an object.
  */
-public class RayHit {
+@Immutable
+@JavaStyle
+public interface RayHit {
     // Ray that caused the rayHit
-    private final Ray3D ray;
+    Ray3D getRay();
     // time at which the ray intersected the object
-    private final double time;
+    double getTime();
     // distance along ray to the first intersection
-    private final double distance;
+    double getDistance();
     // point at which the ray first intersects the object
-    private final Vector iPoint;
+    Vector getIntersection();
     // Normal vector to object at the point that the ray intersects the object
-    private final Vector normal;
+    Vector getNormal();
     // object that the ray intersects
-    private final Object3D obj;
-
-    public RayHit(Ray3D ray, double time, double distance, Vector iPoint, Vector normal, Object3D obj) {
-        this.ray = ray;
-        this.time = time;
-        this.distance = distance;
-        this.iPoint = iPoint;
-        this.normal = normal.normalize();
-        this.obj = obj;
-    }
-
-    public double getTime() {
-        return time;
-    }
-    public double getDistance() {
-        return distance;
-    }
-
-    public Vector getPoint() {
-        return iPoint;
-    }
-
-    public Object3D getObj() {
-        return obj;
-    }
-
-    public String toString() {
-        return String.format("RH[d = %.2f / p = %s / obj = %s]", distance, iPoint, obj.getClass().getName());
-    }
-
-    public Ray3D getRay() {
-        return ray;
-    }
-
-    public Vector getNormal() {
-        return normal;
-    }
+    Object3D getObject();
 }

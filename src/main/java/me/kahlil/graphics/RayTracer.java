@@ -28,11 +28,9 @@ abstract class RayTracer {
     return traceRay(new Ray3D(camera.getLocation(),
         frame.getBottomLeftCorner()
             .translate(
-                // Translate and center to the middle of the pixel
-                i * frame.getPixelWidthInCoordinateSpace()
-                    + 0.5 * frame.getPixelWidthInCoordinateSpace(),
-                j * frame.getPixelHeightInCoordinateSpace()
-                    + 0.5 * frame.getPixelHeightInCoordinateSpace())));
+                // Translate into coordinate space
+                i * frame.getPixelWidthInCoordinateSpace(),
+                j * frame.getPixelHeightInCoordinateSpace())));
   }
 
 }

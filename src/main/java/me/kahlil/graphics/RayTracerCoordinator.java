@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 /**
  * Created by kahliloppenheimer on 9/2/15.
  */
-public class RayTracerCoordinator {
+class RayTracerCoordinator {
 
   private final ExecutorService executor;
 
@@ -36,7 +36,7 @@ public class RayTracerCoordinator {
         frame,
         new BasicTracer(scene, camera, frame, shadowsEnabled),
         new RandomAntiAliasingMethod(),
-        16);
+        8);
 
     // Construct individual worker threads
     ImmutableList<RayTracerWorker> rayTracerWorkers = IntStream.range(0, numThreads)

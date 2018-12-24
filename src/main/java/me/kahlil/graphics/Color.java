@@ -215,6 +215,15 @@ public class Color extends java.awt.Color {
         return new Color(bound(rgb[0] * f), bound(rgb[1] * f), bound(rgb[2] * f));
     }
 
+    public int[] getRgba() {
+        return new int[] {
+            getRed(),
+            getGreen(),
+            getBlue(),
+            getAlpha()
+        };
+    }
+
     private static float bound(float v) {
         return (float) Math.min(Math.max(v, 0), 1);
     }

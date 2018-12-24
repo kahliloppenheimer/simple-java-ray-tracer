@@ -8,7 +8,7 @@ import java.util.function.UnaryOperator;
 public class LinearTransformation implements UnaryOperator<Vector> {
 
     // Identity map
-    public static final LinearTransformation IDENTITY = new LinearTransformation(Matrix.IDENTITY, Matrix.IDENTITY);
+    static final LinearTransformation IDENTITY = new LinearTransformation(Matrix.IDENTITY, Matrix.IDENTITY);
 
     private Matrix transform;
     private Matrix inverse;

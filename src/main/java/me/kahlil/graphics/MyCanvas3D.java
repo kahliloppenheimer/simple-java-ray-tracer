@@ -8,12 +8,11 @@ import java.awt.Image;
 import javax.swing.*;
 
 /**
- * this creates a JPanel with a backbuffer Image which the user can draw on.
+ * A JPanel with a backbuffer Image which can be drawed on.
+ *
  * When the system calls the paintComponent method to repaint the jPanel the
  * backbuffer Image is copied to the screen.
- * 
- * @author tim
- * 
+ *
  */
 public class MyCanvas3D extends JPanel implements Canvas3D {
 

@@ -9,7 +9,7 @@ import java.util.Random;
 import static org.junit.Assert.*;
 
 /**
- * Created by kahliloppenheimer on 9/1/15.
+ * Unit tests for {@link Sphere3D}.
  */
 public class Sphere3DTest {
 
@@ -31,19 +31,19 @@ public class Sphere3DTest {
     @Test
     public void testRayIntersectFromInside() {
         Ray3D r = new Ray3D(new Vector(0, 0, 0), new Vector(1, 1, 1));
-        Optional<RayHit> rh = unitSphere.untransformedIntersection(r);
-        assertTrue(rh.isPresent());
-        assertEquals(rh.get().getDistance(), 1, DELTA);
-        assertEquals(rh.get().getPoint(), new Vector(1, 1, 1).normalize());
+        Optional<RayHit> rayHit = unitSphere.untransformedIntersection(r);
+        assertTrue(rayHit.isPresent());
+        assertEquals(rayHit.get().getDistance(), 1, DELTA);
+        assertEquals(rayHit.get().getIntersection(), new Vector(1, 1, 1).normalize());
     }
 
     @Test
     public void testRayIntersectOnceFromOutside() {
         Ray3D r = new Ray3D(new Vector(-1, 1, 0), new Vector(1, 0, 0));
-        Optional<RayHit> rh = unitSphere.untransformedIntersection(r);
-        assertTrue(rh.isPresent());
-        assertEquals(rh.get().getDistance(), 1, DELTA);
-        assertEquals(rh.get().getPoint(), new Vector(0, 1, 0));
+        Optional<RayHit> rayHit = unitSphere.untransformedIntersection(r);
+        assertTrue(rayHit.isPresent());
+        assertEquals(rayHit.get().getDistance(), 1, DELTA);
+        assertEquals(rayHit.get().getIntersection(), new Vector(0, 1, 0));
     }
 
     @Test

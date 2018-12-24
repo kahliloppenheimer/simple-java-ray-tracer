@@ -72,44 +72,34 @@ public class RayTracerWorker implements Runnable {
     };
   }
 
-  private static boolean samplesAreVerySimilar(List<int[]> colorSamples) {
-    // Always count at least 3 samples.
-    if (colorSamples.size() < 3) {
-      return false;
-    }
-    int[] colorVariance = computeVariance(colorSamples);
-    // If any one RGB component stdev is above the threshold, return false
-    for (int i = 0; i < colorVariance.length; i++) {
-      if (colorVariance[i] > ANTI_ALIAS_VARIANCE_THRESHOLD) {
-        return false;
-      }
-    }
-    return true;
-  }
+//  private static boolean samplesAreVerySimilar(List<int[]> colorSamples) {
+//    // Always count at least 3 samples.
+//    if (colorSamples.size() < 3) {
+//      return false;
+//    }
+//    int[] colorVariance = computeVariance(colorSamples);
+//    // If any one RGB component stdev is above the threshold, return false
+//    for (int i = 0; i < colorVariance.length; i++) {
+//      if (colorVariance[i] > ANTI_ALIAS_VARIANCE_THRESHOLD) {
+//        return false;
+//      }
+//    }
+//    return true;
+//  }
 
-  private static int[] computeVariance(List<int[]> samples) {
-    int[] averages = computeAverage(samples);
-    int[] variance = new int[samples.get(0).length];
-    for (int i = 0; i < samples.size(); i++) {
-      int[] nextSample = samples.get(i);
-      for (int j = 0; j < nextSample.length; j++) {
-        int distanceFromMean = nextSample[j] - averages[j];
-        variance[j] = Math.round((1.0f * distanceFromMean * distanceFromMean) / samples.size());
-      }
-    }
-    return variance;
-  }
+//  private static int[] computeVariance(List<int[]> samples) {
+//    int[] averages = computeAverage(samples);
+//    int[] variance = new int[samples.get(0).length];
+//    for (int i = 0; i < samples.size(); i++) {
+//      int[] nextSample = samples.get(i);
+//      for (int j = 0; j < nextSample.length; j++) {
+//        int distanceFromMean = nextSample[j] - averages[j];
+//        variance[j] = Math.round((1.0f * distanceFromMean * distanceFromMean) / samples.size());
+//      }
+//    }
+//    return variance;
+//  }
 
-  private static int[] computeAverage(List<int[]> samples) {
-    Preconditions.checkArgument(samples != null && !samples.isEmpty(),
-        "Samples must be non-null and non-empty.");
-    int[] averageValues = new int[samples.get(0).length];
-    for (int i = 0; i < samples.size(); i++) {
-      for (int j = 0; j < samples.get(i).length; j++) {
-        averageValues[j] += Math.round(1.0 * samples.get(i)[j] / samples.size());
-      }
-    }
-    return averageValues;
-  }
+
 
 }

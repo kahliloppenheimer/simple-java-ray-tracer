@@ -3,14 +3,13 @@ package me.kahlil.scene;
 import java.util.Arrays;
 
 /**
- * Created by kahliloppenheimer on 9/10/15.
- */
+ * A representation of a matrix used for the required linear algebra in the ray tracing algorithm.
+ * */
 public class Matrix {
 
     private final double[][] entries;
     public static final Matrix IDENTITY = new Matrix(new double[][] {{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}});
     public static final Matrix ZERO = new Matrix(new double[][] {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}});
-
 
     public Matrix (double[][] entries) {
         this.entries = entries;

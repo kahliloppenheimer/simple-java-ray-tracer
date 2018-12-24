@@ -1,5 +1,10 @@
 package me.kahlil.graphics;
 
+import static com.google.common.collect.ImmutableList.toImmutableList;
+
+import com.google.common.base.Preconditions;
+import java.util.Arrays;
+import java.util.List;
 import me.kahlil.scene.Ray3D;
 
 final class SimpleAntiAliaser extends RayTracer {
@@ -9,7 +14,7 @@ final class SimpleAntiAliaser extends RayTracer {
   private final int numSamples;
   private final SamplingRadius samplingRadius;
 
-  public SimpleAntiAliaser(
+  SimpleAntiAliaser(
       Camera3D camera,
       SimpleFrame3D frame,
       RayTracer rayTracer,
@@ -27,19 +32,27 @@ final class SimpleAntiAliaser extends RayTracer {
 
   @Override
   Color traceRay(Ray3D ray) {
-    Ray3D[] raysToSample = antiAliasingMethod.getRaysToSample(ray, samplingRadius, numSamples);
-    int[] averageRgba = new int[raysToSample.length];
-    for (Ray3D rayToSample : raysToSample) {
-      Color tracedColor = this.rayTracer.traceRay(rayToSample);
-      averageRgba[0] += Math.round(1.0f * tracedColor.getRed() / raysToSample.length);
-      averageRgba[1] += Math.round(1.0f * tracedColor.getGreen() / raysToSample.length);
-      averageRgba[2] += Math.round(1.0f * tracedColor.getBlue() / raysToSample.length);
-      averageRgba[3] += Math.round(1.0f * tracedColor.getAlpha() / raysToSample.length);
-    }
+    int[] averageRgba = computeAverage(
+        Arrays.stream(antiAliasingMethod.getRaysToSample(ray, samplingRadius, numSamples))
+            .map(rayTracer::traceRay)
+            .map(Color::getRgba)
+            .collect(toImmutableList()));
     return new Color(
         Math.min(averageRgba[0], 255),  // rounding errors can cause this to be greater than 255.
         Math.min(averageRgba[1], 255),
         Math.min(averageRgba[2], 255),
         Math.min(averageRgba[3], 255));
+  }
+
+  private static int[] computeAverage(List<int[]> samples) {
+    Preconditions.checkArgument(samples != null && !samples.isEmpty(),
+        "Samples must be non-null and non-empty.");
+    int[] averageValues = new int[samples.get(0).length];
+    for (int i = 0; i < samples.size(); i++) {
+      for (int j = 0; j < samples.get(i).length; j++) {
+        averageValues[j] += Math.round(1.0 * samples.get(i)[j] / samples.size());
+      }
+    }
+    return averageValues;
   }
 }

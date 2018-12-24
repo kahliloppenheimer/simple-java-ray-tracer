@@ -1,7 +1,7 @@
 package me.kahlil.scene;
 
 /**
- * A edu.brandeis.cs.cosi155b.Vector is a triple of doubles that can represent a point or a vector.
+ * A triple of doubles that represents a point or a vector in 3 dimensional space.
  */
 
 public class Vector {
