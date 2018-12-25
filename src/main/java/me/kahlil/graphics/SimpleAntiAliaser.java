@@ -37,7 +37,7 @@ final class SimpleAntiAliaser extends RayTracer {
   @Override
   Color traceRay(Ray3D ray) {
     float[] averageRgba = computeAverage(
-        Arrays.stream(antiAliasingMethod.getRaysToSample(ray, samplingRadius, NUM_SAMPLES))
+        Arrays.stream(antiAliasingMethod.getRaysToSample(ray, samplingRadius))
             .map(rayTracer::traceRay)
             .map(Color::getRgbaAsFloats)
             .collect(toImmutableList()));

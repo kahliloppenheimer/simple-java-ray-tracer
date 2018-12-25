@@ -35,7 +35,7 @@ class RayTracerCoordinator {
         camera,
         frame,
         new SimpleRayTracer(scene, camera, frame, shadowsEnabled),
-        new RandomAntiAliasingMethod());
+        new GridAntiAliasingMethod(2));
 
     // Construct individual worker threads
     ImmutableList<RayTracerWorker> rayTracerWorkers = IntStream.range(0, numThreads)

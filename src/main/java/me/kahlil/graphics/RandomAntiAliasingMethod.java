@@ -6,9 +6,14 @@ import me.kahlil.scene.Ray3D;
 final class RandomAntiAliasingMethod implements AntiAliasingMethod {
 
   private static final ThreadLocal<Random> RAND = ThreadLocal.withInitial(Random::new);
+  private final int numSamples;
+
+  RandomAntiAliasingMethod(int numSamples) {
+    this.numSamples = numSamples;
+  }
 
   @Override
-  public Ray3D[] getRaysToSample(Ray3D ray, SamplingRadius samplingRadius, int numSamples) {
+  public Ray3D[] getRaysToSample(Ray3D ray, SamplingRadius samplingRadius) {
     Ray3D[] raysToSample = new Ray3D[numSamples];
     for (int i = 0; i < raysToSample.length; i++) {
       raysToSample[i] = new Ray3D(
