@@ -25,19 +25,11 @@ public class Light3D {
    * source and the normal vector to that point from the object.
    */
   double diffuse(RayHit rayHit) {
-    Vector point = rayHit.getIntersection();
-    Vector normal = rayHit.getNormal();
-    Vector lightVector = getLocation().subtract(point);
+    Vector intersection = rayHit.getIntersection();
+    Vector normal = rayHit.getNormal().normalize();
+    Vector lightVector = getLocation().subtract(intersection).normalize();
 
-    if (lightVector.magnitude() != 1) {
-      lightVector = lightVector.normalize();
-    }
-
-    if (normal.magnitude() != 1) {
-      normal = normal.normalize();
-    }
-
-    return Math.max(lightVector.dot(normal), 0);
+    return Math.max(0, lightVector.dot(normal));
   }
 
   /**
@@ -70,9 +62,7 @@ public class Light3D {
   public Color phongIllumination(RayHit rayHit, Vector cameraPosition) {
     double diffuseCoefficient = diffuse(rayHit);
     double specularCoefficient = specular(cameraPosition, rayHit);
-    if (specularCoefficient * SPECULAR_INTENSITY > diffuseCoefficient) {
-      diffuseCoefficient = 1 - SPECULAR_INTENSITY * specularCoefficient;
-    }
+
     Material material = rayHit.getObject().getOutsideMaterial();
     return material.getColor().multiply(getColor()).scaleFloat((float) diffuseCoefficient)
         .add(getColor().scaleFloat((float) specularCoefficient)

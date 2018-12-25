@@ -34,7 +34,7 @@ public class Sphere3D extends Object3D {
     double timeOfFirstIntersection = -1;
 
     // Potentially one intersection
-    if (-.0000001 <= determinant && determinant <= .0000001) {
+    if (-.0000000001 <= determinant && determinant <= .000000001) {
       timeOfFirstIntersection = -1 * b / (2 * a);
     } // Potentially two intersections
     else if (determinant > 0) {

@@ -62,7 +62,6 @@ public class RayTracerWorker implements Runnable {
     return numTraces;
   }
 
-
 //  private static boolean samplesAreVerySimilar(List<int[]> colorSamples) {
 //    // Always count at least 3 samples.
 //    if (colorSamples.size() < 3) {

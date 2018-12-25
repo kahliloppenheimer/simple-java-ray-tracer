@@ -1,5 +1,7 @@
 package me.kahlil.scene;
 
+import static com.google.common.base.Preconditions.checkState;
+
 /**
  * A triple of doubles that represents a point or a vector in 3 dimensional space.
  */

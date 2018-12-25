@@ -14,7 +14,7 @@ import me.kahlil.scene.Ray3D;
  */
 final class SimpleAntiAliaser extends RayTracer {
 
-  private static final int NUM_SAMPLES = 16;
+  private static final int NUM_SAMPLES = 4;
 
   private final RayTracer rayTracer;
   private final AntiAliasingMethod antiAliasingMethod;

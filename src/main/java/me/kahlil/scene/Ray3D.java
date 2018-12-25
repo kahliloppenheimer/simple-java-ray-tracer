@@ -16,9 +16,7 @@ public class Ray3D {
      * The direction of a ray is a normalized vector.
      */
     public Ray3D(Vector start, Vector direction) {
-        if(direction.magnitude() != 1) {
-            direction = direction.normalize();
-        }
+        direction = direction.normalize();
         this.start = new Vector(start.getX(), start.getY(), start.getZ(), 1);
         this.direction = new Vector(direction.getX(), direction.getY(), direction.getZ(), 0);
     }

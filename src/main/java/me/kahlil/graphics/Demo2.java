@@ -26,14 +26,14 @@ public class Demo2 {
         Camera3D camera = ImmutableCamera3D.builder()
             .setLocation(new Vector(0, 0, 0))
             .build();
-        SimpleFrame3D frame = new SimpleFrame3D(new Vector(-1, -1, -1), 2, 2, 400, 400);
+        SimpleFrame3D frame = new SimpleFrame3D(new Vector(-1, -1, -1), 2, 2, 800, 800);
 
         // Objects in scene
         List<Object3D> objects = new ArrayList<Object3D>();
         Sphere3D sphere1 = new Sphere3D(new Vector(-.5, 1, -3), .4, null, new Material(Color.blue, 10, 1))
                 .transform(LinearTransformation
                     .scale(1, 1, 1).compose(LinearTransformation.translate(-1, 0, 0)));
-        Sphere3D sphere2 = new Sphere3D(new Vector(1, 1, -2), .7, null, new Material(Color.red, 10, 1))
+        Sphere3D sphere2 = new Sphere3D(new Vector(1.5, .8, -2), .9, null, new Material(Color.red, 10, 1))
                 .transform(LinearTransformation.scale(1, 1, 1).compose(LinearTransformation.translate(-1, 0, 0)));
         Sphere3D sphere3 = new Sphere3D(new Vector(2.5, 1, -4), .3, null, new Material(Color.green, 10, 1))
                 .transform(LinearTransformation.scale(1, 1, 1).compose(LinearTransformation.translate(-1, 0, 0)));
