@@ -10,14 +10,13 @@ import me.kahlil.scene.Scene3D;
 import me.kahlil.scene.Vector;
 
 /** Ray tracer that performs single-intersection ray tracing (i.e. no reflection or refraction). */
-class BasicTracer extends RayTracer {
+class SimpleRayTracer extends RayTracer {
 
   private final Scene3D scene;
   private final Camera3D camera;
-  private final SimpleFrame3D frame;
   private final boolean shadowsEnabled;
 
-  BasicTracer(
+  SimpleRayTracer(
       Scene3D scene,
       Camera3D camera,
       SimpleFrame3D frame,
@@ -26,12 +25,11 @@ class BasicTracer extends RayTracer {
 
     this.scene = scene;
     this.camera = camera;
-    this.frame = frame;
     this.shadowsEnabled = shadowsEnabled;
   }
 
   @Override
-  public Color traceRay(Ray3D ray) {
+  Color traceRay(Ray3D ray) {
     // Create the ray from the camera to the pixel in the frame we are currently coloring
     Optional<RayHit> optClosest = findFirstIntersection(ray, scene);
     // Color the pixel depending on which object was hit
@@ -55,10 +53,6 @@ class BasicTracer extends RayTracer {
   /**
    * Returns the RayHit with the lowest distance from the visionVec to each obj in the scene.
    * Returns optional.empty() if no object is hit.
-   *
-   * @param visionVec
-   * @param scene
-   * @return
    */
   private Optional<RayHit> findFirstIntersection(Ray3D visionVec, Scene3D scene) {
     RayHit closest = null;
@@ -75,11 +69,7 @@ class BasicTracer extends RayTracer {
 
   /**
    * Returns true iff there is an object in the scene between the light and the given
-   * point
-   *
-   * @param l
-   * @param point
-   * @return
+   * point.
    */
   private boolean isObjectBetweenLightAndPoint(Light3D l, Vector point) {
     Vector shadowVec = l.getLocation().subtract(point);

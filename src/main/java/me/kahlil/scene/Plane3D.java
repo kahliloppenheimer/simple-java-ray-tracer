@@ -17,7 +17,7 @@ public class Plane3D extends Object3D {
     }
 
     @Override
-    public Optional<RayHit> untransformedIntersection(Ray3D ray) {
+    public Optional<RayHit> intersectWith(Ray3D ray) {
         double dn = (ray.getDirection()).dot(normal);
         double time = (point.subtract(ray.getStart())).dot(normal) / dn;
         if(dn == 0.0 || time <= 0) {

@@ -22,13 +22,13 @@ public class Sphere3D extends Object3D {
   }
 
   @Override
-  public Optional<RayHit> untransformedIntersection(Ray3D ray) {
+  public Optional<RayHit> intersectWith(Ray3D ray) {
     // coefficients for the quadratic equation we have to solve to find the intersection
     // ax^2 + bx + c = 0
-    double a, b, c;
-    a = Math.pow(ray.getDirection().magnitude(), 2);
-    b = ray.getDirection().scale(2).dot(ray.getStart().subtract(this.center));
-    c = Math.pow(ray.getStart().subtract(this.center).magnitude(), 2) - Math.pow(this.radius, 2);
+    double a = Math.pow(ray.getDirection().magnitude(), 2);
+    double b = ray.getDirection().scale(2).dot(ray.getStart().subtract(this.center));
+    double c = Math.pow(ray.getStart().subtract(this.center).magnitude(), 2)
+        - Math.pow(this.radius, 2);
 
     double determinant = Math.pow(b, 2) - 4 * a * c;
     double timeOfFirstIntersection = -1;

@@ -17,7 +17,7 @@ public abstract class Object3D implements Cloneable {
         // the time that ray must travel to the intersection
         Vector inverseRayDirection = transformation.inverse().apply(ray.getDirection());
         Ray3D inverseTransformed = new Ray3D(transformation.inverse().apply(ray.getStart()), inverseRayDirection);
-        Optional<RayHit> optInverseIntersection = untransformedIntersection(inverseTransformed);
+        Optional<RayHit> optInverseIntersection = intersectWith(inverseTransformed);
         if(!optInverseIntersection.isPresent()) {
             return Optional.empty();
         }
@@ -42,7 +42,7 @@ public abstract class Object3D implements Cloneable {
      * returns the intersection of the object with the passed
      * Ray3D object, encoded as a RayHit
      */
-    public abstract Optional<RayHit> untransformedIntersection(Ray3D ray);
+    public abstract Optional<RayHit> intersectWith(Ray3D ray);
 
     /**
      * Returns the Material of the inside of the shape

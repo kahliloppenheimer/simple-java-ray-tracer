@@ -11,7 +11,7 @@ import java.util.concurrent.Future;
 import java.util.stream.IntStream;
 
 /**
- * Created by kahliloppenheimer on 9/2/15.
+ * Coordinator for managing the ray tracer worker threads via a {@link ExecutorService}.
  */
 class RayTracerCoordinator {
 
@@ -34,7 +34,7 @@ class RayTracerCoordinator {
     RayTracer rayTracer = new SimpleAntiAliaser(
         camera,
         frame,
-        new BasicTracer(scene, camera, frame, shadowsEnabled),
+        new SimpleRayTracer(scene, camera, frame, shadowsEnabled),
         new RandomAntiAliasingMethod());
 
     // Construct individual worker threads

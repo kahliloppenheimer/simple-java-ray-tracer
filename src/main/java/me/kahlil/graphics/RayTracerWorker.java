@@ -49,11 +49,10 @@ public class RayTracerWorker implements Runnable {
   public void run() {
     for (int i = 0; i < frame.getWidthPx(); ++i) {
       for (int j = startingPixel; j < frame.getHeightPx(); j += pixelIncrement) {
-        int[] pixelColor = extractRgb(rayTracer.traceRay(i, j));
         frame.setPixel(
             i,
             j,
-            new Color(pixelColor[0], pixelColor[1], pixelColor[2], pixelColor[3]));
+            rayTracer.traceRay(i, j));
       }
     }
     System.out.println("Thread " + startingPixel + " finished!");
@@ -63,14 +62,6 @@ public class RayTracerWorker implements Runnable {
     return numTraces;
   }
 
-  private static int[] extractRgb(Color color) {
-    return new int[] {
-        color.getRed(),
-        color.getGreen(),
-        color.getBlue(),
-        color.getAlpha()
-    };
-  }
 
 //  private static boolean samplesAreVerySimilar(List<int[]> colorSamples) {
 //    // Always count at least 3 samples.

@@ -14,9 +14,14 @@ final class RandomAntiAliasingMethod implements AntiAliasingMethod {
       raysToSample[i] = new Ray3D(
           ray.getStart(),
           ray.getDirection().translate(
-              RAND.get().nextDouble() * samplingRadius.getWidth(),
-              RAND.get().nextDouble() * samplingRadius.getHeight()));
+              RAND.get().nextDouble() * samplingRadius.getWidth() * negativeOrPositive(),
+              RAND.get().nextDouble() * samplingRadius.getHeight() * negativeOrPositive()));
     }
     return raysToSample;
+  }
+
+  /** Returns either 1 or -1 with a 50% chance for both. */
+  private static int negativeOrPositive() {
+    return RAND.get().nextBoolean() ? -1 : 1;
   }
 }
