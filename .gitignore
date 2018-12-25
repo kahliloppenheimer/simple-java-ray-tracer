@@ -1,2 +1,4 @@
-.idea/workspace*
+.idea/*
 reflection.txt
+*.iml
+target/
