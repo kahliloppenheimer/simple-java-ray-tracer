@@ -1,4 +1,4 @@
-package me.kahlil.scene;
+package me.kahlil.geometry;
 
 import java.util.function.UnaryOperator;
 

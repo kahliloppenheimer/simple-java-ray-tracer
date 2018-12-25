@@ -1,6 +1,8 @@
 package me.kahlil.graphics;
 
-import me.kahlil.scene.Ray3D;
+import me.kahlil.geometry.Ray3D;
+import me.kahlil.scene.Camera3D;
+import me.kahlil.scene.SimpleFrame;
 
 /**
  * An object which traces a single ray and returns the corresponding color that should be rendered,
@@ -9,11 +11,11 @@ import me.kahlil.scene.Ray3D;
 abstract class RayTracer {
 
   private final Camera3D camera;
-  private final SimpleFrame3D frame;
+  private final SimpleFrame frame;
 
   RayTracer(
       Camera3D camera,
-      SimpleFrame3D frame
+      SimpleFrame frame
   ) {
     this.camera = camera;
     this.frame = frame;

@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import javax.swing.*;
+import me.kahlil.scene.SimpleFrame;
 
 /**
  * A JPanel with a backbuffer Image which can be drawed on.
@@ -72,7 +73,7 @@ public class MyCanvas3D extends JPanel implements Canvas3D {
 	 *
 	 * @param rendered
 	 */
-	public void paintFrame(SimpleFrame3D rendered) {
+	public void paintFrame(SimpleFrame rendered) {
 		// Make sure the given frame fits in this canvas
 		if(rendered.getWidthPx() != getWidth() || rendered.getHeightPx() != getHeight()) {
 			buffer = this.createImage(rendered.getWidthPx(), rendered.getHeightPx());

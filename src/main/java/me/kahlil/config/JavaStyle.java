@@ -1,4 +1,4 @@
-package me.kahlil.graphics;
+package me.kahlil.config;
 
 import org.immutables.value.Value;
 

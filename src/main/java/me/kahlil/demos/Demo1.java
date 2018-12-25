@@ -1,16 +1,22 @@
-package me.kahlil.graphics;
+package me.kahlil.demos;
 
 import java.util.concurrent.ExecutionException;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import me.kahlil.scene.Camera3D;
+import me.kahlil.graphics.Color;
+import me.kahlil.graphics.MyCanvas3D;
+import me.kahlil.graphics.RayTracerCoordinator;
+import me.kahlil.scene.ImmutableCamera3D;
+import me.kahlil.scene.SimpleFrame;
 import me.kahlil.scene.ImmutableScene3D;
 import me.kahlil.scene.Light3D;
 import me.kahlil.scene.Material;
-import me.kahlil.scene.Object3D;
-import me.kahlil.scene.Plane3D;
+import me.kahlil.geometry.Object3D;
+import me.kahlil.geometry.Plane3D;
 import me.kahlil.scene.Scene3D;
-import me.kahlil.scene.Vector;
+import me.kahlil.geometry.Vector;
 
 /**
  * An initial demo of the ray tracer.
@@ -24,7 +30,7 @@ public class Demo1 {
         Camera3D camera = ImmutableCamera3D.builder()
             .setLocation(new Vector(0, 0, 0))
             .build();
-        SimpleFrame3D frame = new SimpleFrame3D(new Vector(-.5, -.5, -1), 1, 1, 400, 400);
+        SimpleFrame frame = new SimpleFrame(new Vector(-.5, -.5, -1), 1, 1, 400, 400);
 
         // Objects in scene
         List<Object3D> objects = new ArrayList<>();
@@ -47,7 +53,7 @@ public class Demo1 {
         RayTracerCoordinator rt = new RayTracerCoordinator(frame, camera, scene);
 
         long start = System.currentTimeMillis();
-        SimpleFrame3D rendered = rt.render(true, NUM_THREADS);
+        SimpleFrame rendered = rt.render(true, NUM_THREADS);
         long end = System.currentTimeMillis();
 
         System.out.println("Rendering took " + (end - start) + " ms");

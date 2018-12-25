@@ -2,6 +2,11 @@ package me.kahlil.scene;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import me.kahlil.geometry.ImmutableRayHit;
+import me.kahlil.geometry.Ray3D;
+import me.kahlil.geometry.RayHit;
+import me.kahlil.geometry.Sphere3D;
+import me.kahlil.geometry.Vector;
 import me.kahlil.graphics.Color;
 import org.junit.Test;
 

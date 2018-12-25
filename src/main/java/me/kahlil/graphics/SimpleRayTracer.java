@@ -1,13 +1,15 @@
 package me.kahlil.graphics;
 
 import java.util.Optional;
+import me.kahlil.scene.Camera3D;
 import me.kahlil.scene.Light3D;
 import me.kahlil.scene.Material;
-import me.kahlil.scene.Object3D;
-import me.kahlil.scene.Ray3D;
-import me.kahlil.scene.RayHit;
+import me.kahlil.geometry.Object3D;
+import me.kahlil.geometry.Ray3D;
+import me.kahlil.geometry.RayHit;
 import me.kahlil.scene.Scene3D;
-import me.kahlil.scene.Vector;
+import me.kahlil.geometry.Vector;
+import me.kahlil.scene.SimpleFrame;
 
 /** Ray tracer that performs single-intersection ray tracing (i.e. no reflection or refraction). */
 class SimpleRayTracer extends RayTracer {
@@ -19,7 +21,7 @@ class SimpleRayTracer extends RayTracer {
   SimpleRayTracer(
       Scene3D scene,
       Camera3D camera,
-      SimpleFrame3D frame,
+      SimpleFrame frame,
       boolean shadowsEnabled) {
     super(camera, frame);
 

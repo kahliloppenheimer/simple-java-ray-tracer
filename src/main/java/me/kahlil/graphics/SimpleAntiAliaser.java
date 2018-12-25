@@ -4,7 +4,9 @@ import static com.google.common.collect.ImmutableList.toImmutableList;
 
 import java.util.Arrays;
 import java.util.List;
-import me.kahlil.scene.Ray3D;
+import me.kahlil.geometry.Ray3D;
+import me.kahlil.scene.Camera3D;
+import me.kahlil.scene.SimpleFrame;
 
 /** A simple anti-aliasing implementation of ray tracing that uses a given
  * {@link AntiAliasingMethod} to generate a set of rays to sample, and then averages their results
@@ -22,7 +24,7 @@ final class SimpleAntiAliaser extends RayTracer {
 
   SimpleAntiAliaser(
       Camera3D camera,
-      SimpleFrame3D frame,
+      SimpleFrame frame,
       RayTracer rayTracer,
       AntiAliasingMethod antiAliasingMethod) {
     super(camera, frame);

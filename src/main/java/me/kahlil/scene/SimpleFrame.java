@@ -1,12 +1,13 @@
-package me.kahlil.graphics;
+package me.kahlil.scene;
 
-import me.kahlil.scene.Vector;
+import me.kahlil.geometry.Vector;
+import me.kahlil.graphics.Color;
 
 /**
  * Represents the frame that the 3d scene is projected onto. This
  * frame implementation is simply parallel to the XY plane.
  */
-class SimpleFrame3D {
+public class SimpleFrame {
     private final Vector bottomLeftCorner;
     // Width and height in terms of coordinates in grid
     private final double width;
@@ -17,7 +18,7 @@ class SimpleFrame3D {
     private final int heightPx;
     private Color[][] pixels;
 
-    SimpleFrame3D(Vector bottomLeftCorner, double width, double height, int widthPx, int heightPx) {
+    public SimpleFrame(Vector bottomLeftCorner, double width, double height, int widthPx, int heightPx) {
         this.bottomLeftCorner = bottomLeftCorner;
         this.width = width;
         this.height = height;
@@ -26,45 +27,45 @@ class SimpleFrame3D {
         this.pixels = new Color[widthPx][heightPx];
     }
 
-    Vector getBottomLeftCorner() {
+    public Vector getBottomLeftCorner() {
         return bottomLeftCorner;
     }
 
-    double getWidth() {
+    public double getWidth() {
         return width;
     }
 
-    double getPixelWidthInCoordinateSpace() {
+    public double getPixelWidthInCoordinateSpace() {
         return width / widthPx;
     }
 
-    double getPixelHeightInCoordinateSpace() {
+    public double getPixelHeightInCoordinateSpace() {
         return height / heightPx;
     }
 
-    double getHeight() {
+    public double getHeight() {
         return height;
     }
 
     /**
      * Returns the pixel at the specified coordinate
      */
-    Color getPixel(int x, int y) {
+    public Color getPixel(int x, int y) {
         return pixels[x][y];
     }
 
     /**
      * Sets the pixel at the specified coorindate
      */
-    void setPixel(int x, int y, Color c) {
+    public void setPixel(int x, int y, Color c) {
         pixels[x][y] = c;
     }
 
-    int getWidthPx() {
+    public int getWidthPx() {
         return widthPx;
     }
 
-    int getHeightPx() {
+    public int getHeightPx() {
         return heightPx;
     }
 }

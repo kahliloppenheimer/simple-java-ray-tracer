@@ -3,32 +3,34 @@ package me.kahlil.graphics;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 
 import com.google.common.collect.ImmutableList;
+import me.kahlil.scene.Camera3D;
 import me.kahlil.scene.Scene3D;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.IntStream;
+import me.kahlil.scene.SimpleFrame;
 
 /**
  * Coordinator for managing the ray tracer worker threads via a {@link ExecutorService}.
  */
-class RayTracerCoordinator {
+public class RayTracerCoordinator {
 
   private final ExecutorService executor;
 
-  private SimpleFrame3D frame;
+  private SimpleFrame frame;
   private Camera3D camera;
   private Scene3D scene;
 
-  RayTracerCoordinator(SimpleFrame3D frame, Camera3D camera, Scene3D scene) {
+  public RayTracerCoordinator(SimpleFrame frame, Camera3D camera, Scene3D scene) {
     this.frame = frame;
     this.camera = camera;
     this.scene = scene;
     this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
   }
 
-  SimpleFrame3D render(boolean shadowsEnabled, int numThreads)
+  public SimpleFrame render(boolean shadowsEnabled, int numThreads)
       throws InterruptedException, ExecutionException {
 
     RayTracer rayTracer = new SimpleAntiAliaser(

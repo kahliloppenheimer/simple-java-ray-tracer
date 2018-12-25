@@ -1,4 +1,4 @@
-package me.kahlil.scene;
+package me.kahlil.geometry;
 
 /**
  * Representation of a ray in 3-dimensional space.

@@ -1,6 +1,7 @@
-package me.kahlil.scene;
+package me.kahlil.geometry;
 
 import java.util.Optional;
+import me.kahlil.scene.Material;
 
 /**
  * A representation of a 3D object in the scene.

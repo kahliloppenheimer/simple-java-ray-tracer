@@ -1,8 +1,8 @@
 package me.kahlil.graphics;
 
-import com.google.common.base.Preconditions;
+import me.kahlil.scene.Camera3D;
 import me.kahlil.scene.Scene3D;
-import java.util.List;
+import me.kahlil.scene.SimpleFrame;
 
 public class RayTracerWorker implements Runnable {
 
@@ -11,7 +11,7 @@ public class RayTracerWorker implements Runnable {
   private static final int MAX_ANTI_ALIAS_SAMPLES = 32;
 
   private final RayTracer rayTracer;
-  private final SimpleFrame3D frame;
+  private final SimpleFrame frame;
   private final Camera3D camera;
   private final Scene3D scene;
   private final boolean shadowsEnabled;
@@ -24,7 +24,7 @@ public class RayTracerWorker implements Runnable {
 
   RayTracerWorker(
       RayTracer rayTracer,
-      SimpleFrame3D frame,
+      SimpleFrame frame,
       Camera3D camera,
       Scene3D scene,
       boolean shadowsEnabled,

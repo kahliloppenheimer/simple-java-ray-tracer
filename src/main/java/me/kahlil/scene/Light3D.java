@@ -1,5 +1,7 @@
 package me.kahlil.scene;
 
+import me.kahlil.geometry.RayHit;
+import me.kahlil.geometry.Vector;
 import me.kahlil.graphics.Color;
 
 /**

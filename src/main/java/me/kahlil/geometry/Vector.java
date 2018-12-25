@@ -1,4 +1,4 @@
-package me.kahlil.scene;
+package me.kahlil.geometry;
 
 import static com.google.common.base.Preconditions.checkState;
 

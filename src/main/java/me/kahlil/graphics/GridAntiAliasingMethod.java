@@ -1,6 +1,6 @@
 package me.kahlil.graphics;
 
-import me.kahlil.scene.Ray3D;
+import me.kahlil.geometry.Ray3D;
 
 /**
  * A method for anti-aliasing by generating a deterministic, uniformly distributed grid of

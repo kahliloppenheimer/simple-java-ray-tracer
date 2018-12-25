@@ -1,5 +1,7 @@
 package me.kahlil.scene;
 
+import me.kahlil.geometry.Matrix;
+import me.kahlil.geometry.Vector;
 import org.junit.Before;
 import org.junit.Test;
 

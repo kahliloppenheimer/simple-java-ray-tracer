@@ -1,5 +1,6 @@
 package me.kahlil.scene;
 
+import me.kahlil.geometry.Vector;
 import org.junit.Test;
 
 import java.util.Random;

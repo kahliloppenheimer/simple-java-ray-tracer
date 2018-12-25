@@ -1,6 +1,6 @@
-package me.kahlil.scene;
+package me.kahlil.geometry;
 
-import me.kahlil.graphics.JavaStyle;
+import me.kahlil.config.JavaStyle;
 import org.immutables.value.Value.Immutable;
 
 /**
