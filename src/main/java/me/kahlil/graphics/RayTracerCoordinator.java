@@ -34,9 +34,9 @@ public class RayTracerCoordinator {
       throws InterruptedException, ExecutionException {
 
     RayTracer rayTracer = new SimpleAntiAliaser(
-        camera,
         frame,
-        new SimpleRayTracer(scene, camera, frame, shadowsEnabled),
+        camera,
+        new SimpleRayTracer(scene, frame, camera, shadowsEnabled),
         new GridAntiAliasingMethod(2));
 
     // Construct individual worker threads
