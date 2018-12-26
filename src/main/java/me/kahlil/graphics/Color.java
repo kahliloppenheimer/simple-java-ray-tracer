@@ -68,16 +68,9 @@ public class Color extends java.awt.Color {
   public final static Color BLACK = black;
 
   /**
-   * The color red.  In the default sRGB space.
+   * The color red in the default sRGB space.
    */
-  public final static Color red = new Color(255, 0, 0);
-
-  /**
-   * The color red.  In the default sRGB space.
-   *
-   * @since 1.4
-   */
-  public final static Color RED = red;
+  public final static Color RED = new Color(255, 0, 0);
 
   /**
    * The color pink.  In the default sRGB space.
@@ -116,16 +109,9 @@ public class Color extends java.awt.Color {
   public final static Color YELLOW = yellow;
 
   /**
-   * The color green.  In the default sRGB space.
+   * The color green in the default sRGB space.
    */
-  public final static Color green = new Color(0, 255, 0);
-
-  /**
-   * The color green.  In the default sRGB space.
-   *
-   * @since 1.4
-   */
-  public final static Color GREEN = green;
+  public final static Color GREEN = new Color(0, 255, 0);
 
   /**
    * The color magenta.  In the default sRGB space.
@@ -152,16 +138,9 @@ public class Color extends java.awt.Color {
   public final static Color CYAN = cyan;
 
   /**
-   * The color blue.  In the default sRGB space.
+   * The color blue in the default sRGB space.
    */
-  public final static Color blue = new Color(0, 0, 255);
-
-  /**
-   * The color blue.  In the default sRGB space.
-   *
-   * @since 1.4
-   */
-  public final static Color BLUE = blue;
+  public final static Color BLUE = new Color(0, 0, 255);
 
   public Color(int r, int g, int b) {
     super(r, g, b);
