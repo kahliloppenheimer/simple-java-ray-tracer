@@ -1,18 +1,16 @@
 package me.kahlil.demos;
 
-import static me.kahlil.graphics.Color.BLUE;
+import static me.kahlil.graphics.Color.BLACK;
 import static me.kahlil.graphics.Color.GREEN;
 import static me.kahlil.graphics.Color.RED;
 import static me.kahlil.graphics.Color.YELLOW;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
+import me.kahlil.geometry.BoundedPlane3D;
 import me.kahlil.geometry.LinearTransformation;
 import me.kahlil.geometry.Object3D;
 import me.kahlil.geometry.Plane3D;
@@ -32,19 +30,18 @@ import me.kahlil.scene.SimpleFrame;
 /**
  * A second demo of the ray tracer.
  */
-public class Demo2 {
+public class Demo3 {
 
   private static final int NUM_THREADS = 4;
 
   public static void main(String[] args) throws InterruptedException, ExecutionException {
 
     Camera3D camera = ImmutableCamera3D.builder()
-        .setLocation(new Vector(0, 0, 0))
+        .setLocation(new Vector(0, 0, 3))
         .build();
-    SimpleFrame frame = new SimpleFrame(new Vector(-1, -1, -1), 2, 2, 2000, 2000);
+    SimpleFrame frame = new SimpleFrame(new Vector(-1, -1, -1), 2, 2, 400,400);
 
     // Objects in scene
-    List<Object3D> objects = new ArrayList<>();
     Sphere3D sphere1 = new Sphere3D(
         new Vector(-.5, 1, -3),
         .4,
@@ -65,26 +62,54 @@ public class Demo2 {
             .build())
         .transform(
             LinearTransformation.scale(1, 1, 1).compose(LinearTransformation.translate(-1, 0, 0)));
-    Sphere3D sphere3 = new Sphere3D(new Vector(2.5, 1, -4), .3, null,
+    Sphere3D sphere3 = new Sphere3D(new Vector(-2, 2, 0), .3, null,
         ImmutableMaterial.builder()
             .setColor(GREEN)
             .setHardness(10)
             .setSpecularIntensity(1.0)
             .build())
         .transform(
-            LinearTransformation.scale(1, 1, 1).compose(LinearTransformation.translate(-1, 0, 0)));
-    objects.add(sphere1);
-    objects.add(sphere2);
-    objects.add(sphere3);
-    objects.add(
+            LinearTransformation.translate(2, -2, 0));
+    Plane3D basePlane =
         new Plane3D(
-            new Vector(0, 0, -7),
-            new Vector(0, 1, 1),
+            new Vector(-2, -2, -15),
+            new Vector(0, 1, -1),
             ImmutableMaterial.builder()
-                .setColor(BLUE)
+                .setColor(BLACK)
                 .setHardness(10)
                 .setSpecularIntensity(0.1)
-                .build()));
+                .build());
+
+    Plane3D leftSidePlane =
+        new BoundedPlane3D(
+            new Vector(-5, 0, 0),
+            new Vector(-10, 0, 1),
+            new Vector(-20, -1, -20),
+            new Vector(5, 3, 1),
+            ImmutableMaterial.builder()
+                .setSpecularIntensity(0.5)
+                .setHardness(100)
+                .setColor(YELLOW)
+                .build());
+
+    Plane3D rightSidePlane =
+        new BoundedPlane3D(
+            new Vector(5, 0, 0),
+            new Vector(-10, 0, 1),
+            new Vector(-1, -1, -20),
+            new Vector(5, 3, 1),
+            ImmutableMaterial.builder()
+                .setSpecularIntensity(0.5)
+                .setHardness(100)
+                .setColor(BLACK)
+                .setReflective(true)
+                .build());
+
+    ImmutableList<Object3D> objects = ImmutableList.of(
+        leftSidePlane,
+        rightSidePlane,
+        basePlane,
+        sphere3);
 
     // Lights in scene
     List<Light3D> lights = new ArrayList<>();
@@ -95,7 +120,7 @@ public class Demo2 {
     Scene3D scene = ImmutableScene3D.builder()
         .setObjects(objects)
         .setLights(lights)
-        .setBackgroundColor(Color.BLACK)
+        .setBackgroundColor(BLACK)
         .setAmbient(new Color((float) .075, (float) .075, (float) .075))
         .build();
 
@@ -107,40 +132,16 @@ public class Demo2 {
 
     System.out.println("Rendering took " + (end - start) + " ms");
 
-    start = System.currentTimeMillis();
-    paintToJpeg("demo2.png", rendered);
-//    paintToJFrame(rendered);
-    end = System.currentTimeMillis();
-    System.out.println("Painting took " + (end - start) + " ms");
-  }
-
-  private static void paintToJFrame(SimpleFrame rendered) throws InterruptedException {
     MyCanvas3D canvas = new MyCanvas3D(rendered.getWidthPx(), rendered.getHeightPx());
     SwingUtilities.invokeLater(() -> canvas.createAndShowGUI());
     Thread.sleep(500);
 
+    start = System.currentTimeMillis();
     canvas.paintFrame(rendered);
-    SwingUtilities.invokeLater(() -> canvas.refresh());
-  }
+    end = System.currentTimeMillis();
 
-  private static void paintToJpeg(String fileName, SimpleFrame rendered) {
-    int height = rendered.getHeightPx();
-    int width = rendered.getWidthPx();
-    BufferedImage theImage = new BufferedImage(width, height,
-        BufferedImage.TYPE_INT_ARGB);
-    int[][] pixel = new int[width][height];
-    for (int i = 0; i < width; i++) {
-      for (int j = 0; j < height; j++) {
-        int value = rendered.getPixel(i, height - j - 1).getRGB();
-        theImage.setRGB(i, j, value);
-      }
-    }
-    File outputFile = new File(fileName);
-    try {
-      outputFile.createNewFile();
-      ImageIO.write(theImage, "png", outputFile);
-    } catch (IOException e1) {
-      throw new RuntimeException(e1);
-    }
+    System.out.println("Painting took " + (end - start) + " ms");
+
+    SwingUtilities.invokeLater(() -> canvas.refresh());
   }
 }

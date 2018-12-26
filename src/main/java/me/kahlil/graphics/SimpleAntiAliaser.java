@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import me.kahlil.geometry.Ray3D;
 import me.kahlil.scene.Camera3D;
+import me.kahlil.scene.Scene3D;
 import me.kahlil.scene.SimpleFrame;
 
 /** A simple anti-aliasing implementation of ray tracing that uses a given
@@ -23,11 +24,11 @@ final class SimpleAntiAliaser extends RayTracer {
   private final SamplingRadius samplingRadius;
 
   SimpleAntiAliaser(
-      Camera3D camera,
       SimpleFrame frame,
+      Camera3D camera,
       RayTracer rayTracer,
       AntiAliasingMethod antiAliasingMethod) {
-    super(camera, frame);
+    super(rayTracer.getScene(), frame, camera, rayTracer.isShadowsEnabled());
     this.samplingRadius = ImmutableSamplingRadius.builder()
         .setWidth(frame.getPixelWidthInCoordinateSpace() * 0.5)
         .setHeight(frame.getPixelHeightInCoordinateSpace() * 0.5)

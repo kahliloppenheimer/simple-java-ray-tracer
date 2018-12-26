@@ -34,10 +34,10 @@ public class RayTracerCoordinator {
       throws InterruptedException, ExecutionException {
 
     RayTracer rayTracer = new SimpleAntiAliaser(
-        camera,
         frame,
-        new SimpleRayTracer(scene, camera, frame, shadowsEnabled),
-        new GridAntiAliasingMethod(2));
+        camera,
+        new ReflectiveRayTracer(scene, frame, camera, shadowsEnabled, 4),
+        new GridAntiAliasingMethod(3));
 
     // Construct individual worker threads
     ImmutableList<RayTracerWorker> rayTracerWorkers = IntStream.range(0, numThreads)
