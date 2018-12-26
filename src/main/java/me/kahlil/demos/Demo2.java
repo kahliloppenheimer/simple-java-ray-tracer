@@ -56,6 +56,7 @@ public class Demo2 {
             .setColor(RED)
             .setHardness(10)
             .setSpecularIntensity(1.0)
+            .setReflective(true)
             .build())
         .transform(
             LinearTransformation.scale(1, 1, 1).compose(LinearTransformation.translate(-1, 0, 0)));
@@ -78,7 +79,6 @@ public class Demo2 {
                 .setColor(BLUE)
                 .setHardness(10)
                 .setSpecularIntensity(0.1)
-                .setReflective(true)
                 .build()));
 
     // Lights in scene
