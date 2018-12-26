@@ -50,15 +50,15 @@ public class SimpleFrame {
     /**
      * Returns the pixel at the specified coordinate
      */
-    public Color getPixel(int x, int y) {
-        return pixels[x][y];
+    public Color getPixel(int i, int j) {
+        return pixels[i][j];
     }
 
     /**
      * Sets the pixel at the specified coorindate
      */
-    public void setPixel(int x, int y, Color c) {
-        pixels[x][y] = c;
+    public void setPixel(int i, int j, Color c) {
+        pixels[i][j] = c;
     }
 
     public int getWidthPx() {

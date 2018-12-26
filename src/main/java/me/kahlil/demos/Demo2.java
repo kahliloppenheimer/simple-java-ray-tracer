@@ -5,9 +5,13 @@ import static me.kahlil.graphics.Color.GREEN;
 import static me.kahlil.graphics.Color.RED;
 import static me.kahlil.graphics.Color.YELLOW;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 import me.kahlil.geometry.LinearTransformation;
 import me.kahlil.geometry.Object3D;
@@ -37,7 +41,7 @@ public class Demo2 {
     Camera3D camera = ImmutableCamera3D.builder()
         .setLocation(new Vector(0, 0, 0))
         .build();
-    SimpleFrame frame = new SimpleFrame(new Vector(-1, -1, -1), 2, 2, 800, 800);
+    SimpleFrame frame = new SimpleFrame(new Vector(-1, -1, -1), 2, 2, 400, 400);
 
     // Objects in scene
     List<Object3D> objects = new ArrayList<Object3D>();
@@ -103,16 +107,39 @@ public class Demo2 {
 
     System.out.println("Rendering took " + (end - start) + " ms");
 
+    start = System.currentTimeMillis();
+    paintToJpeg("demo2.png", rendered);
+    end = System.currentTimeMillis();
+    System.out.println("Painting took " + (end - start) + " ms");
+  }
+
+  private static void paintToJFrame(SimpleFrame rendered) throws InterruptedException {
     MyCanvas3D canvas = new MyCanvas3D(rendered.getWidthPx(), rendered.getHeightPx());
     SwingUtilities.invokeLater(() -> canvas.createAndShowGUI());
     Thread.sleep(500);
 
-    start = System.currentTimeMillis();
     canvas.paintFrame(rendered);
-    end = System.currentTimeMillis();
-
-    System.out.println("Painting took " + (end - start) + " ms");
-
     SwingUtilities.invokeLater(() -> canvas.refresh());
+  }
+
+  private static void paintToJpeg(String fileName, SimpleFrame rendered) {
+    int height = rendered.getHeightPx();
+    int width = rendered.getWidthPx();
+    BufferedImage theImage = new BufferedImage(width, height,
+        BufferedImage.TYPE_INT_ARGB);
+    int[][] pixel = new int[width][height];
+    for (int i = 0; i < width; i++) {
+      for (int j = 0; j < height; j++) {
+        int value = rendered.getPixel(i, height - j - 1).getRGB();
+        theImage.setRGB(i, j, value);
+      }
+    }
+    File outputFile = new File(fileName);
+    try {
+      outputFile.createNewFile();
+      ImageIO.write(theImage, "png", outputFile);
+    } catch (IOException e1) {
+      throw new RuntimeException(e1);
+    }
   }
 }
