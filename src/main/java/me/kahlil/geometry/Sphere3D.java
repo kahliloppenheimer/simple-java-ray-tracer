@@ -15,6 +15,13 @@ public class Sphere3D extends Object3D {
   // Material of the outside of the sphere
   private final Material outside;
 
+  public Sphere3D(Vector center, double radius, Material material) {
+    this.center = center;
+    this.radius = radius;
+    this.inside = material;
+    this.outside = material;
+  }
+
   public Sphere3D(Vector center, double radius, Material inside, Material outside) {
     this.center = center;
     this.radius = radius;

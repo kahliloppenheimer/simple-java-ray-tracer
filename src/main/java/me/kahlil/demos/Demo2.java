@@ -3,6 +3,7 @@ package me.kahlil.demos;
 import static me.kahlil.graphics.Color.BLUE;
 import static me.kahlil.graphics.Color.GREEN;
 import static me.kahlil.graphics.Color.RED;
+import static me.kahlil.graphics.Color.YELLOW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,13 +46,13 @@ public class Demo2 {
         .4,
         null,
         ImmutableMaterial.builder()
-            .setColor(BLUE)
+            .setColor(YELLOW)
             .setHardness(10)
             .setSpecularIntensity(1.0)
             .build())
         .transform(LinearTransformation
             .scale(1, 1, 1).compose(LinearTransformation.translate(-1, 0, 0)));
-    Sphere3D sphere2 = new Sphere3D(new Vector(1.5, .8, -2), .9, null,
+    Sphere3D sphere2 = new Sphere3D(new Vector(.8, .8, -5), .6, null,
         ImmutableMaterial.builder()
             .setColor(RED)
             .setHardness(10)
@@ -73,7 +74,7 @@ public class Demo2 {
     objects.add(sphere3);
     objects.add(
         new Plane3D(
-            new Vector(0, 0, -5),
+            new Vector(0, 0, -7),
             new Vector(0, 1, 1),
             ImmutableMaterial.builder()
                 .setColor(BLUE)
