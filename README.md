@@ -3,7 +3,7 @@ This is my implementation of a Ray rayTracer built from scratch in Java. Below a
 
 Here is a sample image the current version rendered:
 
-![Sample Image](https://github.com/kahliloppenheimer/Java-Ray-Tracer/blob/master/demo_image.png?raw=true)
+![Sample Image](https://github.com/kahliloppenheimer/Java-Ray-Tracer/blob/master/reflections_demo.png?raw=true)
 
 
 ## Currently Supported Shapes
