@@ -41,10 +41,10 @@ public class Demo2 {
     Camera3D camera = ImmutableCamera3D.builder()
         .setLocation(new Vector(0, 0, 0))
         .build();
-    SimpleFrame frame = new SimpleFrame(new Vector(-1, -1, -1), 2, 2, 400, 400);
+    SimpleFrame frame = new SimpleFrame(new Vector(-1, -1, -1), 2, 2, 2000, 2000);
 
     // Objects in scene
-    List<Object3D> objects = new ArrayList<Object3D>();
+    List<Object3D> objects = new ArrayList<>();
     Sphere3D sphere1 = new Sphere3D(
         new Vector(-.5, 1, -3),
         .4,
@@ -109,6 +109,7 @@ public class Demo2 {
 
     start = System.currentTimeMillis();
     paintToJpeg("demo2.png", rendered);
+//    paintToJFrame(rendered);
     end = System.currentTimeMillis();
     System.out.println("Painting took " + (end - start) + " ms");
   }
