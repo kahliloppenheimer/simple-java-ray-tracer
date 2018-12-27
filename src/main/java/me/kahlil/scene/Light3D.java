@@ -4,9 +4,7 @@ import me.kahlil.geometry.RayHit;
 import me.kahlil.geometry.Vector;
 import me.kahlil.graphics.Color;
 
-/**
- * A representation of a simple light source with a location and intensity.
- */
+/** A representation of a simple light source with a location and intensity. */
 public class Light3D {
 
   // Percentage brightness that specular lighting should get. Lower numbers
@@ -34,9 +32,7 @@ public class Light3D {
     return Math.max(0, lightVector.dot(normal));
   }
 
-  /**
-   * Returns the specular light at a given RayHit with the given light and eye positions.
-   */
+  /** Returns the specular light at a given RayHit with the given light and eye positions. */
   double specular(Vector eyePos, RayHit rayHit) {
     Vector lightVec = getLocation().subtract(rayHit.getIntersection()).normalize();
     Vector eyeVec = eyePos.subtract(rayHit.getIntersection()).normalize();
@@ -44,8 +40,8 @@ public class Light3D {
     Vector lProjectedOntoN = normal.scale(lightVec.dot(normal));
     Vector lProjectedOntoPlane = lightVec.subtract(lProjectedOntoN);
     Vector reflectedLight = lightVec.subtract(lProjectedOntoPlane.scale(2)).normalize();
-    return Math.pow(Math.max(
-        reflectedLight.dot(eyeVec), 0),
+    return Math.pow(
+        Math.max(reflectedLight.dot(eyeVec), 0),
         rayHit.getObject().getOutsideMaterial().getHardness());
   }
 
@@ -66,8 +62,13 @@ public class Light3D {
     double specularCoefficient = specular(cameraPosition, rayHit);
 
     Material material = rayHit.getObject().getOutsideMaterial();
-    return material.getColor().multiply(getColor()).scaleFloat((float) diffuseCoefficient)
-        .add(getColor().scaleFloat((float) specularCoefficient)
-            .scaleFloat((float) material.getSpecularIntensity()));
+    return material
+        .getColor()
+        .multiply(getColor())
+        .scaleFloat((float) diffuseCoefficient)
+        .add(
+            getColor()
+                .scaleFloat((float) specularCoefficient)
+                .scaleFloat((float) material.getSpecularIntensity()));
   }
 }

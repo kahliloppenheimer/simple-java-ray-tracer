@@ -10,5 +10,4 @@ interface AntiAliasingMethod {
    * radius.
    */
   Ray3D[] getRaysToSample(Ray3D ray, SamplingRadius samplingRadius);
-
 }

@@ -9,6 +9,6 @@ import org.immutables.value.Value.Immutable;
 interface SamplingRadius {
 
   double getHeight();
-  double getWidth();
 
+  double getWidth();
 }

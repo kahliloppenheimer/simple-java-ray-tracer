@@ -6,9 +6,7 @@ import me.kahlil.geometry.Object3D;
 import me.kahlil.graphics.Color;
 import org.immutables.value.Value.Immutable;
 
-/**
- * Represents all of hte lights and objects present in a scene to render.
- */
+/** Represents all of hte lights and objects present in a scene to render. */
 @Immutable
 @JavaStyle
 public interface Scene3D {
@@ -24,5 +22,4 @@ public interface Scene3D {
 
   // Ambient lighting of the scene
   Color getAmbient();
-
 }

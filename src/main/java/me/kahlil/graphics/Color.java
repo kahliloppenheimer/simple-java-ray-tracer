@@ -2,145 +2,117 @@ package me.kahlil.graphics;
 
 import java.awt.color.ColorSpace;
 
-/**
- * Created by kahliloppenheimer on 9/7/15.
- */
+/** Created by kahliloppenheimer on 9/7/15. */
 public class Color extends java.awt.Color {
 
-  /**
-   * The color white.  In the default sRGB space.
-   */
-  public final static Color white = new Color(255, 255, 255);
+  /** The color white. In the default sRGB space. */
+  public static final Color white = new Color(255, 255, 255);
 
   /**
-   * The color white.  In the default sRGB space.
+   * The color white. In the default sRGB space.
    *
    * @since 1.4
    */
-  public final static Color WHITE = white;
+  public static final Color WHITE = white;
+
+  /** The color light gray. In the default sRGB space. */
+  public static final Color lightGray = new Color(192, 192, 192);
 
   /**
-   * The color light gray.  In the default sRGB space.
-   */
-  public final static Color lightGray = new Color(192, 192, 192);
-
-  /**
-   * The color light gray.  In the default sRGB space.
+   * The color light gray. In the default sRGB space.
    *
    * @since 1.4
    */
-  public final static Color LIGHT_GRAY = lightGray;
+  public static final Color LIGHT_GRAY = lightGray;
+
+  /** The color gray. In the default sRGB space. */
+  public static final Color gray = new Color(128, 128, 128);
 
   /**
-   * The color gray.  In the default sRGB space.
-   */
-  public final static Color gray = new Color(128, 128, 128);
-
-  /**
-   * The color gray.  In the default sRGB space.
+   * The color gray. In the default sRGB space.
    *
    * @since 1.4
    */
-  public final static Color GRAY = gray;
+  public static final Color GRAY = gray;
+
+  /** The color dark gray. In the default sRGB space. */
+  public static final Color darkGray = new Color(64, 64, 64);
 
   /**
-   * The color dark gray.  In the default sRGB space.
-   */
-  public final static Color darkGray = new Color(64, 64, 64);
-
-  /**
-   * The color dark gray.  In the default sRGB space.
+   * The color dark gray. In the default sRGB space.
    *
    * @since 1.4
    */
-  public final static Color DARK_GRAY = darkGray;
+  public static final Color DARK_GRAY = darkGray;
+
+  /** The color black. In the default sRGB space. */
+  public static final Color black = new Color(0, 0, 0);
 
   /**
-   * The color black.  In the default sRGB space.
-   */
-  public final static Color black = new Color(0, 0, 0);
-
-  /**
-   * The color black.  In the default sRGB space.
+   * The color black. In the default sRGB space.
    *
    * @since 1.4
    */
-  public final static Color BLACK = black;
+  public static final Color BLACK = black;
+
+  /** The color red in the default sRGB space. */
+  public static final Color RED = new Color(255, 0, 0);
+
+  /** The color pink. In the default sRGB space. */
+  public static final Color pink = new Color(255, 175, 175);
 
   /**
-   * The color red in the default sRGB space.
-   */
-  public final static Color RED = new Color(255, 0, 0);
-
-  /**
-   * The color pink.  In the default sRGB space.
-   */
-  public final static Color pink = new Color(255, 175, 175);
-
-  /**
-   * The color pink.  In the default sRGB space.
+   * The color pink. In the default sRGB space.
    *
    * @since 1.4
    */
-  public final static Color PINK = pink;
+  public static final Color PINK = pink;
+
+  /** The color orange. In the default sRGB space. */
+  public static final Color orange = new Color(255, 200, 0);
 
   /**
-   * The color orange.  In the default sRGB space.
-   */
-  public final static Color orange = new Color(255, 200, 0);
-
-  /**
-   * The color orange.  In the default sRGB space.
+   * The color orange. In the default sRGB space.
    *
    * @since 1.4
    */
-  public final static Color ORANGE = orange;
+  public static final Color ORANGE = orange;
+
+  /** The color yellow. In the default sRGB space. */
+  public static final Color yellow = new Color(255, 255, 0);
 
   /**
-   * The color yellow.  In the default sRGB space.
-   */
-  public final static Color yellow = new Color(255, 255, 0);
-
-  /**
-   * The color yellow.  In the default sRGB space.
+   * The color yellow. In the default sRGB space.
    *
    * @since 1.4
    */
-  public final static Color YELLOW = yellow;
+  public static final Color YELLOW = yellow;
+
+  /** The color green in the default sRGB space. */
+  public static final Color GREEN = new Color(0, 255, 0);
+
+  /** The color magenta. In the default sRGB space. */
+  public static final Color magenta = new Color(255, 0, 255);
 
   /**
-   * The color green in the default sRGB space.
-   */
-  public final static Color GREEN = new Color(0, 255, 0);
-
-  /**
-   * The color magenta.  In the default sRGB space.
-   */
-  public final static Color magenta = new Color(255, 0, 255);
-
-  /**
-   * The color magenta.  In the default sRGB space.
+   * The color magenta. In the default sRGB space.
    *
    * @since 1.4
    */
-  public final static Color MAGENTA = magenta;
+  public static final Color MAGENTA = magenta;
+
+  /** The color cyan. In the default sRGB space. */
+  public static final Color cyan = new Color(0, 255, 255);
 
   /**
-   * The color cyan.  In the default sRGB space.
-   */
-  public final static Color cyan = new Color(0, 255, 255);
-
-  /**
-   * The color cyan.  In the default sRGB space.
+   * The color cyan. In the default sRGB space.
    *
    * @since 1.4
    */
-  public final static Color CYAN = cyan;
+  public static final Color CYAN = cyan;
 
-  /**
-   * The color blue in the default sRGB space.
-   */
-  public final static Color BLUE = new Color(0, 0, 255);
+  /** The color blue in the default sRGB space. */
+  public static final Color BLUE = new Color(0, 0, 255);
 
   public Color(int r, int g, int b) {
     super(r, g, b);
@@ -170,9 +142,7 @@ public class Color extends java.awt.Color {
     super(cspace, components, alpha);
   }
 
-  /**
-   * Multiplies each component of each color by the other
-   */
+  /** Multiplies each component of each color by the other */
   public Color multiply(Color other) {
     float[] thisRgb = new float[3];
     float[] otherRgb = new float[3];
@@ -190,7 +160,8 @@ public class Color extends java.awt.Color {
     float[] otherRgb = new float[3];
     getColorComponents(thisRgb);
     other.getColorComponents(otherRgb);
-    return new Color((float) Math.min(thisRgb[0] + otherRgb[0], .9999999),
+    return new Color(
+        (float) Math.min(thisRgb[0] + otherRgb[0], .9999999),
         (float) Math.min(thisRgb[1] + otherRgb[1], .9999999),
         (float) Math.min(thisRgb[2] + otherRgb[2], .9999999));
   }
@@ -202,12 +173,7 @@ public class Color extends java.awt.Color {
   }
 
   public int[] getRgbaAsInts() {
-    return new int[]{
-        getRed(),
-        getGreen(),
-        getBlue(),
-        getAlpha()
-    };
+    return new int[] {getRed(), getGreen(), getBlue(), getAlpha()};
   }
 
   public float[] getRgbaAsFloats() {

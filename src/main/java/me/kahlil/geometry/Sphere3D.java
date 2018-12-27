@@ -3,9 +3,7 @@ package me.kahlil.geometry;
 import java.util.Optional;
 import me.kahlil.scene.Material;
 
-/**
- * A representation of a sphere in 3D space.
- */
+/** A representation of a sphere in 3D space. */
 public class Sphere3D extends Object3D {
 
   private Vector center;
@@ -35,8 +33,8 @@ public class Sphere3D extends Object3D {
     // ax^2 + bx + c = 0
     double a = Math.pow(ray.getDirection().magnitude(), 2);
     double b = ray.getDirection().scale(2).dot(ray.getStart().subtract(this.center));
-    double c = Math.pow(ray.getStart().subtract(this.center).magnitude(), 2)
-        - Math.pow(this.radius, 2);
+    double c =
+        Math.pow(ray.getStart().subtract(this.center).magnitude(), 2) - Math.pow(this.radius, 2);
 
     double determinant = Math.pow(b, 2) - 4 * a * c;
     double timeOfFirstIntersection = -1;
@@ -55,14 +53,15 @@ public class Sphere3D extends Object3D {
       Vector intersection = ray.atTime(timeOfFirstIntersection);
       double distance = ray.getStart().subtract(intersection).magnitude();
       Vector normal = intersection.subtract(center).normalize();
-      return Optional.of(ImmutableRayHit.builder()
-          .setRay(ray)
-          .setTime(timeOfFirstIntersection)
-          .setDistance(distance)
-          .setIntersection(intersection)
-          .setNormal(normal)
-          .setObject(this)
-          .build());
+      return Optional.of(
+          ImmutableRayHit.builder()
+              .setRay(ray)
+              .setTime(timeOfFirstIntersection)
+              .setDistance(distance)
+              .setIntersection(intersection)
+              .setNormal(normal)
+              .setObject(this)
+              .build());
     } else {
       return Optional.empty();
     }
@@ -93,5 +92,4 @@ public class Sphere3D extends Object3D {
   public void setLocation(double x, double y, double z) {
     this.center = new Vector(x, y, z);
   }
-
 }

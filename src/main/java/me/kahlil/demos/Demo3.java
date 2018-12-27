@@ -27,49 +27,53 @@ import me.kahlil.scene.Light3D;
 import me.kahlil.scene.Scene3D;
 import me.kahlil.scene.SimpleFrame;
 
-/**
- * A second demo of the ray tracer.
- */
+/** A second demo of the ray tracer. */
 public class Demo3 {
-
-  private static final int NUM_THREADS = 4;
 
   public static void main(String[] args) throws InterruptedException, ExecutionException {
 
-    Camera3D camera = ImmutableCamera3D.builder()
-        .setLocation(new Vector(0, 0, 3))
-        .build();
-    SimpleFrame frame = new SimpleFrame(new Vector(-1, -1, -1), 2, 2, 400,400);
+    Camera3D camera = ImmutableCamera3D.builder().setLocation(new Vector(0, 0, 3)).build();
+    SimpleFrame frame = new SimpleFrame(new Vector(-1, -1, -1), 2, 2, 400, 400);
 
     // Objects in scene
-    Sphere3D sphere1 = new Sphere3D(
-        new Vector(-.5, 1, -3),
-        .4,
-        null,
-        ImmutableMaterial.builder()
-            .setColor(YELLOW)
-            .setHardness(10)
-            .setSpecularIntensity(1.0)
-            .build())
-        .transform(LinearTransformation
-            .scale(1, 1, 1).compose(LinearTransformation.translate(-1, 0, 0)));
-    Sphere3D sphere2 = new Sphere3D(new Vector(.8, .8, -5), .6, null,
-        ImmutableMaterial.builder()
-            .setColor(RED)
-            .setHardness(10)
-            .setSpecularIntensity(1.0)
-            .setReflective(true)
-            .build())
-        .transform(
-            LinearTransformation.scale(1, 1, 1).compose(LinearTransformation.translate(-1, 0, 0)));
-    Sphere3D sphere3 = new Sphere3D(new Vector(-2, 2, 0), .3, null,
-        ImmutableMaterial.builder()
-            .setColor(GREEN)
-            .setHardness(10)
-            .setSpecularIntensity(1.0)
-            .build())
-        .transform(
-            LinearTransformation.translate(2, -2, 0));
+    Sphere3D sphere1 =
+        new Sphere3D(
+                new Vector(-.5, 1, -3),
+                .4,
+                null,
+                ImmutableMaterial.builder()
+                    .setColor(YELLOW)
+                    .setHardness(10)
+                    .setSpecularIntensity(1.0)
+                    .build())
+            .transform(
+                LinearTransformation.scale(1, 1, 1)
+                    .compose(LinearTransformation.translate(-1, 0, 0)));
+    Sphere3D sphere2 =
+        new Sphere3D(
+                new Vector(.8, .8, -5),
+                .6,
+                null,
+                ImmutableMaterial.builder()
+                    .setColor(RED)
+                    .setHardness(10)
+                    .setSpecularIntensity(1.0)
+                    .setReflective(true)
+                    .build())
+            .transform(
+                LinearTransformation.scale(1, 1, 1)
+                    .compose(LinearTransformation.translate(-1, 0, 0)));
+    Sphere3D sphere3 =
+        new Sphere3D(
+                new Vector(-2, 2, 0),
+                .3,
+                null,
+                ImmutableMaterial.builder()
+                    .setColor(GREEN)
+                    .setHardness(10)
+                    .setSpecularIntensity(1.0)
+                    .build())
+            .transform(LinearTransformation.translate(2, -2, 0));
     Plane3D basePlane =
         new Plane3D(
             new Vector(-2, -2, -15),
@@ -105,11 +109,8 @@ public class Demo3 {
                 .setReflective(true)
                 .build());
 
-    ImmutableList<Object3D> objects = ImmutableList.of(
-        leftSidePlane,
-        rightSidePlane,
-        basePlane,
-        sphere3);
+    ImmutableList<Object3D> objects =
+        ImmutableList.of(leftSidePlane, rightSidePlane, basePlane, sphere3);
 
     // Lights in scene
     List<Light3D> lights = new ArrayList<>();
@@ -117,17 +118,18 @@ public class Demo3 {
     lights.add(new Light3D(new Vector(-6, 5, 0), new Color(200, 200, 200)));
 
     // Whole scene
-    Scene3D scene = ImmutableScene3D.builder()
-        .setObjects(objects)
-        .setLights(lights)
-        .setBackgroundColor(BLACK)
-        .setAmbient(new Color((float) .075, (float) .075, (float) .075))
-        .build();
+    Scene3D scene =
+        ImmutableScene3D.builder()
+            .setObjects(objects)
+            .setLights(lights)
+            .setBackgroundColor(BLACK)
+            .setAmbient(new Color((float) .075, (float) .075, (float) .075))
+            .build();
 
     RayTracerCoordinator rt = new RayTracerCoordinator(frame, camera, scene);
 
     long start = System.currentTimeMillis();
-    SimpleFrame rendered = rt.render(true, NUM_THREADS);
+    SimpleFrame rendered = rt.render(true);
     long end = System.currentTimeMillis();
 
     System.out.println("Rendering took " + (end - start) + " ms");

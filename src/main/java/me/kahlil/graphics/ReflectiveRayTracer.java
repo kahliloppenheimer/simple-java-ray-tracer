@@ -1,10 +1,10 @@
 package me.kahlil.graphics;
 
 import java.util.Optional;
-import me.kahlil.geometry.Vector;
-import me.kahlil.scene.Camera3D;
 import me.kahlil.geometry.Ray3D;
 import me.kahlil.geometry.RayHit;
+import me.kahlil.geometry.Vector;
+import me.kahlil.scene.Camera3D;
 import me.kahlil.scene.Scene3D;
 import me.kahlil.scene.SimpleFrame;
 
@@ -19,15 +19,11 @@ class ReflectiveRayTracer extends RayTracer {
   private final int maxRayDepth;
 
   /**
-   * Constructs a ReflectiveRayTracer with a given maxRayDepth, indicating the maximum number
-   * of recursive rays that should be traced for reflections.
+   * Constructs a ReflectiveRayTracer with a given maxRayDepth, indicating the maximum number of
+   * recursive rays that should be traced for reflections.
    */
   ReflectiveRayTracer(
-      Scene3D scene,
-      SimpleFrame frame,
-      Camera3D camera,
-      boolean shadowsEnabled,
-      int maxRayDepth) {
+      Scene3D scene, SimpleFrame frame, Camera3D camera, boolean shadowsEnabled, int maxRayDepth) {
     super(scene, frame, camera, shadowsEnabled);
     this.scene = scene;
     this.maxRayDepth = maxRayDepth;
@@ -55,12 +51,12 @@ class ReflectiveRayTracer extends RayTracer {
   }
 
   /**
-   * Math for computing the reflection ray R can be expressed with the following formula,
-   * given an incident Ray I and a normal ray N at the point of intersection N:
+   * Math for computing the reflection ray R can be expressed with the following formula, given an
+   * incident Ray I and a normal ray N at the point of intersection N:
    *
-   * R = I - 2 * (I dot N) * N
+   * <p>R = I - 2 * (I dot N) * N
    *
-   * Sources:
+   * <p>Sources:
    * https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel
    * http://web.cse.ohio-state.edu/~shen.94/681/Site/Slides_files/reflection_refraction.pdf
    */
@@ -71,5 +67,4 @@ class ReflectiveRayTracer extends RayTracer {
     Vector perturbedStartingPoint = rayHit.getIntersection().add(reflection.scale(EPSILON));
     return new Ray3D(perturbedStartingPoint, reflection);
   }
-
 }

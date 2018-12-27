@@ -27,12 +27,7 @@ abstract class RayTracer {
   private final Scene3D scene;
   private final boolean shadowsEnabled;
 
-  RayTracer(
-      Scene3D scene,
-      SimpleFrame frame,
-      Camera3D camera,
-      boolean shadowsEnabled
-  ) {
+  RayTracer(Scene3D scene, SimpleFrame frame, Camera3D camera, boolean shadowsEnabled) {
     this.camera = camera;
     this.frame = frame;
     this.scene = scene;
@@ -45,23 +40,24 @@ abstract class RayTracer {
    */
   abstract Color traceRay(Ray3D ray);
 
-  /**
-   * Traces a ray through ith and jth pixel, returning a color for that pixel.
-   */
+  /** Traces a ray through ith and jth pixel, returning a color for that pixel. */
   final Color traceRay(int i, int j) {
-    return traceRay(new Ray3D(camera.getLocation(),
-        frame.getBottomLeftCorner()
-            .translate(
-                // Translate into coordinate space and center
-                i * frame.getPixelWidthInCoordinateSpace()
-                    + 0.5 * frame.getPixelWidthInCoordinateSpace(),
-                j * frame.getPixelHeightInCoordinateSpace()
-                    + 0.5 * frame.getPixelHeightInCoordinateSpace())));
+    return traceRay(
+        new Ray3D(
+            camera.getLocation(),
+            frame
+                .getBottomLeftCorner()
+                .translate(
+                    // Translate into coordinate space and center
+                    i * frame.getPixelWidthInCoordinateSpace()
+                        + 0.5 * frame.getPixelWidthInCoordinateSpace(),
+                    j * frame.getPixelHeightInCoordinateSpace()
+                        + 0.5 * frame.getPixelHeightInCoordinateSpace())));
   }
 
   /**
-   * Computes the shading at a particular ray intersection with an object, returning a color
-   * based on the lights in the scene, with which the given point should be shaded.
+   * Computes the shading at a particular ray intersection with an object, returning a color based
+   * on the lights in the scene, with which the given point should be shaded.
    */
   Color computeShading(RayHit rayHit) {
     // Perform custom logic for LightSpheres since they are exceptional
@@ -84,16 +80,14 @@ abstract class RayTracer {
     return new Color(1.0f, 1.0f, 1.0f);
   }
 
-  /**
-   * Returns true iff there is an object in the scene between the light and the given
-   * point.
-   */
+  /** Returns true iff there is an object in the scene between the light and the given point. */
   private boolean isObjectBetweenLightAndPoint(Light3D l, Vector point) {
     Vector shadowVec = l.getLocation().subtract(point);
     ImmutableList<RayHit> allIntersections =
         findAllIntersections(new Ray3D(point.add(shadowVec.scale(.0001)), shadowVec), scene);
-    return allIntersections.stream()
-        .filter(rayHit ->  !(rayHit.getObject() instanceof LightSphere))
+    return allIntersections
+        .stream()
+        .filter(rayHit -> !(rayHit.getObject() instanceof LightSphere))
         .map(RayHit::getDistance)
         .anyMatch(distance -> distance < shadowVec.magnitude());
   }
@@ -108,13 +102,10 @@ abstract class RayTracer {
         .min((rayHit1, rayHit2) -> Doubles.compare(rayHit1.getDistance(), rayHit2.getDistance()));
   }
 
-  /**
-   * Returns all intersections the given ray has with the objects in the scene.
-   */
+  /** Returns all intersections the given ray has with the objects in the scene. */
   ImmutableList<RayHit> findAllIntersections(Ray3D visionVector, Scene3D scene) {
     return Streams.concat(
-        scene.getObjects().stream(),
-        scene.getLights().stream().map(LightSphere::new))
+            scene.getObjects().stream(), scene.getLights().stream().map(LightSphere::new))
         .map(object -> object.findIntersection(visionVector))
         .filter(Optional::isPresent)
         .map(Optional::get)

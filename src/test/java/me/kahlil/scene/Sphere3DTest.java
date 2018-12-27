@@ -1,34 +1,24 @@
 package me.kahlil.scene;
 
+import static me.kahlil.graphics.Color.RED;
+import static org.junit.Assert.*;
+
+import java.util.Optional;
+import java.util.Random;
 import me.kahlil.geometry.Ray3D;
 import me.kahlil.geometry.RayHit;
 import me.kahlil.geometry.Sphere3D;
 import me.kahlil.geometry.Vector;
-import me.kahlil.graphics.Color;
 import org.junit.Test;
 
-import java.util.Optional;
-import java.util.Random;
-
-import static me.kahlil.graphics.Color.RED;
-import static org.junit.Assert.*;
-
-/**
- * Unit tests for {@link Sphere3D}.
- */
+/** Unit tests for {@link Sphere3D}. */
 public class Sphere3DTest {
 
   private static final double DELTA = .000001;
-  private static final Material material = ImmutableMaterial.builder()
-      .setColor(RED)
-      .setHardness(10)
-      .setSpecularIntensity(1.0)
-      .build();
-  private static final Sphere3D unitSphere = new Sphere3D(
-      new Vector(0, 0, 0),
-      1,
-      material,
-      material);
+  private static final Material material =
+      ImmutableMaterial.builder().setColor(RED).setHardness(10).setSpecularIntensity(1.0).build();
+  private static final Sphere3D unitSphere =
+      new Sphere3D(new Vector(0, 0, 0), 1, material, material);
 
   @Test
   public void testInsiderMaterial() {

@@ -8,16 +8,12 @@ import org.immutables.value.Value.Check;
 import org.immutables.value.Value.Default;
 import org.immutables.value.Value.Immutable;
 
-/**
- * A representation of the material of a given shape.
- */
+/** A representation of the material of a given shape. */
 @Immutable
 @JavaStyle
 public interface Material {
 
-  /**
-   * The color of the material.
-   */
+  /** The color of the material. */
   Color getColor();
 
   /**
@@ -27,8 +23,8 @@ public interface Material {
   int getHardness();
 
   /**
-   * The specular intensity of a material (i.e. "shiny-ness") which is specified as a double
-   * between 0.0 (inclusive) and 1.0 (inclusive).
+   * The specular intensity of a material (i.e. "shiny-ness") which is specified as a double between
+   * 0.0 (inclusive) and 1.0 (inclusive).
    */
   double getSpecularIntensity();
 
@@ -43,10 +39,12 @@ public interface Material {
 
   @Check
   default void checkPreconditions() {
-    checkArgument(getHardness() > 0 && getHardness() < 512,
+    checkArgument(
+        getHardness() > 0 && getHardness() < 512,
         "Hardness must be an integer between 1 (inclusive) and 511 (inclusive) but was %d",
         getHardness());
-    checkArgument(getSpecularIntensity() >= 0.0 && getSpecularIntensity() <= 1.0,
+    checkArgument(
+        getSpecularIntensity() >= 0.0 && getSpecularIntensity() <= 1.0,
         "Specular intensity must be between 0.0 (inclusive) and 1.0 (inclusive) but was %f",
         getSpecularIntensity());
   }
