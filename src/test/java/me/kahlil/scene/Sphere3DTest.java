@@ -33,13 +33,13 @@ public class Sphere3DTest {
   @Test
   public void testInsiderMaterial() {
     assertEquals(unitSphere.getInsideMaterial().getColor(), RED);
-    assertEquals(unitSphere.getInsideMaterial().getHardness(), 55);
+    assertEquals(unitSphere.getInsideMaterial().getHardness(), 10);
   }
 
   @Test
   public void testOutsideMaterial() {
     assertEquals(unitSphere.getOutsideMaterial().getColor(), RED);
-    assertEquals(unitSphere.getOutsideMaterial().getHardness(), 55);
+    assertEquals(unitSphere.getOutsideMaterial().getHardness(), 10);
   }
 
   @Test
