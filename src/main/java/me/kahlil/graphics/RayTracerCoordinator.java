@@ -8,8 +8,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.IntStream;
-import me.kahlil.scene.Camera3D;
-import me.kahlil.scene.Scene3D;
+
+import me.kahlil.scene.Camera;
+import me.kahlil.scene.Scene;
 import me.kahlil.scene.SimpleFrame;
 
 /** Coordinator for managing the ray tracer worker threads via a {@link ExecutorService}. */
@@ -19,10 +20,10 @@ public class RayTracerCoordinator {
   private final int numThreads;
 
   private SimpleFrame frame;
-  private Camera3D camera;
-  private Scene3D scene;
+  private Camera camera;
+  private Scene scene;
 
-  public RayTracerCoordinator(SimpleFrame frame, Camera3D camera, Scene3D scene) {
+  public RayTracerCoordinator(SimpleFrame frame, Camera camera, Scene scene) {
     this.frame = frame;
     this.camera = camera;
     this.scene = scene;
@@ -37,8 +38,13 @@ public class RayTracerCoordinator {
         new SimpleAntiAliaser(
             frame,
             camera,
-            new ReflectiveRayTracer(scene, frame, camera, shadowsEnabled, 4),
-            new GridAntiAliasingMethod(3));
+            new ReflectiveRayTracer(
+                new PhongShading(scene, camera, shadowsEnabled),
+                scene,
+                frame,
+                camera,
+                1),
+            new GridAntiAliasingMethod(1));
 
     // Construct individual worker threads
     ImmutableList<RayTracerWorker> rayTracerWorkers =
@@ -46,7 +52,7 @@ public class RayTracerCoordinator {
             .mapToObj(
                 i ->
                     new RayTracerWorker(
-                        rayTracer, frame, camera, scene, shadowsEnabled, i, numThreads))
+                        rayTracer, frame, i, numThreads))
             .collect(toImmutableList());
 
     // Start all workers
@@ -58,7 +64,7 @@ public class RayTracerCoordinator {
       future.get();
     }
 
-    int totalNumTraces = rayTracerWorkers.stream().mapToInt(RayTracerWorker::getNumTraces).sum();
+    long totalNumTraces = rayTracerWorkers.stream().mapToLong(RayTracerWorker::getNumTraces).sum();
 
     System.out.printf("Total number of rays traced = %d\n", totalNumTraces);
 

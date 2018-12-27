@@ -4,6 +4,7 @@ import static me.kahlil.graphics.Color.BLACK;
 import static me.kahlil.graphics.Color.GREEN;
 import static me.kahlil.graphics.Color.RED;
 import static me.kahlil.graphics.Color.YELLOW;
+import static me.kahlil.scene.Cameras.STANDARD_CAMERA;
 
 import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
@@ -19,12 +20,10 @@ import me.kahlil.geometry.Vector;
 import me.kahlil.graphics.Color;
 import me.kahlil.graphics.MyCanvas3D;
 import me.kahlil.graphics.RayTracerCoordinator;
-import me.kahlil.scene.Camera3D;
-import me.kahlil.scene.ImmutableCamera3D;
 import me.kahlil.scene.ImmutableMaterial;
-import me.kahlil.scene.ImmutableScene3D;
+import me.kahlil.scene.ImmutableScene;
 import me.kahlil.scene.Light3D;
-import me.kahlil.scene.Scene3D;
+import me.kahlil.scene.Scene;
 import me.kahlil.scene.SimpleFrame;
 
 /** A second demo of the ray tracer. */
@@ -32,7 +31,6 @@ public class Demo3 {
 
   public static void main(String[] args) throws InterruptedException, ExecutionException {
 
-    Camera3D camera = ImmutableCamera3D.builder().setLocation(new Vector(0, 0, 3)).build();
     SimpleFrame frame = new SimpleFrame(new Vector(-1, -1, -1), 2, 2, 400, 400);
 
     // Objects in scene
@@ -118,15 +116,15 @@ public class Demo3 {
     lights.add(new Light3D(new Vector(-6, 5, 0), new Color(200, 200, 200)));
 
     // Whole scene
-    Scene3D scene =
-        ImmutableScene3D.builder()
+    Scene scene =
+        ImmutableScene.builder()
             .setObjects(objects)
             .setLights(lights)
             .setBackgroundColor(BLACK)
             .setAmbient(new Color((float) .075, (float) .075, (float) .075))
             .build();
 
-    RayTracerCoordinator rt = new RayTracerCoordinator(frame, camera, scene);
+    RayTracerCoordinator rt = new RayTracerCoordinator(frame, STANDARD_CAMERA, scene);
 
     long start = System.currentTimeMillis();
     SimpleFrame rendered = rt.render(true);

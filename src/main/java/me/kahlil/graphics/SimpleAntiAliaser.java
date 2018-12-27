@@ -5,7 +5,7 @@ import static com.google.common.collect.ImmutableList.toImmutableList;
 import java.util.Arrays;
 import java.util.List;
 import me.kahlil.geometry.Ray3D;
-import me.kahlil.scene.Camera3D;
+import me.kahlil.scene.Camera;
 import me.kahlil.scene.SimpleFrame;
 
 /**
@@ -17,18 +17,18 @@ import me.kahlil.scene.SimpleFrame;
  */
 final class SimpleAntiAliaser extends RayTracer {
 
-  private static final int NUM_SAMPLES = 4;
-
   private final RayTracer rayTracer;
   private final AntiAliasingMethod antiAliasingMethod;
   private final SamplingRadius samplingRadius;
 
+  private final ThreadLocal<Long> numTraces = ThreadLocal.withInitial(() -> 0L);
+
   SimpleAntiAliaser(
       SimpleFrame frame,
-      Camera3D camera,
+      Camera camera,
       RayTracer rayTracer,
       AntiAliasingMethod antiAliasingMethod) {
-    super(rayTracer.getScene(), frame, camera, rayTracer.isShadowsEnabled());
+    super(frame, camera);
     this.samplingRadius =
         ImmutableSamplingRadius.builder()
             .setWidth(frame.getPixelWidthInCoordinateSpace() * 0.5)
@@ -39,23 +39,40 @@ final class SimpleAntiAliaser extends RayTracer {
   }
 
   @Override
-  Color traceRay(Ray3D ray) {
-    float[] averageRgba =
-        computeAverage(
-            Arrays.stream(antiAliasingMethod.getRaysToSample(ray, samplingRadius))
-                .map(rayTracer::traceRay)
-                .map(Color::getRgbaAsFloats)
-                .collect(toImmutableList()));
-    return new Color(averageRgba[0], averageRgba[1], averageRgba[2], averageRgba[3]);
+  RenderingResult traceRay(Ray3D ray) {
+    Ray3D[] raysToSample = antiAliasingMethod.getRaysToSample(ray, samplingRadius);
+    RenderingResult[] renderingResults = new RenderingResult[raysToSample.length];
+
+    // Trace all the sample rays and count the total number of rays traced.
+    long numTraces = 0;
+    for (int i = 0; i < raysToSample.length; i++) {
+      renderingResults[i] = rayTracer.traceRay(raysToSample[i]);
+      numTraces += renderingResults[i].getNumRaysTraced();
+    }
+
+    // Average each RGBA component of the color results using an unweighted average.
+    // Use pass-by-reference array semantics to avoid excess array allocations.
+    float[] currentColor = new float[4];
+    float[] runningAverage = new float[4];
+    for (RenderingResult renderingResult : renderingResults) {
+      renderingResult.getColor().getRgbaAsFloats(currentColor);
+      incrementAverages(runningAverage, currentColor, 1.0f / renderingResults.length);
+    }
+
+    return ImmutableRenderingResult.builder()
+        .setColor(new Color(runningAverage))
+        .setNumRaysTraced(raysToSample.length)
+        .build();
   }
 
-  private static float[] computeAverage(List<float[]> samples) {
-    float[] averageValues = new float[samples.get(0).length];
-    for (int i = 0; i < samples.size(); i++) {
-      for (int j = 0; j < samples.get(i).length; j++) {
-        averageValues[j] += samples.get(i)[j] / samples.size();
-      }
+  private void incrementAverages(float[] runningAverage, float[] currentColor, float weight) {
+    for (int i = 0; i < 4; i++) {
+      runningAverage[i] += currentColor[i] * weight;
     }
-    return averageValues;
+  }
+
+  @Override
+  long getNumTraces() {
+    return numTraces.get();
   }
 }

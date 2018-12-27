@@ -1,11 +1,14 @@
 package me.kahlil.graphics;
 
+import static me.kahlil.graphics.RayIntersections.findFirstIntersection;
+
 import java.util.Optional;
+
 import me.kahlil.geometry.Ray3D;
 import me.kahlil.geometry.RayHit;
 import me.kahlil.geometry.Vector;
-import me.kahlil.scene.Camera3D;
-import me.kahlil.scene.Scene3D;
+import me.kahlil.scene.Camera;
+import me.kahlil.scene.Scene;
 import me.kahlil.scene.SimpleFrame;
 
 /**
@@ -15,26 +18,43 @@ import me.kahlil.scene.SimpleFrame;
 class ReflectiveRayTracer extends RayTracer {
 
   private static final double EPSILON = 0.0000000001;
-  private final Scene3D scene;
+  private final Shader shader;
+  private final Scene scene;
   private final int maxRayDepth;
+
+  private final ThreadLocal<Long> numTraces = ThreadLocal.withInitial(() -> 0L);
 
   /**
    * Constructs a ReflectiveRayTracer with a given maxRayDepth, indicating the maximum number of
    * recursive rays that should be traced for reflections.
    */
   ReflectiveRayTracer(
-      Scene3D scene, SimpleFrame frame, Camera3D camera, boolean shadowsEnabled, int maxRayDepth) {
-    super(scene, frame, camera, shadowsEnabled);
+      Shader shader,
+      Scene scene,
+      SimpleFrame frame,
+      Camera camera,
+      int maxRayDepth) {
+    super(frame, camera);
+    this.shader = shader;
     this.scene = scene;
     this.maxRayDepth = maxRayDepth;
   }
 
   @Override
-  Color traceRay(Ray3D ray) {
-    return recursiveTraceRay(ray, 0);
+  RenderingResult traceRay(Ray3D ray) {
+    return ImmutableRenderingResult.builder()
+        .setColor(recursiveTraceRay(ray, 0))
+        .setNumRaysTraced(numTraces.get())
+        .build();
+  }
+
+  @Override
+  long getNumTraces() {
+    return numTraces.get();
   }
 
   private Color recursiveTraceRay(Ray3D ray, int rayDepth) {
+    numTraces.set(numTraces.get() + 1);
     if (rayDepth > maxRayDepth) {
       return scene.getBackgroundColor();
     }
@@ -45,7 +65,7 @@ class ReflectiveRayTracer extends RayTracer {
     if (!rayHit.get().getObject().getOutsideMaterial().isReflective()) {
       // if we reflected at all, we want to reduce the value by 20% to mimic imperfect reflection.
       float lossToReflection = rayDepth > 0 ? 0.8f : 1.0f;
-      return super.computeShading(rayHit.get()).scaleFloat(lossToReflection);
+      return shader.shade(rayHit.get()).scaleFloat(lossToReflection);
     }
     return recursiveTraceRay(computeReflectionRay(rayHit.get()), rayDepth + 1);
   }

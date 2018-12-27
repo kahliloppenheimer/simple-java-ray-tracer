@@ -9,7 +9,7 @@ import org.immutables.value.Value.Immutable;
 /** Represents all of hte lights and objects present in a scene to render. */
 @Immutable
 @JavaStyle
-public interface Scene3D {
+public interface Scene {
 
   // List of all objects in the scene
   ImmutableList<Object3D> getObjects();

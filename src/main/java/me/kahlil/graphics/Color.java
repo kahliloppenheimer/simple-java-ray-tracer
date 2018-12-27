@@ -126,6 +126,10 @@ public class Color extends java.awt.Color {
     super(rgb);
   }
 
+  public Color(float[] rgba) {
+    super(rgba[0], rgba[1], rgba[2], rgba[3]);
+  }
+
   public Color(int rgba, boolean hasalpha) {
     super(rgba, hasalpha);
   }
@@ -179,6 +183,11 @@ public class Color extends java.awt.Color {
   public float[] getRgbaAsFloats() {
     // Passing null creates a new float array, rather than passing one in
     return getRGBComponents(null);
+  }
+
+  public float[] getRgbaAsFloats(float[] f) {
+    // Passing null creates a new float array, rather than passing one in
+    return getRGBComponents(f);
   }
 
   private static float bound(float v) {
