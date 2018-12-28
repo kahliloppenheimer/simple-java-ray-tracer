@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.*;
-import me.kahlil.scene.SimpleFrame;
+import me.kahlil.scene.Raster;
 
 /**
  * A JPanel with a backbuffer Image which can be drawed on.
@@ -71,7 +71,7 @@ public class MyCanvas3D extends JPanel implements Canvas3D {
    *
    * @param rendered
    */
-  public void paintFrame(SimpleFrame rendered) {
+  public void paintFrame(Raster rendered) {
     // Make sure the given frame fits in this canvas
     if (rendered.getWidthPx() != getWidth() || rendered.getHeightPx() != getHeight()) {
       buffer = this.createImage(rendered.getWidthPx(), rendered.getHeightPx());
@@ -79,7 +79,7 @@ public class MyCanvas3D extends JPanel implements Canvas3D {
     // Otherwise just fill it in
     for (int i = 0; i < rendered.getWidthPx(); ++i) {
       for (int j = 0; j < rendered.getHeightPx(); ++j) {
-        drawPixel(i, getHeight() - j - 1, rendered.getPixel(i, j));
+        drawPixel(i, j, rendered.getPixel(i, j));
       }
     }
   }

@@ -9,7 +9,7 @@ import me.kahlil.geometry.RayHit;
 import me.kahlil.geometry.Vector;
 import me.kahlil.scene.Camera;
 import me.kahlil.scene.Scene;
-import me.kahlil.scene.SimpleFrame;
+import me.kahlil.scene.Raster;
 
 /**
  * Ray tracer that performs a simple implementation of reflection-based ray tracing (i.e. no
@@ -31,7 +31,7 @@ class ReflectiveRayTracer extends RayTracer {
   ReflectiveRayTracer(
       Shader shader,
       Scene scene,
-      SimpleFrame frame,
+      Raster frame,
       Camera camera,
       int maxRayDepth) {
     super(frame, camera);

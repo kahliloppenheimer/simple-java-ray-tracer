@@ -20,7 +20,7 @@ public class Demo1 {
 
   public static void main(String[] args) throws InterruptedException, ExecutionException {
 
-    SimpleFrame frame = new SimpleFrame(new Vector(-.5, -.5, -1), 1, 1, 400, 400);
+    Raster frame = new Raster(400, 400);
 
     // Objects in scene
     List<Object3D> objects = new ArrayList<>();
@@ -59,7 +59,7 @@ public class Demo1 {
     RayTracerCoordinator rt = new RayTracerCoordinator(frame, STANDARD_CAMERA, scene);
 
     long start = System.currentTimeMillis();
-    SimpleFrame rendered = rt.render(true);
+    Raster rendered = rt.render(true);
     long end = System.currentTimeMillis();
 
     System.out.println("Rendering took " + (end - start) + " ms");

@@ -1,6 +1,8 @@
 package me.kahlil.geometry;
 
 
+import me.kahlil.graphics.Point2D;
+
 /** A triple of doubles that represents a point or a vector in 3 dimensional space. */
 public class Vector {
 
@@ -24,6 +26,10 @@ public class Vector {
     this.y = y;
     this.z = z;
     this.w = w;
+  }
+
+  public Vector(Point2D inCameraSpace) {
+    this(inCameraSpace.getX(), inCameraSpace.getY(), 0.0);
   }
 
   /**

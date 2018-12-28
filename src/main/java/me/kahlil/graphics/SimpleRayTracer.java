@@ -4,8 +4,8 @@ import static me.kahlil.graphics.RayIntersections.findFirstIntersection;
 
 import me.kahlil.geometry.Ray3D;
 import me.kahlil.scene.Camera;
+import me.kahlil.scene.Raster;
 import me.kahlil.scene.Scene;
-import me.kahlil.scene.SimpleFrame;
 
 /** Ray tracer that performs single-intersection ray tracing (i.e. no reflection or refraction). */
 class SimpleRayTracer extends RayTracer {
@@ -17,7 +17,7 @@ class SimpleRayTracer extends RayTracer {
   SimpleRayTracer(
       Shader shader,
       Scene scene,
-      SimpleFrame frame, Camera camera) {
+      Raster frame, Camera camera) {
     super(frame, camera);
     this.shader = shader;
     this.scene = scene;

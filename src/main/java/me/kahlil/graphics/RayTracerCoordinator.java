@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 
 import me.kahlil.scene.Camera;
 import me.kahlil.scene.Scene;
-import me.kahlil.scene.SimpleFrame;
+import me.kahlil.scene.Raster;
 
 /** Coordinator for managing the ray tracer worker threads via a {@link ExecutorService}. */
 public class RayTracerCoordinator {
@@ -19,32 +19,37 @@ public class RayTracerCoordinator {
   private final ExecutorService executor;
   private final int numThreads;
 
-  private SimpleFrame frame;
+  private Raster raster;
   private Camera camera;
   private Scene scene;
 
-  public RayTracerCoordinator(SimpleFrame frame, Camera camera, Scene scene) {
-    this.frame = frame;
+  public RayTracerCoordinator(Raster raster, Camera camera, Scene scene) {
+    this.raster = raster;
     this.camera = camera;
     this.scene = scene;
     this.numThreads = Runtime.getRuntime().availableProcessors();
     this.executor = Executors.newFixedThreadPool(this.numThreads);
   }
 
-  public SimpleFrame render(boolean shadowsEnabled)
+  public Raster render(boolean shadowsEnabled)
       throws InterruptedException, ExecutionException {
 
-    RayTracer rayTracer =
-        new SimpleAntiAliaser(
-            frame,
-            camera,
-            new ReflectiveRayTracer(
-                new PhongShading(scene, camera, shadowsEnabled),
-                scene,
-                frame,
-                camera,
-                1),
-            new GridAntiAliasingMethod(1));
+//    RayTracer rayTracer =
+//        new SimpleAntiAliaser(
+//            raster,
+//            camera,
+//            new ReflectiveRayTracer(
+//                new PhongShading(scene, camera, shadowsEnabled),
+//                scene,
+//                raster,
+//                camera,
+//                1),
+//            new GridAntiAliasingMethod(1));
+    RayTracer rayTracer = new SimpleRayTracer(
+        new PhongShading(scene, camera, shadowsEnabled),
+        scene,
+        raster,
+        camera);
 
     // Construct individual worker threads
     ImmutableList<RayTracerWorker> rayTracerWorkers =
@@ -52,7 +57,7 @@ public class RayTracerCoordinator {
             .mapToObj(
                 i ->
                     new RayTracerWorker(
-                        rayTracer, frame, i, numThreads))
+                        rayTracer, raster, i, numThreads))
             .collect(toImmutableList());
 
     // Start all workers
@@ -68,6 +73,6 @@ public class RayTracerCoordinator {
 
     System.out.printf("Total number of rays traced = %d\n", totalNumTraces);
 
-    return frame;
+    return raster;
   }
 }

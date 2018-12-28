@@ -1,5 +1,7 @@
 package me.kahlil.scene;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import me.kahlil.geometry.Vector;
 import me.kahlil.graphics.Color;
 
@@ -7,22 +9,15 @@ import me.kahlil.graphics.Color;
  * Represents the frame that the 3d scene is projected onto. This frame implementation is simply
  * parallel to the XY plane.
  */
-public class SimpleFrame {
+public class Raster {
   private final Vector bottomLeftCorner;
-  // Width and height in terms of coordinates in grid
-  private final double width;
-  private final double height;
-  // Width in height in terms of how many pixels the previous width
-  // and height are broken into
+  // Number of pixels for width in height of the frame
   private final int widthPx;
   private final int heightPx;
   private Color[][] pixels;
 
-  public SimpleFrame(
-      Vector bottomLeftCorner, double width, double height, int widthPx, int heightPx) {
-    this.bottomLeftCorner = bottomLeftCorner;
-    this.width = width;
-    this.height = height;
+  public Raster(int widthPx, int heightPx) {
+    this.bottomLeftCorner = new Vector(-1, -1, -1);
     this.widthPx = widthPx;
     this.heightPx = heightPx;
     this.pixels = new Color[widthPx][heightPx];
@@ -32,22 +27,6 @@ public class SimpleFrame {
     return bottomLeftCorner;
   }
 
-  public double getWidth() {
-    return width;
-  }
-
-  public double getPixelWidthInCoordinateSpace() {
-    return width / widthPx;
-  }
-
-  public double getPixelHeightInCoordinateSpace() {
-    return height / heightPx;
-  }
-
-  public double getHeight() {
-    return height;
-  }
-
   /** Returns the pixel at the specified coordinate */
   public Color getPixel(int i, int j) {
     return pixels[i][j];
@@ -55,6 +34,7 @@ public class SimpleFrame {
 
   /** Sets the pixel at the specified coorindate */
   public void setPixel(int i, int j, Color c) {
+    checkState(pixels[i][j] == null, "Same pixel should not be modified twice: (%d, %d)", i, j);
     pixels[i][j] = c;
   }
 

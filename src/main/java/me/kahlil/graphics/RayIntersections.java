@@ -16,6 +16,8 @@ import me.kahlil.scene.Scene;
  */
 final class RayIntersections {
 
+  private RayIntersections() {}
+
   /**
    * Returns the RayHit with the lowest distance from the visionVector to each obj in the scene.
    * Returns optional.empty() if no object is hit.

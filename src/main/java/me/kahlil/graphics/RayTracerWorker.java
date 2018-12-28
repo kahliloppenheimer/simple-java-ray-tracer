@@ -1,11 +1,11 @@
 package me.kahlil.graphics;
 
-import me.kahlil.scene.SimpleFrame;
+import me.kahlil.scene.Raster;
 
 public class RayTracerWorker implements Runnable {
 
   private final RayTracer rayTracer;
-  private final SimpleFrame frame;
+  private final Raster frame;
   private final int startingPixel;
   private final int pixelIncrement;
 
@@ -13,7 +13,7 @@ public class RayTracerWorker implements Runnable {
 
   RayTracerWorker(
       RayTracer rayTracer,
-      SimpleFrame frame,
+      Raster frame,
       int startingPixel,
       int pixelIncrement) {
     this.rayTracer = rayTracer;

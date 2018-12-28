@@ -12,5 +12,8 @@ public final class Cameras {
    * <p>https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-generating-camera-rays/generating-camera-rays
    */
   public static final Camera STANDARD_CAMERA =
-      ImmutableCameraImpl.builder().setLocation(new Vector(0, 0, 0)).build();
+      ImmutableCameraImpl.builder()
+          .setLocation(new Vector(0, 0, 0))
+          .setFieldOfVisionDegrees(60)
+          .build();
 }

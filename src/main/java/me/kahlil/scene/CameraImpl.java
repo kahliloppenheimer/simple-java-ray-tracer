@@ -10,4 +10,6 @@ import org.immutables.value.Value;
 interface CameraImpl extends Camera {
 
   Vector getLocation();
+
+  double getFieldOfVisionDegrees();
 }

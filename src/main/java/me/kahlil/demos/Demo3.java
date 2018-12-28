@@ -24,14 +24,14 @@ import me.kahlil.scene.ImmutableMaterial;
 import me.kahlil.scene.ImmutableScene;
 import me.kahlil.scene.Light3D;
 import me.kahlil.scene.Scene;
-import me.kahlil.scene.SimpleFrame;
+import me.kahlil.scene.Raster;
 
 /** A second demo of the ray tracer. */
 public class Demo3 {
 
   public static void main(String[] args) throws InterruptedException, ExecutionException {
 
-    SimpleFrame frame = new SimpleFrame(new Vector(-1, -1, -1), 2, 2, 400, 400);
+    Raster frame = new Raster(400, 400);
 
     // Objects in scene
     Sphere3D sphere1 =
@@ -127,7 +127,7 @@ public class Demo3 {
     RayTracerCoordinator rt = new RayTracerCoordinator(frame, STANDARD_CAMERA, scene);
 
     long start = System.currentTimeMillis();
-    SimpleFrame rendered = rt.render(true);
+    Raster rendered = rt.render(true);
     long end = System.currentTimeMillis();
 
     System.out.println("Rendering took " + (end - start) + " ms");
