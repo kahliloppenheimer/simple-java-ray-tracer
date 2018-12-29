@@ -4,7 +4,7 @@ import static me.kahlil.graphics.RayIntersections.findFirstIntersection;
 
 import java.util.Optional;
 
-import me.kahlil.geometry.Ray3D;
+import me.kahlil.geometry.Ray;
 import me.kahlil.geometry.RayHit;
 import me.kahlil.geometry.Vector;
 import me.kahlil.scene.Camera;
@@ -41,7 +41,7 @@ class ReflectiveRayTracer extends RayTracer {
   }
 
   @Override
-  RenderingResult traceRay(Ray3D ray) {
+  RenderingResult traceRay(Ray ray) {
     return ImmutableRenderingResult.builder()
         .setColor(recursiveTraceRay(ray, 0))
         .setNumRaysTraced(numTraces.get())
@@ -53,7 +53,7 @@ class ReflectiveRayTracer extends RayTracer {
     return numTraces.get();
   }
 
-  private Color recursiveTraceRay(Ray3D ray, int rayDepth) {
+  private Color recursiveTraceRay(Ray ray, int rayDepth) {
     numTraces.set(numTraces.get() + 1);
     if (rayDepth > maxRayDepth) {
       return scene.getBackgroundColor();
@@ -80,11 +80,11 @@ class ReflectiveRayTracer extends RayTracer {
    * https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel
    * http://web.cse.ohio-state.edu/~shen.94/681/Site/Slides_files/reflection_refraction.pdf
    */
-  private static Ray3D computeReflectionRay(RayHit rayHit) {
+  private static Ray computeReflectionRay(RayHit rayHit) {
     Vector incident = rayHit.getRay().getDirection();
     Vector normal = rayHit.getNormal();
     Vector reflection = incident.subtract(normal.scale(2 * incident.dot(normal)));
     Vector perturbedStartingPoint = rayHit.getIntersection().add(reflection.scale(EPSILON));
-    return new Ray3D(perturbedStartingPoint, reflection);
+    return new Ray(perturbedStartingPoint, reflection);
   }
 }

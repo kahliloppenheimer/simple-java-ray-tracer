@@ -5,7 +5,7 @@ import me.kahlil.geometry.Vector;
 import me.kahlil.graphics.Color;
 
 /** A representation of a simple light source with a location and intensity. */
-public class Light3D {
+public class PointLight {
 
   // Percentage brightness that specular lighting should get. Lower numbers
   // yield a "duller" effect, while higher numbers yield a more artificial
@@ -15,7 +15,7 @@ public class Light3D {
   private final Vector location;
   private final Color color;
 
-  public Light3D(Vector location, Color color) {
+  public PointLight(Vector location, Color color) {
     this.location = location;
     this.color = color;
   }

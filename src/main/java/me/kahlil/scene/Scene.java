@@ -2,7 +2,7 @@ package me.kahlil.scene;
 
 import com.google.common.collect.ImmutableList;
 import me.kahlil.config.JavaStyle;
-import me.kahlil.geometry.Object3D;
+import me.kahlil.geometry.Shape;
 import me.kahlil.graphics.Color;
 import org.immutables.value.Value.Immutable;
 
@@ -12,10 +12,10 @@ import org.immutables.value.Value.Immutable;
 public interface Scene {
 
   // List of all objects in the scene
-  ImmutableList<Object3D> getObjects();
+  ImmutableList<Shape> getShapes();
 
   // List of all lights in the scene
-  ImmutableList<Light3D> getLights();
+  ImmutableList<PointLight> getLights();
 
   // Background color of the scene
   Color getBackgroundColor();

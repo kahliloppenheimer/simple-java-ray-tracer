@@ -1,4 +1,4 @@
-package me.kahlil.scene;
+package me.kahlil.geometry;
 
 import static org.junit.Assert.*;
 
@@ -7,8 +7,11 @@ import me.kahlil.geometry.Matrix;
 import me.kahlil.geometry.Vector;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /** Unit tests for {@link Matrix}. */
+@RunWith(JUnit4.class)
 public class MatrixTest {
 
   private static final double DELTA = .0000001;

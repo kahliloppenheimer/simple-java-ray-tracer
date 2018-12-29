@@ -4,11 +4,11 @@ import static me.kahlil.graphics.RayIntersections.findAllIntersections;
 
 import com.google.common.collect.ImmutableList;
 import me.kahlil.geometry.LightSphere;
-import me.kahlil.geometry.Ray3D;
+import me.kahlil.geometry.Ray;
 import me.kahlil.geometry.RayHit;
 import me.kahlil.geometry.Vector;
 import me.kahlil.scene.Camera;
-import me.kahlil.scene.Light3D;
+import me.kahlil.scene.PointLight;
 import me.kahlil.scene.Material;
 import me.kahlil.scene.Scene;
 
@@ -40,7 +40,7 @@ public final class PhongShading implements Shader {
     Material material = rayHit.getObject().getOutsideMaterial();
     // Initialize color with ambient light
     Color lighted = scene.getAmbient().multiply(material.getColor());
-    for (Light3D light : scene.getLights()) {
+    for (PointLight light : scene.getLights()) {
       // Check to see if shadow should be cast
       if (!shadowsEnabled || !isObjectBetweenLightAndPoint(light, rayHit.getIntersection())) {
         lighted = lighted.add(light.phongIllumination(rayHit, camera.getLocation()));
@@ -54,10 +54,10 @@ public final class PhongShading implements Shader {
   }
 
   /** Returns true iff there is an object in the scene between the light and the given point. */
-  private boolean isObjectBetweenLightAndPoint(Light3D l, Vector point) {
+  private boolean isObjectBetweenLightAndPoint(PointLight l, Vector point) {
     Vector shadowVec = l.getLocation().subtract(point);
     ImmutableList<RayHit> allIntersections =
-        findAllIntersections(new Ray3D(point.add(shadowVec.scale(.0001)), shadowVec), scene);
+        findAllIntersections(new Ray(point.add(shadowVec.scale(.0001)), shadowVec), scene);
     return allIntersections
         .stream()
         .filter(rayHit -> !(rayHit.getObject() instanceof LightSphere))

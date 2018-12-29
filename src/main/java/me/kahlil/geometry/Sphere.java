@@ -1,40 +1,43 @@
 package me.kahlil.geometry;
 
+import static me.kahlil.geometry.Constants.ORIGIN;
+
 import java.util.Optional;
 import me.kahlil.scene.Material;
 
-/** A representation of a sphere in 3D space. */
-public class Sphere3D extends Object3D {
+/**
+ * A representation of a unit sphere in 3D space.
+ *
+ * <p>The unit sphere is centered at the origin with radius 1.0. Any transformations (rotate, scale,
+ * translate) should be performed using {@link #transform}.
+ */
+public class Sphere extends Shape {
 
-  private Vector center;
+  private final Vector center;
   private final double radius;
   // Material of the inside of the sphere
   private final Material inside;
   // Material of the outside of the sphere
   private final Material outside;
 
-  public Sphere3D(Vector center, double radius, Material material) {
+  public Sphere(Material material) {
+    this(ORIGIN, 1.0, material);
+  }
+
+  public Sphere(Vector center, double radius, Material material) {
     this.center = center;
     this.radius = radius;
     this.inside = material;
     this.outside = material;
   }
 
-  public Sphere3D(Vector center, double radius, Material inside, Material outside) {
-    this.center = center;
-    this.radius = radius;
-    this.inside = inside;
-    this.outside = outside;
-  }
-
   @Override
-  public Optional<RayHit> intersectWith(Ray3D ray) {
+  public Optional<RayHit> intersectInObjectSpace(Ray ray) {
     // coefficients for the quadratic equation we have to solve to find the intersection
     // ax^2 + bx + c = 0
     double a = Math.pow(ray.getDirection().magnitude(), 2);
-    double b = ray.getDirection().scale(2).dot(ray.getStart().subtract(this.center));
-    double c =
-        Math.pow(ray.getStart().subtract(this.center).magnitude(), 2) - Math.pow(this.radius, 2);
+    double b = ray.getDirection().scale(2).dot(ray.getStart().subtract(center));
+    double c = Math.pow(ray.getStart().subtract(center).magnitude(), 2) - Math.pow(radius, 2);
 
     double determinant = Math.pow(b, 2) - 4 * a * c;
     double timeOfFirstIntersection = -1;
@@ -67,10 +70,6 @@ public class Sphere3D extends Object3D {
     }
   }
 
-  public void translate(double x, double y, double z) {
-    this.center.translate(x, y, z);
-  }
-
   @Override
   public Material getInsideMaterial() {
     return this.inside;
@@ -81,15 +80,4 @@ public class Sphere3D extends Object3D {
     return this.outside;
   }
 
-  public Vector getCenter() {
-    return this.center;
-  }
-
-  public double getRadius() {
-    return this.radius;
-  }
-
-  public void setLocation(double x, double y, double z) {
-    this.center = new Vector(x, y, z);
-  }
 }

@@ -9,15 +9,15 @@ public class BoundedPlane3D extends Plane3D {
   private final Vector maxCoordinates;
 
   public BoundedPlane3D(
-      Vector point, Vector normal, Vector minCoordinates, Vector maxCoordinates, Material front) {
-    super(point, normal, front);
+      Vector normal, Vector minCoordinates, Vector maxCoordinates, Material front) {
+    super(normal, front);
     this.minCoordinates = minCoordinates;
     this.maxCoordinates = maxCoordinates;
   }
 
   @Override
-  public Optional<RayHit> intersectWith(Ray3D ray) {
-    return super.intersectWith(ray)
+  public Optional<RayHit> intersectInObjectSpace(Ray ray) {
+    return super.intersectInObjectSpace(ray)
         .filter(rayHit -> isInBounds(rayHit.getIntersection(), minCoordinates, maxCoordinates));
   }
 

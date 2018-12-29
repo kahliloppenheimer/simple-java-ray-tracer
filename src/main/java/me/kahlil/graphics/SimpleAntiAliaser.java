@@ -3,7 +3,7 @@ package me.kahlil.graphics;
 import static me.kahlil.graphics.CoordinateMapper.getPixelHeightInCameraSpace;
 import static me.kahlil.graphics.CoordinateMapper.getPixelWidthInCameraSpace;
 
-import me.kahlil.geometry.Ray3D;
+import me.kahlil.geometry.Ray;
 import me.kahlil.scene.Camera;
 import me.kahlil.scene.Raster;
 
@@ -38,8 +38,8 @@ final class SimpleAntiAliaser extends RayTracer {
   }
 
   @Override
-  RenderingResult traceRay(Ray3D ray) {
-    Ray3D[] raysToSample = antiAliasingMethod.getRaysToSample(ray, samplingRadius);
+  RenderingResult traceRay(Ray ray) {
+    Ray[] raysToSample = antiAliasingMethod.getRaysToSample(ray, samplingRadius);
     RenderingResult[] renderingResults = new RenderingResult[raysToSample.length];
 
     // Trace all the sample rays and count the total number of rays traced.

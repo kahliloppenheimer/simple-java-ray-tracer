@@ -1,13 +1,12 @@
 package me.kahlil.geometry;
 
 
+import static me.kahlil.geometry.Constants.EPSILON;
+
 import me.kahlil.graphics.Point2D;
 
 /** A triple of doubles that represents a point or a vector in 3 dimensional space. */
 public class Vector {
-
-  // Used for double equality checks
-  private static final double EPSILON = .00000001;
 
   // Coordinates of vector in 3D space
   private final double x;
