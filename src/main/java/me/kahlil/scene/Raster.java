@@ -20,7 +20,7 @@ public class Raster {
     this.bottomLeftCorner = new Vector(-1, -1, -1);
     this.widthPx = widthPx;
     this.heightPx = heightPx;
-    this.pixels = new Color[widthPx][heightPx];
+    this.pixels = new Color[heightPx][widthPx];
   }
 
   public Vector getBottomLeftCorner() {
