@@ -1,5 +1,6 @@
 package me.kahlil.graphics;
 
+import java.awt.Color;
 import me.kahlil.config.JavaStyle;
 import org.immutables.value.Value.Immutable;
 

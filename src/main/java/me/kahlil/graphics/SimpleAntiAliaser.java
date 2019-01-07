@@ -3,6 +3,7 @@ package me.kahlil.graphics;
 import static me.kahlil.graphics.CoordinateMapper.getPixelHeightInCameraSpace;
 import static me.kahlil.graphics.CoordinateMapper.getPixelWidthInCameraSpace;
 
+import java.awt.Color;
 import me.kahlil.geometry.Ray;
 import me.kahlil.scene.Camera;
 import me.kahlil.scene.Raster;
@@ -23,10 +24,7 @@ final class SimpleAntiAliaser extends RayTracer {
   private final ThreadLocal<Long> numTraces = ThreadLocal.withInitial(() -> 0L);
 
   SimpleAntiAliaser(
-      Raster frame,
-      Camera camera,
-      RayTracer rayTracer,
-      AntiAliasingMethod antiAliasingMethod) {
+      Raster frame, Camera camera, RayTracer rayTracer, AntiAliasingMethod antiAliasingMethod) {
     super(frame, camera);
     this.samplingRadius =
         ImmutableSamplingRadius.builder()
@@ -54,12 +52,13 @@ final class SimpleAntiAliaser extends RayTracer {
     float[] currentColor = new float[4];
     float[] runningAverage = new float[4];
     for (RenderingResult renderingResult : renderingResults) {
-      renderingResult.getColor().getRgbaAsFloats(currentColor);
+      renderingResult.getColor().getRGBComponents(currentColor);
       incrementAverages(runningAverage, currentColor, 1.0f / renderingResults.length);
     }
 
     return ImmutableRenderingResult.builder()
-        .setColor(new Color(runningAverage))
+        .setColor(
+            new Color(runningAverage[0], runningAverage[1], runningAverage[2], runningAverage[3]))
         .setNumRaysTraced(numTraces)
         .build();
   }

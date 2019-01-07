@@ -1,6 +1,6 @@
 package me.kahlil.scene;
 
-import static me.kahlil.graphics.Color.GREEN;
+import static java.awt.Color.GREEN;
 
 public final class Materials {
 

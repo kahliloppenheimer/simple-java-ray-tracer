@@ -2,11 +2,14 @@ package me.kahlil.scene;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import me.kahlil.config.JavaStyle;
 import me.kahlil.geometry.Vector;
 import org.immutables.value.Value.Check;
+import org.immutables.value.Value.Immutable;
 
 /** A representation of a camera positioned at a certain point in the scene. */
-
+@Immutable
+@JavaStyle
 public interface Camera {
 
   /**

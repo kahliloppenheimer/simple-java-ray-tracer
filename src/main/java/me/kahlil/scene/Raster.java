@@ -2,8 +2,8 @@ package me.kahlil.scene;
 
 import static com.google.common.base.Preconditions.checkState;
 
+import java.awt.Color;
 import me.kahlil.geometry.Vector;
-import me.kahlil.graphics.Color;
 
 /**
  * Represents the frame that the 3d scene is projected onto. This frame implementation is simply

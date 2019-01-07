@@ -1,12 +1,14 @@
 package me.kahlil.demos;
 
+import static java.awt.Color.BLACK;
+import static java.awt.Color.RED;
+import static java.awt.Color.YELLOW;
 import static me.kahlil.geometry.LinearTransformation.rotateAboutXAxis;
 import static me.kahlil.geometry.LinearTransformation.translate;
-import static me.kahlil.graphics.Color.RED;
-import static me.kahlil.graphics.Color.YELLOW;
 import static me.kahlil.scene.Cameras.STANDARD_CAMERA;
 
 import com.google.common.collect.ImmutableList;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,10 +19,10 @@ import javax.swing.SwingUtilities;
 import me.kahlil.geometry.Plane3D;
 import me.kahlil.geometry.Sphere;
 import me.kahlil.geometry.Vector;
-import me.kahlil.graphics.Color;
 import me.kahlil.graphics.MyCanvas3D;
 import me.kahlil.graphics.RayTracerCoordinator;
 import me.kahlil.scene.ImmutableMaterial;
+import me.kahlil.scene.ImmutablePointLight;
 import me.kahlil.scene.ImmutableScene;
 import me.kahlil.scene.PointLight;
 import me.kahlil.scene.Raster;
@@ -57,15 +59,21 @@ public class Demo {
     // Lights in scene
     List<PointLight> lights =
         ImmutableList.of(
-            new PointLight(new Vector(3, 3, 0), new Color(115, 115, 115)),
-            new PointLight(new Vector(-6, 5, 0), new Color(200, 200, 200)));
+            ImmutablePointLight.builder()
+                .setLocation(new Vector(3, 3, 0))
+                .setColor(new Color(115, 115, 115))
+                .build(),
+            ImmutablePointLight.builder()
+                .setLocation(new Vector(-6, 5, 0))
+                .setColor(new Color(200, 200, 200))
+                .build());
 
     // Whole scene
     Scene scene =
         ImmutableScene.builder()
             .setShapes(ImmutableList.of(sphere1, plane))
             .setLights(lights)
-            .setBackgroundColor(Color.BLACK)
+            .setBackgroundColor(BLACK)
             .setAmbient(new Color((float) .075, (float) .075, (float) .075))
             .build();
 

@@ -2,6 +2,7 @@ package me.kahlil.graphics;
 
 import static me.kahlil.graphics.RayIntersections.findFirstIntersection;
 
+import java.awt.Color;
 import me.kahlil.geometry.Ray;
 import me.kahlil.scene.Camera;
 import me.kahlil.scene.Raster;
