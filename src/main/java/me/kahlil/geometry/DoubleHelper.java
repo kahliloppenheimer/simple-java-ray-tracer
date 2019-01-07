@@ -11,16 +11,4 @@ public class DoubleHelper {
     return Math.abs(d2 - d1) < EPSILON;
   }
 
-  /**
-   * Returns true iff every passed double is equal to one another (sans {@link EPSILON}).
-   */
-  public static boolean nearEquals(double ... ds) {
-    for (int i = 0; i < ds.length - 1; i++) {
-      if (!nearEquals(ds[i], ds[i + 1])) {
-        return false;
-      }
-    }
-    return true;
-  }
-
 }
