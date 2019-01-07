@@ -1,12 +1,11 @@
 package me.kahlil.graphics;
 
-import static com.google.common.collect.ImmutableList.toImmutableList;
+import static me.kahlil.graphics.CoordinateMapper.getPixelHeightInCameraSpace;
+import static me.kahlil.graphics.CoordinateMapper.getPixelWidthInCameraSpace;
 
-import java.util.Arrays;
-import java.util.List;
-import me.kahlil.geometry.Ray3D;
+import me.kahlil.geometry.Ray;
 import me.kahlil.scene.Camera;
-import me.kahlil.scene.SimpleFrame;
+import me.kahlil.scene.Raster;
 
 /**
  * A simple anti-aliasing implementation of ray tracing that uses a given {@link AntiAliasingMethod}
@@ -24,23 +23,23 @@ final class SimpleAntiAliaser extends RayTracer {
   private final ThreadLocal<Long> numTraces = ThreadLocal.withInitial(() -> 0L);
 
   SimpleAntiAliaser(
-      SimpleFrame frame,
+      Raster frame,
       Camera camera,
       RayTracer rayTracer,
       AntiAliasingMethod antiAliasingMethod) {
     super(frame, camera);
     this.samplingRadius =
         ImmutableSamplingRadius.builder()
-            .setWidth(frame.getPixelWidthInCoordinateSpace() * 0.5)
-            .setHeight(frame.getPixelHeightInCoordinateSpace() * 0.5)
+            .setWidth(getPixelWidthInCameraSpace(frame, camera) * 0.5)
+            .setHeight(getPixelHeightInCameraSpace(frame, camera) * 0.5)
             .build();
     this.rayTracer = rayTracer;
     this.antiAliasingMethod = antiAliasingMethod;
   }
 
   @Override
-  RenderingResult traceRay(Ray3D ray) {
-    Ray3D[] raysToSample = antiAliasingMethod.getRaysToSample(ray, samplingRadius);
+  RenderingResult traceRay(Ray ray) {
+    Ray[] raysToSample = antiAliasingMethod.getRaysToSample(ray, samplingRadius);
     RenderingResult[] renderingResults = new RenderingResult[raysToSample.length];
 
     // Trace all the sample rays and count the total number of rays traced.
@@ -61,7 +60,7 @@ final class SimpleAntiAliaser extends RayTracer {
 
     return ImmutableRenderingResult.builder()
         .setColor(new Color(runningAverage))
-        .setNumRaysTraced(raysToSample.length)
+        .setNumRaysTraced(numTraces)
         .build();
   }
 

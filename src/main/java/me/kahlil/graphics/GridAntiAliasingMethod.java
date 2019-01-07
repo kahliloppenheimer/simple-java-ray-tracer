@@ -1,6 +1,6 @@
 package me.kahlil.graphics;
 
-import me.kahlil.geometry.Ray3D;
+import me.kahlil.geometry.Ray;
 
 /**
  * A method for anti-aliasing by generating a deterministic, uniformly distributed grid of points to
@@ -28,14 +28,14 @@ class GridAntiAliasingMethod implements AntiAliasingMethod {
    * 1/(n - 1) * 2 * samplingRadius for grid size of n.
    */
   @Override
-  public Ray3D[] getRaysToSample(Ray3D ray, SamplingRadius samplingRadius) {
+  public Ray[] getRaysToSample(Ray ray, SamplingRadius samplingRadius) {
     if (gridSize == 1) {
-      return new Ray3D[] {ray};
+      return new Ray[] {ray};
     }
     // We start in middle of pixel, so offset to lowest values of (x, y) in the grid.
-    Ray3D[] samples = new Ray3D[gridSize * gridSize];
-    Ray3D origin =
-        new Ray3D(
+    Ray[] samples = new Ray[gridSize * gridSize];
+    Ray origin =
+        new Ray(
             ray.getStart(),
             ray.getDirection()
                 .translate(-1.0 * samplingRadius.getWidth(), -1.0 * samplingRadius.getHeight()));
@@ -46,7 +46,7 @@ class GridAntiAliasingMethod implements AntiAliasingMethod {
       for (int j = 0; j < gridSize; j++) {
         // Translate origin's height/width
         samples[i * gridSize + j] =
-            new Ray3D(
+            new Ray(
                 origin.getStart(),
                 origin.getDirection().translate(j * widthDelta, i * heightDelta));
       }

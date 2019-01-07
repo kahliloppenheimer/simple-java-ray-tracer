@@ -1,6 +1,10 @@
 package me.kahlil.geometry;
 
+import static me.kahlil.geometry.Constants.EPSILON;
+
+import com.google.common.primitives.Doubles;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * A representation of a matrix used for the required linear algebra in the ray tracing algorithm.
@@ -23,9 +27,6 @@ public class Matrix {
 
   /**
    * Returns a vector representing the ith row of the matrix
-   *
-   * @param i
-   * @return
    */
   public Vector getRow(int i) {
     return new Vector(entries[i][0], entries[i][1], entries[i][2], entries[i][3]);
@@ -33,9 +34,6 @@ public class Matrix {
 
   /**
    * Returns a vector representing the jth row of the matrix
-   *
-   * @param j
-   * @return
    */
   public Vector getColumn(int j) {
     return new Vector(entries[0][j], entries[1][j], entries[2][j], entries[3][j]);
@@ -43,9 +41,6 @@ public class Matrix {
 
   /**
    * Returns the left-product with the vector. I.e. given this matrix A and vector V, return Av
-   *
-   * @param vector
-   * @return
    */
   public Vector multiply(Vector vector) {
     if (getColumnCount() != 4) {
@@ -61,9 +56,6 @@ public class Matrix {
   /**
    * Left multiplies this matrix by the passed matrix. In other words if this matrix is A and other
    * is B, this computes AB
-   *
-   * @param other
-   * @return
    */
   public Matrix multiply(Matrix other) {
     if (getColumnCount() != other.getRowCount()) {
@@ -83,8 +75,6 @@ public class Matrix {
   /**
    * Returns the transpose of this matrix, i.e. the matrix formed by using every column of this
    * matrix as the rows of the returned matrix.
-   *
-   * @return
    */
   public Matrix transpose() {
     int numRows = getRowCount();
@@ -116,16 +106,26 @@ public class Matrix {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-
-    Matrix matrix = (Matrix) o;
-
-    return Arrays.deepEquals(entries, matrix.entries);
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Matrix other = (Matrix) o;
+    if (this.getRowCount() != other.getRowCount()) {
+      return false;
+    }
+    for (int i = 0; i < this.getRowCount(); i++) {
+      if (!this.getRow(i).equals(other.getRow(i))) {
+        return false;
+      }
+    }
+    return true;
   }
 
   @Override
   public int hashCode() {
-    return Arrays.deepHashCode(entries);
+    return Arrays.hashCode(entries);
   }
 }

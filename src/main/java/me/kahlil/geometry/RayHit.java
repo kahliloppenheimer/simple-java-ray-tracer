@@ -8,7 +8,7 @@ import org.immutables.value.Value.Immutable;
 @JavaStyle
 public interface RayHit {
   // Ray that caused the rayHit
-  Ray3D getRay();
+  Ray getRay();
   // time at which the ray intersected the object
   double getTime();
   // distance along ray to the first intersection
@@ -18,5 +18,5 @@ public interface RayHit {
   // Normal vector to object at the point that the ray intersects the object
   Vector getNormal();
   // object that the ray intersects
-  Object3D getObject();
+  Shape getObject();
 }

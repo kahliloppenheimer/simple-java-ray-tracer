@@ -1,12 +1,15 @@
-package me.kahlil.scene;
+package me.kahlil.geometry;
 
 import static org.junit.Assert.*;
 
 import java.util.Random;
 import me.kahlil.geometry.Vector;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /** Unit tests for {@link Vector}. */
+@RunWith(JUnit4.class)
 public class VectorTest {
 
   private static final double DELTA = .0001;

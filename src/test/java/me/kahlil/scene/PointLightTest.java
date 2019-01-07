@@ -1,18 +1,19 @@
 package me.kahlil.scene;
 
 import static com.google.common.truth.Truth.assertThat;
+import static me.kahlil.scene.Materials.BASIC_GREEN;
 
 import me.kahlil.geometry.ImmutableRayHit;
-import me.kahlil.geometry.Ray3D;
+import me.kahlil.geometry.Ray;
 import me.kahlil.geometry.RayHit;
-import me.kahlil.geometry.Sphere3D;
+import me.kahlil.geometry.Sphere;
 import me.kahlil.geometry.Vector;
 import me.kahlil.graphics.Color;
 import org.junit.Test;
 
-public class Light3DTest {
+public class PointLightTest {
 
-  private static final Sphere3D DUMMY_SPHERE = new Sphere3D(null, 0.0, null, null);
+  private static final Sphere DUMMY_SPHERE = new Sphere(BASIC_GREEN);
 
   /**
    * When computing the diffuse light at a point, it is possible that the dot product of the surface
@@ -21,14 +22,14 @@ public class Light3DTest {
    */
   @Test
   public void diffuseLightingIsZeroWhenSurfaceNormalDotLightIsNegative() {
-    Light3D light = new Light3D(new Vector(0, 0, 0), Color.RED);
+    PointLight light = new PointLight(new Vector(0, 0, 0), Color.RED);
     RayHit rayHit =
         ImmutableRayHit.builder()
             // Unused for this test but required by builder to be set
             .setDistance(1)
             .setObject(DUMMY_SPHERE)
             .setTime(1)
-            .setRay(new Ray3D(new Vector(0, 0, 0), new Vector(0, 0, 0)))
+            .setRay(new Ray(new Vector(0, 0, 0), new Vector(0, 0, 0)))
             // Relevant attributes for this test
             .setIntersection(new Vector(1, 0, 0))
             .setNormal(new Vector(1, 0, 0))

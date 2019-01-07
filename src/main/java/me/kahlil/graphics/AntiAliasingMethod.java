@@ -1,6 +1,6 @@
 package me.kahlil.graphics;
 
-import me.kahlil.geometry.Ray3D;
+import me.kahlil.geometry.Ray;
 
 /** A method for picking out points within a sampling radius to apply anti-aliasing. */
 interface AntiAliasingMethod {
@@ -9,5 +9,5 @@ interface AntiAliasingMethod {
    * Generates the rays to sample to anti-alias a given ray within a given rectangular sampling
    * radius.
    */
-  Ray3D[] getRaysToSample(Ray3D ray, SamplingRadius samplingRadius);
+  Ray[] getRaysToSample(Ray ray, SamplingRadius samplingRadius);
 }

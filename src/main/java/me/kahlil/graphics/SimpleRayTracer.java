@@ -2,10 +2,10 @@ package me.kahlil.graphics;
 
 import static me.kahlil.graphics.RayIntersections.findFirstIntersection;
 
-import me.kahlil.geometry.Ray3D;
+import me.kahlil.geometry.Ray;
 import me.kahlil.scene.Camera;
+import me.kahlil.scene.Raster;
 import me.kahlil.scene.Scene;
-import me.kahlil.scene.SimpleFrame;
 
 /** Ray tracer that performs single-intersection ray tracing (i.e. no reflection or refraction). */
 class SimpleRayTracer extends RayTracer {
@@ -17,14 +17,14 @@ class SimpleRayTracer extends RayTracer {
   SimpleRayTracer(
       Shader shader,
       Scene scene,
-      SimpleFrame frame, Camera camera) {
+      Raster frame, Camera camera) {
     super(frame, camera);
     this.shader = shader;
     this.scene = scene;
   }
 
   @Override
-  RenderingResult traceRay(Ray3D ray) {
+  RenderingResult traceRay(Ray ray) {
     numTraces.set(numTraces.get() + 1);
     // Cast the ray from the camera to the pixel in the frame we are currently coloring,
     // and color the pixel based on the first object we hit (or the background if we hit none).

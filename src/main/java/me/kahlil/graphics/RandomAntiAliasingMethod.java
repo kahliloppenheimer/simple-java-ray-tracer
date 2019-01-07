@@ -1,7 +1,7 @@
 package me.kahlil.graphics;
 
 import java.util.Random;
-import me.kahlil.geometry.Ray3D;
+import me.kahlil.geometry.Ray;
 
 final class RandomAntiAliasingMethod implements AntiAliasingMethod {
 
@@ -13,11 +13,11 @@ final class RandomAntiAliasingMethod implements AntiAliasingMethod {
   }
 
   @Override
-  public Ray3D[] getRaysToSample(Ray3D ray, SamplingRadius samplingRadius) {
-    Ray3D[] raysToSample = new Ray3D[numSamples];
+  public Ray[] getRaysToSample(Ray ray, SamplingRadius samplingRadius) {
+    Ray[] raysToSample = new Ray[numSamples];
     for (int i = 0; i < raysToSample.length; i++) {
       raysToSample[i] =
-          new Ray3D(
+          new Ray(
               ray.getStart(),
               ray.getDirection()
                   .translate(
