@@ -2,22 +2,22 @@ package me.kahlil.geometry;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
+import static java.awt.Color.BLACK;
+import static java.awt.Color.WHITE;
 import static me.kahlil.geometry.Constants.ORIGIN;
 import static me.kahlil.geometry.LinearTransformation.IDENTITY;
 import static me.kahlil.geometry.LinearTransformation.rotateAboutXAxis;
 import static me.kahlil.geometry.LinearTransformation.rotateAboutZAxis;
 import static me.kahlil.geometry.LinearTransformation.translate;
-import static me.kahlil.graphics.Color.BLACK;
-import static me.kahlil.graphics.Color.WHITE;
 import static me.kahlil.scene.Cameras.STANDARD_CAMERA;
 import static me.kahlil.scene.Materials.BASIC_GREEN;
 
+import java.awt.Color;
 import java.util.Arrays;
 import java.util.Optional;
-import me.kahlil.graphics.Color;
 import me.kahlil.graphics.PhongShading;
+import me.kahlil.scene.ImmutablePointLight;
 import me.kahlil.scene.ImmutableScene;
-import me.kahlil.scene.PointLight;
 import me.kahlil.scene.Scene;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,9 +76,7 @@ public class ShapeTest {
 
   @Test
   public void sphereRotationDoesNotAffectRayNormal() {
-    Sphere notRotated =
-        new Sphere(BASIC_GREEN)
-            .transform(translate(0.0, 0.0, -2.0));
+    Sphere notRotated = new Sphere(BASIC_GREEN).transform(translate(0.0, 0.0, -2.0));
 
     Sphere rotated =
         new Sphere(BASIC_GREEN)
@@ -100,9 +98,7 @@ public class ShapeTest {
 
   @Test
   public void sphereRotationDoesNotAffectShading() {
-    Sphere notRotated =
-        new Sphere(BASIC_GREEN)
-            .transform(translate(0.0, 0.0, -2.0));
+    Sphere notRotated = new Sphere(BASIC_GREEN).transform(translate(0.0, 0.0, -2.0));
 
     Sphere rotated =
         new Sphere(BASIC_GREEN)
@@ -125,7 +121,8 @@ public class ShapeTest {
     return ImmutableScene.builder()
         .setAmbient(BLACK)
         .setBackgroundColor(BLACK)
-        .addLights(new PointLight(new Vector(0, 2, 5), WHITE))
+        .addLights(
+            ImmutablePointLight.builder().setLocation(new Vector(0, 2, 5)).setColor(WHITE).build())
         .addAllShapes(Arrays.asList(shapes))
         .build();
   }

@@ -2,8 +2,8 @@ package me.kahlil.scene;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import java.awt.Color;
 import me.kahlil.config.JavaStyle;
-import me.kahlil.graphics.Color;
 import org.immutables.value.Value.Check;
 import org.immutables.value.Value.Default;
 import org.immutables.value.Value.Immutable;

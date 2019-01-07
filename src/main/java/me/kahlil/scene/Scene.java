@@ -1,9 +1,9 @@
 package me.kahlil.scene;
 
 import com.google.common.collect.ImmutableList;
+import java.awt.Color;
 import me.kahlil.config.JavaStyle;
 import me.kahlil.geometry.Shape;
-import me.kahlil.graphics.Color;
 import org.immutables.value.Value.Immutable;
 
 /** Represents all of hte lights and objects present in a scene to render. */

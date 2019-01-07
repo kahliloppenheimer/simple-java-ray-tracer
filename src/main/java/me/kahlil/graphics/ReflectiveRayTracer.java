@@ -2,14 +2,14 @@ package me.kahlil.graphics;
 
 import static me.kahlil.graphics.RayIntersections.findFirstIntersection;
 
+import java.awt.Color;
 import java.util.Optional;
-
 import me.kahlil.geometry.Ray;
 import me.kahlil.geometry.RayHit;
 import me.kahlil.geometry.Vector;
 import me.kahlil.scene.Camera;
-import me.kahlil.scene.Scene;
 import me.kahlil.scene.Raster;
+import me.kahlil.scene.Scene;
 
 /**
  * Ray tracer that performs a simple implementation of reflection-based ray tracing (i.e. no
@@ -65,7 +65,9 @@ class ReflectiveRayTracer extends RayTracer {
     if (!rayHit.get().getObject().getOutsideMaterial().isReflective()) {
       // if we reflected at all, we want to reduce the value by 20% to mimic imperfect reflection.
       float lossToReflection = rayDepth > 0 ? 0.8f : 1.0f;
-      return shader.shade(rayHit.get()).scaleFloat(lossToReflection);
+      return ColorComputation.of(shader.shade(rayHit.get()))
+          .scaleFloat(lossToReflection)
+          .compute();
     }
     return recursiveTraceRay(computeReflectionRay(rayHit.get()), rayDepth + 1);
   }

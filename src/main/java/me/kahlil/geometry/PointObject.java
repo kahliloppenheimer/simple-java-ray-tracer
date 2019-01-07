@@ -1,7 +1,7 @@
 package me.kahlil.geometry;
 
 import static me.kahlil.geometry.Constants.EPSILON;
-import static me.kahlil.graphics.Color.WHITE;
+import static java.awt.Color.WHITE;
 
 import java.util.Optional;
 import me.kahlil.scene.ImmutableMaterial;

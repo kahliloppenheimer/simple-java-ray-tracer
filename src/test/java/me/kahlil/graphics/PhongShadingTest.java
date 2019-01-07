@@ -1,17 +1,24 @@
-package me.kahlil.scene;
+package me.kahlil.graphics;
 
 import static com.google.common.truth.Truth.assertThat;
+import static me.kahlil.geometry.Constants.ORIGIN;
 import static me.kahlil.scene.Materials.BASIC_GREEN;
 
+import java.awt.Color;
 import me.kahlil.geometry.ImmutableRayHit;
 import me.kahlil.geometry.Ray;
 import me.kahlil.geometry.RayHit;
 import me.kahlil.geometry.Sphere;
 import me.kahlil.geometry.Vector;
-import me.kahlil.graphics.Color;
+import me.kahlil.scene.ImmutablePointLight;
+import me.kahlil.scene.PointLight;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-public class PointLightTest {
+/** Unit tests for {@link me.kahlil.graphics.PhongShading}. */
+@RunWith(JUnit4.class)
+public class PhongShadingTest {
 
   private static final Sphere DUMMY_SPHERE = new Sphere(BASIC_GREEN);
 
@@ -22,7 +29,8 @@ public class PointLightTest {
    */
   @Test
   public void diffuseLightingIsZeroWhenSurfaceNormalDotLightIsNegative() {
-    PointLight light = new PointLight(new Vector(0, 0, 0), Color.RED);
+    PointLight light =
+        ImmutablePointLight.builder().setLocation(ORIGIN).setColor(Color.RED).build();
     RayHit rayHit =
         ImmutableRayHit.builder()
             // Unused for this test but required by builder to be set
@@ -34,6 +42,7 @@ public class PointLightTest {
             .setIntersection(new Vector(1, 0, 0))
             .setNormal(new Vector(1, 0, 0))
             .build();
-    assertThat(light.diffuse(rayHit)).isZero();
+
+    assertThat(PhongShading.diffuse(light, rayHit)).isZero();
   }
 }

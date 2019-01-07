@@ -1,5 +1,6 @@
 package me.kahlil.graphics;
 
+import java.awt.Color;
 import me.kahlil.geometry.RayHit;
 
 /**
