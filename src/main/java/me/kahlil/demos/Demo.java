@@ -1,9 +1,7 @@
 package me.kahlil.demos;
 
 import static java.awt.Color.BLACK;
-import static java.awt.Color.RED;
 import static java.awt.Color.YELLOW;
-import static me.kahlil.geometry.LinearTransformation.rotateAboutXAxis;
 import static me.kahlil.geometry.LinearTransformation.translate;
 import static me.kahlil.scene.Cameras.STANDARD_CAMERA;
 
@@ -16,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
-import me.kahlil.geometry.Plane3D;
+import me.kahlil.geometry.Plane;
 import me.kahlil.geometry.Sphere;
 import me.kahlil.geometry.Vector;
 import me.kahlil.graphics.MyCanvas3D;
@@ -43,18 +41,22 @@ public class Demo {
                     .setHardness(10)
                     .setSpecularIntensity(1.0)
                     .build())
-            .transform(rotateAboutXAxis(0))
-            .transform(translate(1, 1, -3));
-    Plane3D plane =
-        new Plane3D(
-                new Vector(0, 0, 1),
-                ImmutableMaterial.builder()
-                    .setColor(RED)
-                    .setHardness(10)
-                    .setSpecularIntensity(0.1)
-                    .build())
-            .transform(rotateAboutXAxis(145))
-            .transform(translate(0, 0, -5));
+            .transform(translate(1, 1, -5));
+    Sphere sphere2 =
+        new Sphere(
+            ImmutableMaterial.builder()
+                .setColor(YELLOW)
+                .setHardness(20)
+                .setSpecularIntensity(0.5)
+                .build())
+        .transform(translate(-2, 1, -10));
+    Plane plane =
+        new Plane(new Vector(0, -1, 0), new Vector(0, 1.0, 0.0),
+            ImmutableMaterial.builder().setColor(Color.GREEN)
+                .setHardness(100)
+                .setSpecularIntensity(1.0)
+                .setReflective(true)
+                .build());
 
     // Lights in scene
     List<PointLight> lights =
@@ -71,7 +73,7 @@ public class Demo {
     // Whole scene
     Scene scene =
         ImmutableScene.builder()
-            .setShapes(ImmutableList.of(sphere1, plane))
+            .setShapes(ImmutableList.of(sphere1, sphere2, plane))
             .setLights(lights)
             .setBackgroundColor(BLACK)
             .setAmbient(new Color((float) .075, (float) .075, (float) .075))

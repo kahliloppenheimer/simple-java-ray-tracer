@@ -1,7 +1,6 @@
 package me.kahlil.geometry;
 
 import static me.kahlil.geometry.Constants.EPSILON;
-import static me.kahlil.geometry.Constants.ORIGIN;
 
 import java.util.Optional;
 import me.kahlil.scene.Material;
@@ -10,14 +9,14 @@ import me.kahlil.scene.Material;
  * Representation of a plane in 3-dimensional space.
  *
  * All planes initially pass through the origin, but may be transformed. */
-public class Plane3D extends Shape {
+public class Plane extends Shape {
   private final Vector normal;
   private final Vector point;
   private final Material front;
 
-  public Plane3D(Vector normal, Material front) {
+  public Plane(Vector point, Vector normal, Material front) {
     this.normal = normal.normalize();
-    this.point = ORIGIN;
+    this.point = point;
     this.front = front;
   }
 
@@ -30,12 +29,12 @@ public class Plane3D extends Shape {
     }
 
     double time = (point.subtract(ray.getStart())).dot(normal) / denominator;
-    if (time < EPSILON) {
+    if (time < 0.0) {
       return Optional.empty();
     }
 
     // Check if the ray hit the back of the plane, and we need to invert the normal.
-    boolean hitBackOfPlane = denominator < EPSILON;
+    boolean hitBackOfPlane = denominator > 0;
     Vector adjustedNormal = hitBackOfPlane ? this.normal.scale(-1) : this.normal;
 
     return Optional.of(
