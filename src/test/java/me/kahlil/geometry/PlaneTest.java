@@ -12,7 +12,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class PlaneTest {
 
-  Plane xzPlane = new Plane(
+  private static final Plane xzPlane = new Plane(
       new Vector(0, 0, 0),
       new Vector(0, 1, 0),
       BASIC_GREEN);
