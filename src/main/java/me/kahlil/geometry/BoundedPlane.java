@@ -1,16 +1,18 @@
 package me.kahlil.geometry;
 
+import static me.kahlil.geometry.Constants.ORIGIN;
+
 import java.util.Optional;
 import me.kahlil.scene.Material;
 
-public class BoundedPlane3D extends Plane3D {
+public class BoundedPlane extends Plane {
 
   private final Vector minCoordinates;
   private final Vector maxCoordinates;
 
-  public BoundedPlane3D(
+  public BoundedPlane(
       Vector normal, Vector minCoordinates, Vector maxCoordinates, Material front) {
-    super(normal, front);
+    super(ORIGIN, normal, front);
     this.minCoordinates = minCoordinates;
     this.maxCoordinates = maxCoordinates;
   }

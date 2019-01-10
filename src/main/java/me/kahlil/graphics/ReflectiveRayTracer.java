@@ -31,10 +31,10 @@ class ReflectiveRayTracer extends RayTracer {
   ReflectiveRayTracer(
       Shader shader,
       Scene scene,
-      Raster frame,
+      Raster raster,
       Camera camera,
       int maxRayDepth) {
-    super(frame, camera);
+    super(raster, camera);
     this.shader = shader;
     this.scene = scene;
     this.maxRayDepth = maxRayDepth;
