@@ -18,7 +18,7 @@ final class CoordinateMapper {
    * <p>https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-generating-camera-rays/generating-camera-rays
    */
   static Point2D convertPixelToCameraSpaceCoordinates(Raster frame, Camera camera, int i, int j) {
-    // Center and transform to Normalized Device Coordinates (i.e. (x, y) in range [0.0, 1.0])
+    // Center and transform to Normalized Device Coordinates (i.e. (x, y) in range [0.0, 1.0]).
     double x = (j + 0.5) / frame.getWidthPx();
     double y = (i + 0.5) / frame.getHeightPx();
 

@@ -1,6 +1,5 @@
 package me.kahlil.demos;
 
-import static java.awt.Color.BLACK;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;

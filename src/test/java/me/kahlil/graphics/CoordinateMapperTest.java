@@ -28,7 +28,7 @@ public class CoordinateMapperTest {
   public void firstPixelToCameraSpaceWithAspectRatioEffect() {
     Point2D inCameraSpace =
         convertPixelToCameraSpaceCoordinates(new Raster(40, 20), Cameras.NINETY_DEGREE_FOV, 0, 0);
-    // Standard Camera uses narrower FOV, thus X, Y are more tightly bound
+    // Standard Camera uses narrower FOV, thus X, Y are more tightly bound.
     Point2D expected =
         ImmutablePoint2D.builder()
             // X is stretched by aspect ratio (width / height).
@@ -43,7 +43,7 @@ public class CoordinateMapperTest {
   public void firstPixelToCameraSpaceWithFovEffect() {
     Point2D inCameraSpace =
         convertPixelToCameraSpaceCoordinates(new Raster(20, 20), Cameras.STANDARD_CAMERA, 0, 0);
-    // Standard Camera uses narrower FOV, thus X, Y are more tightly bound
+    // Standard Camera uses narrower FOV, thus X, Y are more tightly bound.
     Point2D expected =
         ImmutablePoint2D.builder().setX(-0.5484827557301444).setY(0.5484827557301444).build();
     assertThat(inCameraSpace.getX()).isWithin(EPSILON).of(expected.getX());
@@ -60,7 +60,7 @@ public class CoordinateMapperTest {
   @Test
   public void pixelWidthNotAffectedByAspectRatio() {
     assertThat(getPixelWidthInCameraSpace(new Raster(40, 20), Cameras.NINETY_DEGREE_FOV))
-        // Aspect ratio effect mitigated by doubling number of x pixels
+        // Aspect ratio effect mitigated by doubling number of x pixels.
         .isWithin(EPSILON)
         .of(0.1);
   }
@@ -68,7 +68,7 @@ public class CoordinateMapperTest {
   @Test
   public void pixelWidthWithFovEffect() {
     assertThat(getPixelWidthInCameraSpace(new Raster(20, 20), Cameras.STANDARD_CAMERA))
-        // Narrower FOV means a smaller pixel width
+        // Narrower FOV means a smaller pixel width.
         .isWithin(EPSILON)
         .of(0.05773502691896254);
   }
@@ -90,7 +90,7 @@ public class CoordinateMapperTest {
   @Test
   public void pixelHeightWithFovEffect() {
     assertThat(getPixelHeightInCameraSpace(new Raster(20, 20), Cameras.STANDARD_CAMERA))
-        // Narrower FOV means a smaller pixel width
+        // Narrower FOV means a smaller pixel width.
         .isWithin(EPSILON)
         .of(0.05773502691896254);
   }
