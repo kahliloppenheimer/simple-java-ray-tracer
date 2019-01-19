@@ -44,13 +44,6 @@ public abstract class Shape implements Cloneable {
    */
   abstract Optional<RayHit> intersectInObjectSpace(Ray ray);
 
-  /**
-   * Returns the Material of the inside of the shape
-   *
-   * @return
-   */
-  public abstract Material getInsideMaterial();
-
   /** Returns the Material of the outside of the shape */
   public abstract Material getOutsideMaterial();
 

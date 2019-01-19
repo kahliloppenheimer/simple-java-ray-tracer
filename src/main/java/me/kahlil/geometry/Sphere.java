@@ -15,8 +15,6 @@ public class Sphere extends Shape {
 
   private final Vector center;
   private final double radius;
-  // Material of the inside of the sphere
-  private final Material inside;
   // Material of the outside of the sphere
   private final Material outside;
 
@@ -24,10 +22,9 @@ public class Sphere extends Shape {
     this(ORIGIN, 1.0, material);
   }
 
-  public Sphere(Vector center, double radius, Material material) {
+  Sphere(Vector center, double radius, Material material) {
     this.center = center;
     this.radius = radius;
-    this.inside = material;
     this.outside = material;
   }
 
@@ -68,11 +65,6 @@ public class Sphere extends Shape {
     } else {
       return Optional.empty();
     }
-  }
-
-  @Override
-  public Material getInsideMaterial() {
-    return this.inside;
   }
 
   @Override

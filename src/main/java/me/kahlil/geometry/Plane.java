@@ -12,12 +12,12 @@ import me.kahlil.scene.Material;
 public class Plane extends Shape {
   private final Vector normal;
   private final Vector point;
-  private final Material front;
+  private final Material material;
 
   public Plane(Vector point, Vector normal, Material front) {
     this.normal = normal.normalize();
     this.point = point;
-    this.front = front;
+    this.material = front;
   }
 
   @Override
@@ -49,12 +49,7 @@ public class Plane extends Shape {
   }
 
   @Override
-  public Material getInsideMaterial() {
-    return front;
-  }
-
-  @Override
   public Material getOutsideMaterial() {
-    return front;
+    return material;
   }
 }

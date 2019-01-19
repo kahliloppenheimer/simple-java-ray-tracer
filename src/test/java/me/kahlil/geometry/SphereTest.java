@@ -3,6 +3,8 @@ package me.kahlil.geometry;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
 import static me.kahlil.geometry.Constants.EPSILON;
+import static me.kahlil.geometry.LinearTransformation.scale;
+import static me.kahlil.geometry.LinearTransformation.translate;
 import static me.kahlil.scene.Materials.BASIC_GREEN;
 
 import java.util.Optional;
@@ -51,6 +53,24 @@ public class SphereTest {
     Ray r = new Ray(new Vector(0, -2, 0), new Vector(0, -1, 0));
     Optional<RayHit> rh = unitSphere.intersectWith(r);
     assertThat(rh).isEmpty();
+  }
+
+  @Test
+  public void edgeTest() {
+    Sphere sphere = new Sphere(BASIC_GREEN).transform(translate(0.0, 0.0, -2.0));
+
+    Ray towardsMiddle = new Ray(new Vector(0, 0, 0), new Vector(0, 0, -1.0));
+    Ray insideEdge = new Ray(
+        new Vector(0, 0, 0),
+        new Vector(1 - EPSILON, 1 - EPSILON, -1.0));
+    Ray outsideEdge = new Ray(
+        new Vector(0, 0, 0),
+        new Vector(1 + EPSILON, 1 + EPSILON, -1.0));
+
+    assertThat(sphere.intersectWith(towardsMiddle)).isPresent();
+    // Check edges
+    assertThat(sphere.intersectWith(insideEdge)).isPresent();
+    assertThat(sphere.intersectWith(outsideEdge)).isEmpty();
   }
 
   private static Vector getRandPointBiggerThan(int i) {

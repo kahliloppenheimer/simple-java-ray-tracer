@@ -34,11 +34,6 @@ public class PointObject extends Shape {
   }
 
   @Override
-  public Material getInsideMaterial() {
-    return MATERIAL;
-  }
-
-  @Override
   public Material getOutsideMaterial() {
     return MATERIAL;
   }

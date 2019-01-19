@@ -20,7 +20,7 @@ public class PlaneTest {
   @Test
   public void testPerfectlyNormalIntersection() {
     Ray directlyAbove = new Ray(new Vector(0, 1, 0), new Vector(0, -1, 0));
-    Optional<RayHit> rayHit = xzPlane.intersectInObjectSpace(directlyAbove);
+    Optional<RayHit> rayHit = xzPlane.intersectWith(directlyAbove);
 
     assertThat(rayHit).isPresent();
     RayHit expected = ImmutableRayHit.builder()
@@ -37,7 +37,7 @@ public class PlaneTest {
   @Test
   public void testPerfectlyParallelIntersection() {
     Ray parallel = new Ray(new Vector(0, 0, 0), new Vector(1, 0, 1));
-    Optional<RayHit> rayHit = xzPlane.intersectInObjectSpace(parallel);
+    Optional<RayHit> rayHit = xzPlane.intersectWith(parallel);
     assertThat(rayHit).isEmpty();
   }
 

@@ -4,10 +4,12 @@ import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
 import static java.awt.Color.BLACK;
 import static java.awt.Color.WHITE;
+import static me.kahlil.geometry.Constants.EPSILON;
 import static me.kahlil.geometry.Constants.ORIGIN;
 import static me.kahlil.geometry.LinearTransformation.IDENTITY;
 import static me.kahlil.geometry.LinearTransformation.rotateAboutXAxis;
 import static me.kahlil.geometry.LinearTransformation.rotateAboutZAxis;
+import static me.kahlil.geometry.LinearTransformation.scale;
 import static me.kahlil.geometry.LinearTransformation.translate;
 import static me.kahlil.scene.Cameras.STANDARD_CAMERA;
 import static me.kahlil.scene.Materials.BASIC_GREEN;
@@ -115,6 +117,26 @@ public class ShapeTest {
         new PhongShading(simpleScene(rotated), STANDARD_CAMERA, true)
             .shade(rotated.intersectWith(towardsSphere).get());
     assertThat(actualColor).isEqualTo(expectedColor);
+  }
+
+  @Test
+  public void sphereScaling() {
+    Sphere scaled =
+        new Sphere(BASIC_GREEN)
+            .transform(scale(0.1));
+
+    Ray towardsMiddle = new Ray(new Vector(0, 0, 0), new Vector(0, 0, -1.0));
+    Ray insideScaledEdge = new Ray(
+        new Vector(0, 0, 0),
+        new Vector(0.1 - EPSILON, 0.1 - EPSILON, -1.0));
+    Ray outsideScaledEdge = new Ray(
+        new Vector(0, 0, 0),
+        new Vector(0.1 - EPSILON, 0.1 - EPSILON, -1.0));
+
+    assertThat(scaled.intersectWith(towardsMiddle)).isPresent();
+    // Check edges of scaled sphere
+    assertThat(scaled.intersectWith(insideScaledEdge)).isPresent();
+    assertThat(scaled.intersectWith(outsideScaledEdge)).isEmpty();
   }
 
   private static Scene simpleScene(Shape... shapes) {
