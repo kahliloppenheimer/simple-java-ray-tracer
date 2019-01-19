@@ -1,5 +1,7 @@
 package me.kahlil.graphics;
 
+import static java.lang.Math.toRadians;
+
 import me.kahlil.scene.Camera;
 import me.kahlil.scene.Raster;
 
@@ -15,11 +17,10 @@ final class CoordinateMapper {
    *
    * <p>https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-generating-camera-rays/generating-camera-rays
    */
-  static Point2D convertPixelToCameraSpaceCoordinates(
-      Raster frame, Camera camera, int i, int j) {
+  static Point2D convertPixelToCameraSpaceCoordinates(Raster frame, Camera camera, int i, int j) {
     // Center and transform to Normalized Device Coordinates (i.e. (x, y) in range [0.0, 1.0])
-    double x = (i + 0.5) / frame.getWidthPx();
-    double y = (j + 0.5) / frame.getHeightPx();
+    double x = (j + 0.5) / frame.getWidthPx();
+    double y = (i + 0.5) / frame.getHeightPx();
 
     // Transform to Screen coordinates (i.e. (x, y) ranges between [-1.0, 1.0]).
     x = 2 * x - 1;
@@ -32,27 +33,22 @@ final class CoordinateMapper {
     x *= aspectRatio;
 
     // Apply Field of Vision (FOV) for zoomed in/out effect based on degrees of visiblity.
-    double fieldOfVisionMultiplier =
-        Math.tan(Math.toRadians(camera.getFieldOfVisionDegrees() * 0.5));
+    double fieldOfVisionMultiplier = Math.tan(toRadians(camera.getFieldOfVisionDegrees() * 0.5));
     x *= fieldOfVisionMultiplier;
     y *= fieldOfVisionMultiplier;
 
     return ImmutablePoint2D.builder().setX(x).setY(y).build();
   }
 
-  /**
-   * Returns the width of a single pixel in camera space.
-   */
+  /** Returns the width of a single pixel in camera space. */
   static double getPixelWidthInCameraSpace(Raster frame, Camera camera) {
-    return convertPixelToCameraSpaceCoordinates(frame, camera, 0, 0)
-        .getX() * 2;
+    return Math.abs(convertPixelToCameraSpaceCoordinates(frame, camera, 0, 1).getX()
+            - convertPixelToCameraSpaceCoordinates(frame, camera, 0, 0).getX());
   }
 
-  /**
-   * Returns the height of a single pixel in camera space.
-   */
+  /** Returns the height of a single pixel in camera space. */
   static double getPixelHeightInCameraSpace(Raster frame, Camera camera) {
-    return convertPixelToCameraSpaceCoordinates(frame, camera, 0, 0)
-        .getY() * 2;
+    return Math.abs(convertPixelToCameraSpaceCoordinates(frame, camera, 1, 0).getY()
+            - convertPixelToCameraSpaceCoordinates(frame, camera, 0, 0).getY());
   }
 }

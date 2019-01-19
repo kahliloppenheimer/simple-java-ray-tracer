@@ -16,4 +16,14 @@ public final class Cameras {
           .setLocation(new Vector(0, 0, 0))
           .setFieldOfVisionDegrees(60)
           .build();
+
+  /**
+   * A camera centered at the origin (0, 0, 0) but with a 90 degree FOV, which is useful for testing
+   * because the FOV effect (tan(FOV / 2)) is 1, and does not affect the coordinate computation.
+   */
+  public static final Camera NINETY_DEGREE_FOV =
+      ImmutableCameraImpl.builder()
+          .setLocation(new Vector(0, 0, 0))
+          .setFieldOfVisionDegrees(90)
+          .build();
 }

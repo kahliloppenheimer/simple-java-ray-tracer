@@ -39,7 +39,7 @@ public class MyCanvas3D extends JPanel implements Canvas3D {
   /** draw a single pixel in the image * */
   public void drawPixel(int i, int j, java.awt.Color c) {
     bufferg.setColor(c);
-    bufferg.fillRect(i, j, 1, 1);
+    bufferg.fillRect(j, i, 1, 1);
   }
 
   /** draw the image onto the screen * */
@@ -77,8 +77,8 @@ public class MyCanvas3D extends JPanel implements Canvas3D {
       buffer = this.createImage(rendered.getWidthPx(), rendered.getHeightPx());
     }
     // Otherwise just fill it in
-    for (int i = 0; i < rendered.getWidthPx(); ++i) {
-      for (int j = 0; j < rendered.getHeightPx(); ++j) {
+    for (int i = 0; i < rendered.getHeightPx(); ++i) {
+      for (int j = 0; j < rendered.getWidthPx(); ++j) {
         drawPixel(i, j, rendered.getPixel(i, j));
       }
     }

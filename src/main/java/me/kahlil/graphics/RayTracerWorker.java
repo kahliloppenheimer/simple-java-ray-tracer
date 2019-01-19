@@ -25,8 +25,8 @@ public class RayTracerWorker implements Runnable {
 
   @Override
   public void run() {
-    for (int i = 0; i < frame.getWidthPx(); ++i) {
-      for (int j = startingPixel; j < frame.getHeightPx(); j += pixelIncrement) {
+    for (int i = 0; i < frame.getHeightPx(); ++i) {
+      for (int j = startingPixel; j < frame.getWidthPx(); j += pixelIncrement) {
         RenderingResult renderingResult = rayTracer.traceRay(i, j);
         numTraces += renderingResult.getNumRaysTraced();
         frame.setPixel(i, j, renderingResult.getColor());

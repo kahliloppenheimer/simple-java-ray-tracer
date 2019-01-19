@@ -34,28 +34,29 @@ public class RayTracerCoordinator {
   public Raster render(boolean shadowsEnabled)
       throws InterruptedException, ExecutionException {
 
-//    RayTracer rayTracer =
-//        new SimpleAntiAliaser(
-//            raster,
-//            camera,
-//            new ReflectiveRayTracer(
-//                new PhongShading(scene, camera, shadowsEnabled),
-//                scene,
-//                raster,
-//                camera,
-//                1),
-//            new GridAntiAliasingMethod(1));
+    RayTracer rayTracer =
+        new SimpleAntiAliaser(
+            raster,
+            camera,
+            new ReflectiveRayTracer(
+                new PhongShading(scene, camera, shadowsEnabled),
+                scene,
+                raster,
+                camera,
+                1),
+            new GridAntiAliasingMethod(1));
 //    RayTracer rayTracer = new SimpleRayTracer(
-//        new PhongShading(scene, camera, shadowsEnabled),
+////        new NoShading(),
+//        new PhongShading(scene, camera, false),
 //        scene,
 //        raster,
 //        camera);
-    RayTracer rayTracer = new ReflectiveRayTracer(
-        new PhongShading(scene, camera, shadowsEnabled),
-        scene,
-        raster,
-        camera,
-        4);
+//    RayTracer rayTracer = new ReflectiveRayTracer(
+//        new PhongShading(scene, camera, shadowsEnabled),
+//        scene,
+//        raster,
+//        camera,
+//        4);
 
     // Construct individual worker threads
     ImmutableList<RayTracerWorker> rayTracerWorkers =

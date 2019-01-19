@@ -1,6 +1,9 @@
 package me.kahlil.demos;
 
 import static java.awt.Color.BLACK;
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
+import static java.awt.Color.RED;
 import static java.awt.Color.YELLOW;
 import static me.kahlil.geometry.LinearTransformation.translate;
 import static me.kahlil.scene.Cameras.STANDARD_CAMERA;
@@ -15,6 +18,7 @@ import java.util.concurrent.ExecutionException;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 import me.kahlil.geometry.Plane;
+import me.kahlil.geometry.Shape;
 import me.kahlil.geometry.Sphere;
 import me.kahlil.geometry.Vector;
 import me.kahlil.graphics.MyCanvas3D;
@@ -31,32 +35,56 @@ public class Demo {
 
   public static void main(String[] args) throws InterruptedException, ExecutionException {
 
-    Raster frame = new Raster(400, 400);
+    Raster frame = new Raster(800, 800);
 
-    // Objects in scene
-    Sphere sphere1 =
-        new Sphere(
+    ImmutableList<Shape> shapes =
+        ImmutableList.of(
+            new Sphere(
+                    ImmutableMaterial.builder()
+                        .setColor(RED)
+                        .setHardness(10)
+                        .setSpecularIntensity(1.0)
+                        .build())
+                .transform(translate(2, 0, -7)),
+            new Sphere(
+                    ImmutableMaterial.builder()
+                        .setColor(GREEN)
+                        .setHardness(20)
+                        .setSpecularIntensity(0.5)
+                        .build())
+                .transform(translate(-4, 0, -10)),
+            new Sphere(
+                    ImmutableMaterial.builder()
+                        .setColor(BLUE)
+                        .setHardness(20)
+                        .setSpecularIntensity(0.5)
+                        .build())
+                .transform(translate(-2, 0, -15)),
+            new Sphere(
+                    ImmutableMaterial.builder()
+                        .setColor(YELLOW)
+                        .setHardness(20)
+                        .setSpecularIntensity(1.0)
+                        .setReflective(true)
+                        .build())
+                .transform(translate(0, 0, -10)),
+            new Sphere(
                 ImmutableMaterial.builder()
-                    .setColor(YELLOW)
-                    .setHardness(10)
-                    .setSpecularIntensity(1.0)
-                    .build())
-            .transform(translate(1, 1, -5));
-    Sphere sphere2 =
-        new Sphere(
-            ImmutableMaterial.builder()
-                .setColor(YELLOW)
-                .setHardness(20)
+                .setColor(new Color(1.0f, 0.0f, 1.0f))
                 .setSpecularIntensity(0.5)
+                .setHardness(30)
+                .setReflective(false)
                 .build())
-        .transform(translate(-2, 1, -10));
-    Plane plane =
-        new Plane(new Vector(0, -1, 0), new Vector(0, 1.0, 0.0),
-            ImmutableMaterial.builder().setColor(Color.GREEN)
-                .setHardness(100)
-                .setSpecularIntensity(1.0)
-                .setReflective(true)
-                .build());
+                .transform(translate(0, 2, 1)),
+            new Plane(
+                new Vector(0, -1, 0),
+                new Vector(0, 1.0, 0.0),
+                ImmutableMaterial.builder()
+                    .setColor(Color.GRAY)
+                    .setHardness(100)
+                    .setSpecularIntensity(1.0)
+                    .setReflective(false)
+                    .build()));
 
     // Lights in scene
     List<PointLight> lights =
@@ -73,16 +101,16 @@ public class Demo {
     // Whole scene
     Scene scene =
         ImmutableScene.builder()
-            .setShapes(ImmutableList.of(sphere1, sphere2, plane))
+            .setShapes(shapes)
             .setLights(lights)
-            .setBackgroundColor(BLACK)
+            .setBackgroundColor(new Color(.25f, .25f, .25f))
             .setAmbient(new Color((float) .075, (float) .075, (float) .075))
             .build();
 
     RayTracerCoordinator rt = new RayTracerCoordinator(frame, STANDARD_CAMERA, scene);
 
     long start = System.currentTimeMillis();
-    Raster rendered = rt.render(false);
+    Raster rendered = rt.render(true);
     long end = System.currentTimeMillis();
 
     System.out.println("Rendering took " + (end - start) + " ms");
@@ -108,10 +136,10 @@ public class Demo {
     int width = rendered.getWidthPx();
     BufferedImage theImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     int[][] pixel = new int[width][height];
-    for (int i = 0; i < width; i++) {
-      for (int j = 0; j < height; j++) {
+    for (int i = 0; i < height; i++) {
+      for (int j = 0; j < width; j++) {
         int value = rendered.getPixel(i, j).getRGB();
-        theImage.setRGB(i, j, value);
+        theImage.setRGB(j, i, value);
       }
     }
     File outputFile = new File(fileName);

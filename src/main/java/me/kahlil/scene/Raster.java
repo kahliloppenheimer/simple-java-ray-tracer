@@ -23,10 +23,6 @@ public class Raster {
     this.pixels = new Color[heightPx][widthPx];
   }
 
-  public Vector getBottomLeftCorner() {
-    return bottomLeftCorner;
-  }
-
   /** Returns the pixel at the specified coordinate */
   public Color getPixel(int i, int j) {
     return pixels[i][j];
