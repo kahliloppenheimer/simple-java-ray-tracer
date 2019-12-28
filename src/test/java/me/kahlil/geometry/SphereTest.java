@@ -3,7 +3,6 @@ package me.kahlil.geometry;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
 import static me.kahlil.geometry.Constants.EPSILON;
-import static me.kahlil.geometry.LinearTransformation.scale;
 import static me.kahlil.geometry.LinearTransformation.translate;
 import static me.kahlil.scene.Materials.BASIC_GREEN;
 
@@ -57,15 +56,15 @@ public class SphereTest {
 
   @Test
   public void edgeTest() {
-    Sphere sphere = new Sphere(BASIC_GREEN).transform(translate(0.0, 0.0, -2.0));
+    Sphere sphere = new Sphere(BASIC_GREEN).transform(translate(1.0, 0.0, -1.0));
 
-    Ray towardsMiddle = new Ray(new Vector(0, 0, 0), new Vector(0, 0, -1.0));
+    Ray towardsMiddle = new Ray(new Vector(0, 0, 0), new Vector(1.0, 0.0, -1.0));
     Ray insideEdge = new Ray(
         new Vector(0, 0, 0),
-        new Vector(1 - EPSILON, 1 - EPSILON, -1.0));
+        new Vector(EPSILON, 0.0, -1.0));
     Ray outsideEdge = new Ray(
         new Vector(0, 0, 0),
-        new Vector(1 + EPSILON, 1 + EPSILON, -1.0));
+        new Vector(-1 * EPSILON, 0.0, -1.0));
 
     assertThat(sphere.intersectWith(towardsMiddle)).isPresent();
     // Check edges

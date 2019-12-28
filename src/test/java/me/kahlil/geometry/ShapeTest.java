@@ -123,20 +123,21 @@ public class ShapeTest {
   public void sphereScaling() {
     Sphere scaled =
         new Sphere(BASIC_GREEN)
+            .transform(translate(1.0, 0.0, -1.0))
             .transform(scale(0.1));
 
-    Ray towardsMiddle = new Ray(new Vector(0, 0, 0), new Vector(0, 0, -1.0));
-    Ray insideScaledEdge = new Ray(
+    Ray towardsMiddle = new Ray(new Vector(0, 0, 0), new Vector(1.0, 0.0, -1.0));
+    Ray insideEdge = new Ray(
         new Vector(0, 0, 0),
-        new Vector(0.1 - EPSILON, 0.1 - EPSILON, -1.0));
-    Ray outsideScaledEdge = new Ray(
+        new Vector(EPSILON, 0.0, -1.0));
+    Ray outsideEdge = new Ray(
         new Vector(0, 0, 0),
-        new Vector(0.1 - EPSILON, 0.1 - EPSILON, -1.0));
+        new Vector(-1 * EPSILON, 0.0, -1.0));
 
     assertThat(scaled.intersectWith(towardsMiddle)).isPresent();
     // Check edges of scaled sphere
-    assertThat(scaled.intersectWith(insideScaledEdge)).isPresent();
-    assertThat(scaled.intersectWith(outsideScaledEdge)).isEmpty();
+    assertThat(scaled.intersectWith(insideEdge)).isPresent();
+    assertThat(scaled.intersectWith(outsideEdge)).isEmpty();
   }
 
   private static Scene simpleScene(Shape... shapes) {
