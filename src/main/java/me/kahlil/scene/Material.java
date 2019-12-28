@@ -29,12 +29,12 @@ public interface Material {
   double getSpecularIntensity();
 
   /**
-   * True iff the object has a reflective surface (i.e. rays should bounce off of the surface for
-   * shading computation).
+   * A parameter indicating how reflective a surface is with 1.0 being the highest and 0.0 being
+   * the lowest.
    */
   @Default
-  default boolean isReflective() {
-    return false;
+  default double getReflectiveness() {
+    return 0.0;
   }
 
   @Check
@@ -47,5 +47,8 @@ public interface Material {
         getSpecularIntensity() >= 0.0 && getSpecularIntensity() <= 1.0,
         "Specular intensity must be between 0.0 (inclusive) and 1.0 (inclusive) but was %f",
         getSpecularIntensity());
+    checkArgument(getReflectiveness() >= 0.0 && getReflectiveness() <= 1.0,
+        "Reflectiveness must be between 0.0 (inclusive) and 1.0 (inclusive) but was %f",
+        getReflectiveness());
   }
 }

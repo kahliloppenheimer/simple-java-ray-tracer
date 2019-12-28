@@ -10,7 +10,7 @@ public final class Materials {
       .setColor(GREEN)
       .setHardness(200)
       .setSpecularIntensity(0.5f)
-      .setReflective(false)
+      .setReflectiveness(0.0)
       .build();
 
   /**
@@ -20,7 +20,7 @@ public final class Materials {
     return ImmutableMaterial.builder()
         .setHardness(10)
         .setSpecularIntensity(0.4)
-        .setReflective(false);
+        .setReflectiveness(0.0);
   }
 
   /**
@@ -30,6 +30,6 @@ public final class Materials {
     return ImmutableMaterial.builder()
         .setHardness(250)
         .setSpecularIntensity(1.0)
-        .setReflective(false);
+        .setReflectiveness(0.55);
   }
 }

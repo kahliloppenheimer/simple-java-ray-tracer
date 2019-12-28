@@ -1,9 +1,9 @@
 package me.kahlil.demos;
 
+import static java.awt.Color.BLACK;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
-import static java.awt.Color.YELLOW;
 import static me.kahlil.geometry.LinearTransformation.translate;
 import static me.kahlil.scene.Cameras.STANDARD_CAMERA;
 import static me.kahlil.scene.Materials.glossy;
@@ -40,9 +40,12 @@ import me.kahlil.scene.Scene;
 /** A second demo of the ray tracer. */
 public class Demo {
 
+  private static final int IMAGE_SIZE = 2000;
+  private static final int NUM_ANTI_ALIASING_SAMPLES = 4;
+
   public static void main(String[] args) throws InterruptedException, ExecutionException {
 
-    Raster raster = new Raster(800, 800);
+    Raster raster = new Raster(IMAGE_SIZE, IMAGE_SIZE);
 
     ImmutableList<Shape> shapes =
         ImmutableList.of(
@@ -50,24 +53,18 @@ public class Demo {
             new Sphere(shiny().setColor(GREEN).build()).transform(translate(-4, 0, -10)),
             new Sphere(glossy().setColor(BLUE).build()).transform(translate(-2, 0, -15)),
             new Sphere(
-                    ImmutableMaterial.builder()
-                        .setColor(YELLOW)
-                        .setHardness(20)
-                        .setSpecularIntensity(1.0)
-                        .setReflective(true)
-                        .build())
-                .transform(translate(0, 0, -10)),
+                ImmutableMaterial.builder()
+                    .setColor(BLACK)
+                    .setReflectiveness(1.0)
+                    .setHardness(1)
+                    .setSpecularIntensity(0.0)
+                    .build()).transform(translate(0, 0, -10)),
             new Sphere(shiny().setColor(new Color(1.0f, 0.0f, 1.0f)).build())
                 .transform(translate(0, 2, 1)),
             new Plane(
                 new Vector(0, -1, 0),
                 new Vector(0, 1.0, 0.0),
-                ImmutableMaterial.builder()
-                    .setColor(Color.GRAY)
-                    .setHardness(100)
-                    .setSpecularIntensity(1.0)
-                    .setReflective(false)
-                    .build()));
+                glossy().setColor(new Color(72, 136, 168)).build()));
 
     // Lights in scene
     List<PointLight> lights =
@@ -99,8 +96,8 @@ public class Demo {
             raster,
             camera,
             new ReflectiveRayTracer(
-                new PhongShading(scene, camera, shadowsEnabled), scene, raster, camera, 1),
-            new RandomAntiAliasingMethod(16));
+                new PhongShading(scene, camera, shadowsEnabled), scene, raster, camera, 16),
+            new RandomAntiAliasingMethod(NUM_ANTI_ALIASING_SAMPLES));
     //    RayTracer rayTracer = new SimpleRayTracer(
     ////        new NoShading(),
     //        new PhongShading(scene, camera, false),
@@ -162,5 +159,4 @@ public class Demo {
       throw new RuntimeException(e);
     }
   }
-
 }

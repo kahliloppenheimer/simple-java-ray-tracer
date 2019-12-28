@@ -1,10 +1,9 @@
 package me.kahlil.geometry;
 
 import static me.kahlil.geometry.Constants.EPSILON;
-import static java.awt.Color.WHITE;
+import static me.kahlil.scene.Materials.BASIC_GREEN;
 
 import java.util.Optional;
-import me.kahlil.scene.ImmutableMaterial;
 import me.kahlil.scene.Material;
 
 /**
@@ -13,19 +12,10 @@ import me.kahlil.scene.Material;
  */
 public class PointObject extends Shape {
 
-  private static final Material MATERIAL =
-      ImmutableMaterial.builder()
-          .setColor(WHITE)
-          .setHardness(50)
-          .setSpecularIntensity(1.0)
-          .setReflective(false)
-          .build();
-
   private final Sphere pointSphere;
 
   PointObject(double x, double y, double z) {
-    this.pointSphere =
-        new Sphere(new Vector(x, y, z), EPSILON, MATERIAL);
+    this.pointSphere = new Sphere(new Vector(x, y, z), EPSILON, BASIC_GREEN);
   }
 
   @Override
@@ -35,6 +25,6 @@ public class PointObject extends Shape {
 
   @Override
   public Material getOutsideMaterial() {
-    return MATERIAL;
+    return BASIC_GREEN;
   }
 }

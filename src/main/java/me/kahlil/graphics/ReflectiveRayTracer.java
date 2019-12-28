@@ -29,11 +29,7 @@ public class ReflectiveRayTracer extends RayTracer {
    * recursive rays that should be traced for reflections.
    */
   public ReflectiveRayTracer(
-      Shader shader,
-      Scene scene,
-      Raster raster,
-      Camera camera,
-      int maxRayDepth) {
+      Shader shader, Scene scene, Raster raster, Camera camera, int maxRayDepth) {
     super(raster, camera);
     this.shader = shader;
     this.scene = scene;
@@ -62,14 +58,28 @@ public class ReflectiveRayTracer extends RayTracer {
     if (!rayHit.isPresent()) {
       return scene.getBackgroundColor();
     }
-    if (!rayHit.get().getObject().getOutsideMaterial().isReflective()) {
-      // if we reflected at all, we want to reduce the value by 20% to mimic imperfect reflection.
-      float lossToReflection = rayDepth > 0 ? 0.8f : 1.0f;
-      return ColorComputation.of(shader.shade(rayHit.get()))
-          .scaleFloat(lossToReflection)
-          .compute();
+    double reflectiveness = rayHit.get().getObject().getOutsideMaterial().getReflectiveness();
+    if (reflectiveness < EPSILON) {
+      return shader.shade(rayHit.get());
     }
-    return recursiveTraceRay(computeReflectionRay(rayHit.get()), rayDepth + 1);
+
+    Color reflectedRayColor =
+        ColorComputation.of(recursiveTraceRay(computeReflectionRay(rayHit.get()), rayDepth + 1))
+            // Reduce effect of reflection by 20% to mimic imperfect reflection.
+            .scaleFloat(0.8f)
+            .scaleFloat((float) reflectiveness)
+            .compute();
+
+    // For purely reflective surfaces, simply return the reflected ray's color.
+    if (Math.abs(reflectiveness - 1.0) < EPSILON) {
+      return reflectedRayColor;
+    }
+
+    // For partially reflective surfaces, combine the reflected ray's color with the surface color.
+    return ColorComputation.of(shader.shade(rayHit.get()))
+        .scaleFloat(1.0f - (float) reflectiveness)
+        .add(reflectedRayColor)
+        .compute();
   }
 
   /**
