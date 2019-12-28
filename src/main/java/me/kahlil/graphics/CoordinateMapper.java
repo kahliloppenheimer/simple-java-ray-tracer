@@ -1,9 +1,14 @@
 package me.kahlil.graphics;
 
+import static java.lang.Math.tan;
+import static java.lang.Math.toRadians;
+
 import me.kahlil.scene.Camera;
 import me.kahlil.scene.Raster;
 
 final class CoordinateMapper {
+
+  private static final double CAMERA_SPACE_MIN_VALUE = -1.0;
 
   private CoordinateMapper() {}
 
@@ -31,9 +36,9 @@ final class CoordinateMapper {
     double aspectRatio = 1.0 * frame.getWidthPx() / frame.getHeightPx();
     x *= aspectRatio;
 
-    // Apply Field of Vision (FOV) for zoomed in/out effect based on degrees of visiblity.
+    // Apply Field of Vision (FOV) for zoomed in/out effect based on degrees of visibility.
     double fieldOfVisionMultiplier =
-        Math.tan(Math.toRadians(camera.getFieldOfVisionDegrees() * 0.5));
+        tan(toRadians(camera.getFieldOfVisionDegrees() * 0.5));
     x *= fieldOfVisionMultiplier;
     y *= fieldOfVisionMultiplier;
 
@@ -44,15 +49,19 @@ final class CoordinateMapper {
    * Returns the width of a single pixel in camera space.
    */
   static double getPixelWidthInCameraSpace(Raster frame, Camera camera) {
-    return convertPixelToCameraSpaceCoordinates(frame, camera, 0, 0)
-        .getX() * 2;
+    double middleOfZeroZeroInCameraSpace =
+        convertPixelToCameraSpaceCoordinates(frame, camera, 0, 0).getX();
+
+    return 2 * (middleOfZeroZeroInCameraSpace - CAMERA_SPACE_MIN_VALUE);
   }
 
   /**
    * Returns the height of a single pixel in camera space.
    */
   static double getPixelHeightInCameraSpace(Raster frame, Camera camera) {
-    return convertPixelToCameraSpaceCoordinates(frame, camera, 0, 0)
-        .getY() * 2;
+    double middleOfZeroZeroInCameraSpace =
+        convertPixelToCameraSpaceCoordinates(frame, camera, 0, 0).getY();
+
+    return 2 * (-middleOfZeroZeroInCameraSpace - CAMERA_SPACE_MIN_VALUE);
   }
 }
