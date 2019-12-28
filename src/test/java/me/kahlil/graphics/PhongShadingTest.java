@@ -34,12 +34,10 @@ public class PhongShadingTest {
     RayHit rayHit =
         ImmutableRayHit.builder()
             // Unused for this test but required by builder to be set
-            .setDistance(1)
             .setObject(DUMMY_SPHERE)
             .setTime(1)
-            .setRay(new Ray(new Vector(0, 0, 0), new Vector(0, 0, 0)))
+            .setRay(new Ray(new Vector(0, 0, 0), new Vector(1, 0, 0)))
             // Relevant attributes for this test
-            .setIntersection(new Vector(1, 0, 0))
             .setNormal(new Vector(1, 0, 0))
             .build();
 

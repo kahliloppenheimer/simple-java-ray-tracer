@@ -8,10 +8,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.IntStream;
-
 import me.kahlil.scene.Camera;
-import me.kahlil.scene.Scene;
 import me.kahlil.scene.Raster;
+import me.kahlil.scene.Scene;
 
 /** Coordinator for managing the ray tracer worker threads via a {@link ExecutorService}. */
 public class RayTracerCoordinator {

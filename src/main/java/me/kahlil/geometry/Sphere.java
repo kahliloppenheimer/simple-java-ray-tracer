@@ -51,14 +51,11 @@ public class Sphere extends Shape {
 
     if (timeOfFirstIntersection > 0) {
       Vector intersection = ray.atTime(timeOfFirstIntersection);
-      double distance = ray.getStart().subtract(intersection).magnitude();
       Vector normal = intersection.subtract(center).normalize();
       return Optional.of(
           ImmutableRayHit.builder()
               .setRay(ray)
               .setTime(timeOfFirstIntersection)
-              .setDistance(distance)
-              .setIntersection(intersection)
               .setNormal(normal)
               .setObject(this)
               .build());
@@ -71,5 +68,4 @@ public class Sphere extends Shape {
   public Material getOutsideMaterial() {
     return this.outside;
   }
-
 }

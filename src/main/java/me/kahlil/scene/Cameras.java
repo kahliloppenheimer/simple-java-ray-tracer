@@ -12,7 +12,7 @@ public final class Cameras {
    * <p>https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-generating-camera-rays/generating-camera-rays
    */
   public static final Camera STANDARD_CAMERA =
-      ImmutableCameraImpl.builder()
+      ImmutableCamera.builder()
           .setLocation(new Vector(0, 0, 0))
           .setFieldOfVisionDegrees(60)
           .build();
@@ -22,7 +22,7 @@ public final class Cameras {
    * because the FOV effect (tan(FOV / 2)) is 1, and does not affect the coordinate computation.
    */
   public static final Camera NINETY_DEGREE_FOV =
-      ImmutableCameraImpl.builder()
+      ImmutableCamera.builder()
           .setLocation(new Vector(0, 0, 0))
           .setFieldOfVisionDegrees(90)
           .build();

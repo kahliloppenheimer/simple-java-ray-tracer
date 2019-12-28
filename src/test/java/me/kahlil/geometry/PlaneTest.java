@@ -12,10 +12,8 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class PlaneTest {
 
-  private static final Plane xzPlane = new Plane(
-      new Vector(0, 0, 0),
-      new Vector(0, 1, 0),
-      BASIC_GREEN);
+  private static final Plane xzPlane =
+      new Plane(new Vector(0, 0, 0), new Vector(0, 1, 0), BASIC_GREEN);
 
   @Test
   public void testPerfectlyNormalIntersection() {
@@ -23,14 +21,13 @@ public class PlaneTest {
     Optional<RayHit> rayHit = xzPlane.intersectWith(directlyAbove);
 
     assertThat(rayHit).isPresent();
-    RayHit expected = ImmutableRayHit.builder()
-        .setObject(xzPlane)
-        .setDistance(1)
-        .setIntersection(new Vector(0, 0, 0))
-        .setNormal(new Vector(0, 1, 0))
-        .setRay(directlyAbove)
-        .setTime(1)
-        .build();
+    RayHit expected =
+        ImmutableRayHit.builder()
+            .setObject(xzPlane)
+            .setNormal(new Vector(0, 1, 0))
+            .setRay(directlyAbove)
+            .setTime(1)
+            .build();
     assertThat(rayHit.get()).isEqualTo(expected);
   }
 
@@ -40,5 +37,4 @@ public class PlaneTest {
     Optional<RayHit> rayHit = xzPlane.intersectWith(parallel);
     assertThat(rayHit).isEmpty();
   }
-
 }

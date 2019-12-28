@@ -8,7 +8,8 @@ import me.kahlil.scene.Material;
 /**
  * Representation of a plane in 3-dimensional space.
  *
- * All planes initially pass through the origin, but may be transformed. */
+ * <p>All planes initially pass through the origin, but may be transformed.
+ */
 public class Plane extends Shape {
   private final Vector normal;
   private final Vector point;
@@ -41,8 +42,6 @@ public class Plane extends Shape {
         ImmutableRayHit.builder()
             .setRay(ray)
             .setTime(time)
-            .setDistance(ray.atTime(time).subtract(ray.getStart()).magnitude())
-            .setIntersection(ray.atTime(time))
             .setNormal(adjustedNormal)
             .setObject(this)
             .build());

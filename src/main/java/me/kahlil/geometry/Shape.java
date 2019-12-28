@@ -30,8 +30,6 @@ public abstract class Shape implements Cloneable {
         ImmutableRayHit.builder()
             .setRay(ray)
             .setTime(ray.timeToPoint(worldSpaceIntersectionPoint))
-            .setDistance(distance)
-            .setIntersection(worldSpaceIntersectionPoint)
             .setNormal(worldSpaceNormal)
             .setObject(this)
             .build());
