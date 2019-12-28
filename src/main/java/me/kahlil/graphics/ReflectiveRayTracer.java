@@ -15,7 +15,7 @@ import me.kahlil.scene.Scene;
  * Ray tracer that performs a simple implementation of reflection-based ray tracing (i.e. no
  * refraction or partial reflection).
  */
-class ReflectiveRayTracer extends RayTracer {
+public class ReflectiveRayTracer extends RayTracer {
 
   private static final double EPSILON = 0.0000000001;
   private final Shader shader;
@@ -28,7 +28,7 @@ class ReflectiveRayTracer extends RayTracer {
    * Constructs a ReflectiveRayTracer with a given maxRayDepth, indicating the maximum number of
    * recursive rays that should be traced for reflections.
    */
-  ReflectiveRayTracer(
+  public ReflectiveRayTracer(
       Shader shader,
       Scene scene,
       Raster raster,

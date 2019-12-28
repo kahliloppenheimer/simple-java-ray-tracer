@@ -3,12 +3,12 @@ package me.kahlil.graphics;
 import java.util.Random;
 import me.kahlil.geometry.Ray;
 
-final class RandomAntiAliasingMethod implements AntiAliasingMethod {
+public final class RandomAntiAliasingMethod implements AntiAliasingMethod {
 
   private static final ThreadLocal<Random> RAND = ThreadLocal.withInitial(Random::new);
   private final int numSamples;
 
-  RandomAntiAliasingMethod(int numSamples) {
+  public RandomAntiAliasingMethod(int numSamples) {
     this.numSamples = numSamples;
   }
 

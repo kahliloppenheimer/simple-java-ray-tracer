@@ -19,44 +19,22 @@ public class RayTracerCoordinator {
   private final ExecutorService executor;
   private final int numThreads;
 
-  private Raster raster;
-  private Camera camera;
-  private Scene scene;
+  private final Raster raster;
+  private final Camera camera;
+  private final Scene scene;
+  private final RayTracer rayTracer;
 
-  public RayTracerCoordinator(Raster raster, Camera camera, Scene scene) {
+  public RayTracerCoordinator(Raster raster, Camera camera, Scene scene, RayTracer rayTracer) {
     this.raster = raster;
     this.camera = camera;
     this.scene = scene;
+    this.rayTracer = rayTracer;
     this.numThreads = Runtime.getRuntime().availableProcessors();
     this.executor = Executors.newFixedThreadPool(this.numThreads);
   }
 
   public Raster render(boolean shadowsEnabled)
       throws InterruptedException, ExecutionException {
-
-    RayTracer rayTracer =
-        new SimpleAntiAliaser(
-            raster,
-            camera,
-            new ReflectiveRayTracer(
-                new PhongShading(scene, camera, shadowsEnabled),
-                scene,
-                raster,
-                camera,
-                1),
-            new GridAntiAliasingMethod(1));
-//    RayTracer rayTracer = new SimpleRayTracer(
-////        new NoShading(),
-//        new PhongShading(scene, camera, false),
-//        scene,
-//        raster,
-//        camera);
-//    RayTracer rayTracer = new ReflectiveRayTracer(
-//        new PhongShading(scene, camera, shadowsEnabled),
-//        scene,
-//        raster,
-//        camera,
-//        4);
 
     // Construct individual worker threads
     ImmutableList<RayTracerWorker> rayTracerWorkers =

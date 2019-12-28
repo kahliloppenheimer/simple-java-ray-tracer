@@ -15,7 +15,7 @@ import me.kahlil.scene.Raster;
  *
  * <p>No adaptive anti-aliasing or more complicated combination logic is performed.
  */
-final class SimpleAntiAliaser extends RayTracer {
+public final class SimpleAntiAliaser extends RayTracer {
 
   private final RayTracer rayTracer;
   private final AntiAliasingMethod antiAliasingMethod;
@@ -23,7 +23,7 @@ final class SimpleAntiAliaser extends RayTracer {
 
   private final ThreadLocal<Long> numTraces = ThreadLocal.withInitial(() -> 0L);
 
-  SimpleAntiAliaser(
+  public SimpleAntiAliaser(
       Raster frame, Camera camera, RayTracer rayTracer, AntiAliasingMethod antiAliasingMethod) {
     super(frame, camera);
     this.samplingRadius =

@@ -11,7 +11,7 @@ import me.kahlil.scene.Raster;
  * An object which traces a single ray and returns the corresponding color that should be rendered,
  * as defined by the ray tracing algorithm.
  */
-abstract class RayTracer {
+public abstract class RayTracer {
 
   private final Camera camera;
   private final Raster raster;

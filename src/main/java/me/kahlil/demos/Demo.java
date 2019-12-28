@@ -21,7 +21,13 @@ import me.kahlil.geometry.Shape;
 import me.kahlil.geometry.Sphere;
 import me.kahlil.geometry.Vector;
 import me.kahlil.graphics.MyCanvas3D;
+import me.kahlil.graphics.PhongShading;
+import me.kahlil.graphics.RandomAntiAliasingMethod;
+import me.kahlil.graphics.RayTracer;
 import me.kahlil.graphics.RayTracerCoordinator;
+import me.kahlil.graphics.ReflectiveRayTracer;
+import me.kahlil.graphics.SimpleAntiAliaser;
+import me.kahlil.scene.Camera;
 import me.kahlil.scene.ImmutableMaterial;
 import me.kahlil.scene.ImmutablePointLight;
 import me.kahlil.scene.ImmutableScene;
@@ -34,7 +40,7 @@ public class Demo {
 
   public static void main(String[] args) throws InterruptedException, ExecutionException {
 
-    Raster frame = new Raster(800, 800);
+    Raster raster = new Raster(400, 400);
 
     ImmutableList<Shape> shapes =
         ImmutableList.of(
@@ -106,10 +112,38 @@ public class Demo {
             .setAmbient(new Color((float) .075, (float) .075, (float) .075))
             .build();
 
-    RayTracerCoordinator rt = new RayTracerCoordinator(frame, STANDARD_CAMERA, scene);
+    Camera camera = STANDARD_CAMERA;
+
+    boolean shadowsEnabled = true;
+
+    RayTracer rayTracer =
+        new SimpleAntiAliaser(
+            raster,
+            camera,
+            new ReflectiveRayTracer(
+                new PhongShading(scene, camera, shadowsEnabled),
+                scene,
+                raster,
+                camera,
+                3),
+            new RandomAntiAliasingMethod(4));
+//    RayTracer rayTracer = new SimpleRayTracer(
+////        new NoShading(),
+//        new PhongShading(scene, camera, false),
+//        scene,
+//        raster,
+//        camera);
+//    RayTracer rayTracer = new ReflectiveRayTracer(
+//        new PhongShading(scene, camera, shadowsEnabled),
+//        scene,
+//        raster,
+//        camera,
+//        4);
+
+    RayTracerCoordinator rt = new RayTracerCoordinator(raster, camera, scene, rayTracer);
 
     long start = System.currentTimeMillis();
-    Raster rendered = rt.render(true);
+    Raster rendered = rt.render(shadowsEnabled);
     long end = System.currentTimeMillis();
 
     System.out.println("Rendering took " + (end - start) + " ms");
