@@ -1,6 +1,8 @@
 package me.kahlil.demos;
 
 import static java.awt.Color.BLACK;
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
 import static java.awt.Color.YELLOW;
 import static me.kahlil.geometry.LinearTransformation.translate;
 import static me.kahlil.scene.Cameras.STANDARD_CAMERA;
@@ -45,17 +47,17 @@ public class Demo {
     Sphere sphere2 =
         new Sphere(
             ImmutableMaterial.builder()
-                .setColor(YELLOW)
+                .setColor(GREEN)
                 .setHardness(20)
                 .setSpecularIntensity(0.5)
                 .build())
         .transform(translate(-2, 1, -10));
     Plane plane =
         new Plane(new Vector(0, -1, 0), new Vector(0, 1.0, 0.0),
-            ImmutableMaterial.builder().setColor(Color.GREEN)
+            ImmutableMaterial.builder().setColor(BLUE)
                 .setHardness(100)
                 .setSpecularIntensity(1.0)
-                .setReflective(true)
+                .setReflective(false)
                 .build());
 
     // Lights in scene
