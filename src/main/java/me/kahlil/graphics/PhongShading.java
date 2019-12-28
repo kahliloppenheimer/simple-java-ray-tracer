@@ -17,6 +17,9 @@ import me.kahlil.scene.Scene;
 /** An implementation of the phong illumination model implementation of shading. */
 public final class PhongShading implements Shader {
 
+  private static final float SPECULAR_COEFFICIENT = 0.75f;
+  private static final float DIFFUSE_COEFFICIENT = 0.5f;
+
   private Scene scene;
   private final Camera camera;
   private final boolean shadowsEnabled;
@@ -53,15 +56,17 @@ public final class PhongShading implements Shader {
    * diffuseCoefficient of that collision.
    */
   private static Color phongIllumination(PointLight light, RayHit rayHit, Vector cameraPosition) {
-    double diffuseCoefficient = diffuse(light, rayHit);
-    double specularCoefficient = specular(light, cameraPosition, rayHit);
+    double diffuse = diffuse(light, rayHit);
+    double specular = specular(light, cameraPosition, rayHit);
 
     Material material = rayHit.getObject().getOutsideMaterial();
     return ColorComputation.of(light.getColor())
         .multiply(material.getColor())
-        .scaleFloat((float) diffuseCoefficient)
+        .scaleFloat((float) diffuse)
+        .scaleFloat(DIFFUSE_COEFFICIENT)
         .add(ColorComputation.of(light.getColor())
-            .scaleFloat((float) specularCoefficient)
+            .scaleFloat((float) specular)
+            .scaleFloat(SPECULAR_COEFFICIENT)
             .scaleFloat((float) material.getSpecularIntensity())
             .compute())
         .compute();

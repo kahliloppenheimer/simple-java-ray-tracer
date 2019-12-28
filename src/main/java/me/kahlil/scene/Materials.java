@@ -12,4 +12,24 @@ public final class Materials {
       .setSpecularIntensity(0.5f)
       .setReflective(false)
       .build();
+
+  /**
+   * Returns an glossy material builder with no color specified.
+   */
+  public static ImmutableMaterial.Builder glossy() {
+    return ImmutableMaterial.builder()
+        .setHardness(10)
+        .setSpecularIntensity(0.4)
+        .setReflective(false);
+  }
+
+  /**
+   * Returns a shiny material builder with no color specified.
+   */
+  public static ImmutableMaterial.Builder shiny() {
+    return ImmutableMaterial.builder()
+        .setHardness(250)
+        .setSpecularIntensity(1.0)
+        .setReflective(false);
+  }
 }

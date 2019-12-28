@@ -36,7 +36,7 @@ public class RayTracerCoordinator {
   public Raster render(boolean shadowsEnabled)
       throws InterruptedException, ExecutionException {
 
-    // Construct individual worker threads
+    // Construct individual worker threads.
     ImmutableList<RayTracerWorker> rayTracerWorkers =
         IntStream.range(0, this.numThreads)
             .mapToObj(
@@ -45,14 +45,17 @@ public class RayTracerCoordinator {
                         rayTracer, raster, i, numThreads))
             .collect(toImmutableList());
 
-    // Start all workers
+    // Start all workers.
     ImmutableList<Future<?>> futures =
         rayTracerWorkers.stream().map(executor::submit).collect(toImmutableList());
 
-    // Wait for all workers to finish
+    // Wait for all workers to finish.
     for (Future<?> future : futures) {
       future.get();
     }
+
+    // Kill executor now that work is done.
+    executor.shutdown();
 
     long totalNumTraces = rayTracerWorkers.stream().mapToLong(RayTracerWorker::getNumTraces).sum();
 
