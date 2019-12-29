@@ -54,10 +54,14 @@ public class Triangle extends Shape {
     if (v < 0 || u + v > 1) { return Optional.empty(); }
 
     double t = p0p2.dot(qVec) * inverseDeterminant;
+    if (t < 0) {
+      return Optional.empty();
+    }
+
     return Optional.of(ImmutableRayHit.builder()
         .setObject(this)
         .setTime(t)
-        .setNormal(p0p1.cross(p0p2))
+        .setNormal(p0p1.cross(p0p2).normalize())
         .setRay(ray)
         .build());
   }
