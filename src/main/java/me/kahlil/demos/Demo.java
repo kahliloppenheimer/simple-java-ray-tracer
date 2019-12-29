@@ -4,6 +4,7 @@ import static java.awt.Color.BLACK;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.CYAN;
 import static java.awt.Color.GREEN;
+import static java.awt.Color.MAGENTA;
 import static java.awt.Color.RED;
 import static me.kahlil.geometry.LinearTransformation.rotateAboutZAxis;
 import static me.kahlil.geometry.LinearTransformation.scale;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
+import me.kahlil.geometry.ConvexPolygon;
 import me.kahlil.geometry.Plane;
 import me.kahlil.geometry.Shape;
 import me.kahlil.geometry.Sphere;
@@ -46,6 +48,7 @@ public class Demo {
 
   private static final int IMAGE_SIZE = 400;
   private static final int NUM_ANTI_ALIASING_SAMPLES = 1;
+  private static final String IMAGES_DEMO_PNG_PATH = "images/tmp/demo.png";
 
   public static void main(String[] args) throws InterruptedException, ExecutionException {
 
@@ -60,6 +63,7 @@ public class Demo {
             equilateralTriangle(shiny().setColor(CYAN).build()).transform(scale(3.0).then(rotateAboutZAxis(90)).then(translate(2, 4, -15))),
             equilateralTriangle(shiny().setColor(CYAN).build()).transform(scale(3.0).then(rotateAboutZAxis(180)).then(translate(2, 4, -15))),
             equilateralTriangle(shiny().setColor(CYAN).build()).transform(scale(3.0).then(rotateAboutZAxis(270)).then(translate(2, 4, -15))),
+            ConvexPolygon.square(glossy().setColor(MAGENTA).build()).transform(scale(5.0).then(translate(1, 5, -20))),
             new Sphere(
                 ImmutableMaterial.builder()
                     .setColor(BLACK)
@@ -128,7 +132,7 @@ public class Demo {
     System.out.println("Rendering took " + (end - start) + " ms");
 
     start = System.currentTimeMillis();
-    paintToJpeg("images/demo.png", rendered);
+    paintToJpeg(IMAGES_DEMO_PNG_PATH, rendered);
     //    paintToJFrame(rendered);
     end = System.currentTimeMillis();
     System.out.println("Painting took " + (end - start) + " ms");
