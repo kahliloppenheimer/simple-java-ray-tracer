@@ -13,7 +13,7 @@ public class Triangle extends Shape {
   private final Vector p1;
   private final Vector p2;
 
-  public Triangle(
+   Triangle(
       Material material,
       Vector p0,
       Vector p1,
@@ -22,6 +22,14 @@ public class Triangle extends Shape {
     this.p0 = p0;
     this.p1 = p1;
     this.p2 = p2;
+  }
+
+  public static Triangle equilateralTriangle(Material material) {
+    return new Triangle(
+        material,
+        new Vector(1, 0, 0),
+        new Vector(0, 1, 0),
+        new Vector(0, 0, 1));
   }
 
   /**
