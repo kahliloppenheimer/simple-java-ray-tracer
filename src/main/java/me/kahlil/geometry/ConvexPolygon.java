@@ -12,7 +12,12 @@ public class ConvexPolygon extends Shape {
   private final Material material;
   private final Triangle[] triangles;
 
-  public ConvexPolygon(Material material, Vector[] vertexes, int[] faces, int[] vertexIndexes) {
+  private ConvexPolygon(
+      Material material,
+      Vector[] vertexes,
+      Vector[] vertexNormals,
+      int[] faces,
+      int[] vertexIndexes) {
     checkArgument(
         vertexes.length >= 3,
         "A polygon must have at least 3 vertices. Found: %d",
@@ -21,11 +26,31 @@ public class ConvexPolygon extends Shape {
     checkArgument(
         vertexIndexes.length > 0, "A convex polygon must have at least one vertex index.");
     this.material = material;
-    this.triangles = convertVertexesToTriangles(material, vertexes, faces, vertexIndexes);
+    this.triangles =
+        convertVertexesToTriangles(material, vertexes, vertexNormals, faces, vertexIndexes);
+  }
+
+  public static ConvexPolygon withSurfaceNormals(
+      Material material, Vector[] vertexes, int[] faces, int[] vertexIndexes) {
+    return new ConvexPolygon(material, vertexes, new Vector[] {}, faces, vertexIndexes);
+  }
+
+  public static ConvexPolygon withVertexNormals(
+      Material material,
+      Vector[] vertexes,
+      Vector[] vertexNormals,
+      int[] faces,
+      int[] vertexIndexes) {
+    checkArgument(
+        vertexNormals.length == vertexes.length,
+        "A polygon with vertex normals must have the same number of vertexes as normals. Instead, found vertexes=%s, normals=%s",
+        vertexes,
+        vertexNormals);
+    return new ConvexPolygon(material, vertexes, vertexNormals, faces, vertexIndexes);
   }
 
   public static ConvexPolygon cube(Material material) {
-    return new ConvexPolygon(
+    return ConvexPolygon.withSurfaceNormals(
         material,
         new Vector[] {
           new Vector(-1, -1, 0),
@@ -75,7 +100,11 @@ public class ConvexPolygon extends Shape {
    * https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-polygon-mesh/polygon-to-triangle-mesh
    */
   private static Triangle[] convertVertexesToTriangles(
-      Material material, Vector[] vertexes, int[] faces, int[] vertexIndexes) {
+      Material material,
+      Vector[] vertexes,
+      Vector[] vertexNormals,
+      int[] faces,
+      int[] vertexIndexes) {
     int vertexIndex = 0;
     int trianglesIndex = 0;
     int numTriangles = computeNumTriangles(faces);
@@ -85,6 +114,7 @@ public class ConvexPolygon extends Shape {
           triangles,
           material,
           vertexes,
+          vertexNormals,
           trianglesIndex,
           faces[faceIndex],
           vertexIndexes,
@@ -115,17 +145,58 @@ public class ConvexPolygon extends Shape {
       Triangle[] triangles,
       Material material,
       Vector[] vertexes,
+      Vector[] vertexNormals,
       int trianglesIndex,
       int numVertexes,
       int[] vertexIndexes,
       int startingVertexIndex) {
     for (int i = 0; i < numVertexes - 2; i++) {
+      int firstVertexIndex = vertexIndexes[startingVertexIndex];
+      int secondVertexIndex = vertexIndexes[startingVertexIndex + i + 1];
+      int thirdVertexIndex = vertexIndexes[startingVertexIndex + i + 2];
       triangles[trianglesIndex + i] =
-          new Triangle(
+          constructTriangle(
               material,
-              vertexes[vertexIndexes[startingVertexIndex]],
-              vertexes[vertexIndexes[startingVertexIndex + i + 1]],
-              vertexes[vertexIndexes[startingVertexIndex + i + 2]]);
+              vertexes,
+              vertexNormals,
+              firstVertexIndex,
+              secondVertexIndex,
+              thirdVertexIndex);
     }
+  }
+
+  /**
+   * Constructs a triangle with the given parameters, determining to use vertex normals or surface
+   * normals based on the size of the {@code vertexNormals} array.
+   */
+  private static Triangle constructTriangle(
+      Material material,
+      Vector[] vertexes,
+      Vector[] vertexNormals,
+      int firstVertexIndex,
+      int secondVertexIndex,
+      int thirdVertexIndex) {
+    Triangle triangle;
+    if (vertexNormals.length == 0) {
+      triangle =
+          Triangle.withSurfaceNormals(
+              material,
+              vertexes[firstVertexIndex],
+              vertexes[secondVertexIndex],
+              vertexes[thirdVertexIndex]);
+    } else {
+      triangle =
+          Triangle.withVertexNormals(
+              material,
+              new Vector[] {
+                vertexes[firstVertexIndex], vertexes[secondVertexIndex], vertexes[thirdVertexIndex]
+              },
+              new Vector[] {
+                vertexNormals[firstVertexIndex],
+                vertexNormals[secondVertexIndex],
+                vertexNormals[thirdVertexIndex]
+              });
+    }
+    return triangle;
   }
 }

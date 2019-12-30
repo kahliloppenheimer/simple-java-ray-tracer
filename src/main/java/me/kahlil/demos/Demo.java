@@ -58,7 +58,8 @@ public class Demo {
 
     ImmutableList<Shape> shapes =
         ImmutableList.of(
-            new PolygonSphere(glossy().setColor(RED).build(), 16).transform(translate(2, 0, -7)),
+            PolygonSphere.withVertexNormals(glossy().setColor(RED).build(), 16).transform(translate(2, 0, -7)),
+            PolygonSphere.withSurfaceNormals(glossy().setColor(RED).build(), 16).transform(translate(-2, 0, -7)),
 //            new Sphere(glossy().setColor(RED).build()).transform(translate(2, 0, -7)),
             new Sphere(shiny().setColor(GREEN).build()).transform(translate(-4, 0, -10)),
             new Sphere(glossy().setColor(BLUE).build()).transform(translate(-2, 0, -15)),

@@ -16,7 +16,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class PolygonSphereTest {
 
-  private static final PolygonSphere unitSphere = new PolygonSphere(BASIC_GREEN, 16);
+  private static final PolygonSphere unitSphere = PolygonSphere.withSurfaceNormals(BASIC_GREEN, 16);
 
   @Test
   public void testRayIntersectFromInside() {

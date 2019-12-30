@@ -13,11 +13,21 @@ public class PolygonSphere extends Shape {
   private final Material material;
   private final int numDivisions;
   private final ConvexPolygon polygon;
+  private final boolean useVertexNormals;
 
-  public PolygonSphere(Material material, int numDivisions) {
+  private PolygonSphere(Material material, int numDivisions, boolean useVertexNormals) {
     this.material = material;
     this.numDivisions = numDivisions;
+    this.useVertexNormals = useVertexNormals;
     this.polygon = computePolygonSpecification(numDivisions);
+  }
+
+  public static PolygonSphere withSurfaceNormals(Material material, int numDivisions) {
+    return new PolygonSphere(material, numDivisions, false);
+  }
+
+  public static PolygonSphere withVertexNormals(Material material, int numDivisions) {
+    return new PolygonSphere(material, numDivisions, true);
   }
 
   @Override
@@ -48,7 +58,9 @@ public class PolygonSphere extends Shape {
     int[] vertexIndexes = new int[(6 + (numDivisions - 1) * 4) * numDivisions];
     generateConnectivity(faces, vertexIndexes);
 
-    return new ConvexPolygon(material, vertexes, faces, vertexIndexes);
+    return useVertexNormals
+        ? ConvexPolygon.withVertexNormals(material, vertexes, vertexes, faces, vertexIndexes)
+        : ConvexPolygon.withSurfaceNormals(material, vertexes, faces, vertexIndexes);
   }
 
   /**

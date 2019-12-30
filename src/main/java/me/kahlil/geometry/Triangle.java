@@ -1,31 +1,57 @@
 package me.kahlil.geometry;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.Math.abs;
 import static me.kahlil.geometry.Constants.EPSILON;
 
+import java.util.Arrays;
 import java.util.Optional;
 import me.kahlil.scene.Material;
 
 public class Triangle extends Shape {
 
   private final Material material;
-  private final Vector p0;
-  private final Vector p1;
-  private final Vector p2;
 
-   Triangle(
+  // Array of size-3 containing the vertexes of the triangle.
+  private final Vector[] vertexes;
+
+  // Array of size 3 containing the vertex normals of the triangle.
+  private final Vector[] vertexNormals;
+
+  private Triangle(
       Material material,
-      Vector p0,
-      Vector p1,
-      Vector p2) {
+      Vector[] vertexes,
+      Vector[] vertexNormals) {
+    checkArgument(vertexes.length == 3, "A triangle must have 3 vertexes. Found: %s", Arrays.toString(vertexes));
+    checkArgument(vertexNormals.length == 0 || vertexNormals.length == 3, "A triangle must have no vertex normals or 3 0 surface normals. Found: %s", Arrays.toString(vertexes));
     this.material = material;
-    this.p0 = p0;
-    this.p1 = p1;
-    this.p2 = p2;
+    this.vertexes = vertexes;
+    this.vertexNormals = vertexNormals;
   }
 
+  public static Triangle withSurfaceNormals(
+      Material material,
+      Vector vertex0,
+      Vector vertex1,
+      Vector vertex2) {
+     return withSurfaceNormals(material, new Vector[]{vertex0, vertex1, vertex2});
+   }
+
+   public static Triangle withSurfaceNormals(
+       Material material,
+       Vector[] vertexes) {
+     return new Triangle(material, vertexes, new Vector[]{});
+   }
+
+   public static Triangle withVertexNormals(
+       Material material,
+       Vector[] vertexes,
+       Vector[] normals) {
+      return new Triangle(material, vertexes, normals);
+   }
+
   public static Triangle equilateralTriangle(Material material) {
-    return new Triangle(
+    return Triangle.withSurfaceNormals(
         material,
         new Vector(1, 0, 0),
         new Vector(0, 1, 0),
@@ -38,8 +64,8 @@ public class Triangle extends Shape {
    */
   @Override
   Optional<RayHit> intersectInObjectSpace(Ray ray) {
-    Vector p0p1 = p1.subtract(p0);
-    Vector p0p2 = p2.subtract(p0);
+    Vector p0p1 = vertexes[1].subtract(vertexes[0]);
+    Vector p0p2 = vertexes[2].subtract(vertexes[0]);
 
     Vector pVec = ray.getDirection().cross(p0p2);
     double determinant = p0p1.dot(pVec);
@@ -52,7 +78,7 @@ public class Triangle extends Shape {
     double inverseDeterminant = 1 / determinant;
 
     // Compute barycentric coordinates.
-    Vector tVec = ray.getStart().subtract(p0);
+    Vector tVec = ray.getStart().subtract(vertexes[0]);
     Vector qVec = tVec.cross(p0p1);
 
     double u = tVec.dot(pVec) * inverseDeterminant;
@@ -66,10 +92,14 @@ public class Triangle extends Shape {
       return Optional.empty();
     }
 
+    Vector normal = vertexNormals.length == 3
+        ? interpolateNormals(vertexNormals, u, v)
+        : p0p1.cross(p0p2).normalize();
+
     return Optional.of(ImmutableRayHit.builder()
         .setObject(this)
         .setTime(t)
-        .setNormal(p0p1.cross(p0p2).normalize())
+        .setNormal(normal)
         .setRay(ray)
         .build());
   }
@@ -81,6 +111,13 @@ public class Triangle extends Shape {
 
   @Override
   public String toString() {
-    return String.format("Triangle[%s %s %s]", p0, p1, p2);
+    return String.format("Triangle[%s %s %s]", vertexes[0], vertexes[1], vertexes[2]);
+  }
+
+  private static Vector interpolateNormals(Vector[] normals, double u, double v) {
+    double w = 1 - u - v;
+    checkArgument(0 <= w && w <= 1);
+
+    return normals[0].scale(w).add(normals[1].scale(u)).add(normals[2].scale(v));
   }
 }
