@@ -16,6 +16,10 @@ public class Vector {
   // 4th-dimensional coordinate used for matrix transforms
   private final double w;
 
+  public Vector(double x, double y) {
+    this(x, y, 0.0);
+  }
+
   public Vector(double x, double y, double z) {
     this(x, y, z, 0);
   }

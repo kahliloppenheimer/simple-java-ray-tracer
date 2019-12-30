@@ -26,6 +26,7 @@ import java.util.concurrent.ExecutionException;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 import me.kahlil.geometry.Plane;
+import me.kahlil.geometry.PolygonSphere;
 import me.kahlil.geometry.Shape;
 import me.kahlil.geometry.Sphere;
 import me.kahlil.geometry.Vector;
@@ -57,7 +58,8 @@ public class Demo {
 
     ImmutableList<Shape> shapes =
         ImmutableList.of(
-            new Sphere(glossy().setColor(RED).build()).transform(translate(2, 0, -7)),
+            new PolygonSphere(glossy().setColor(RED).build(), 16).transform(translate(2, 0, -7)),
+//            new Sphere(glossy().setColor(RED).build()).transform(translate(2, 0, -7)),
             new Sphere(shiny().setColor(GREEN).build()).transform(translate(-4, 0, -10)),
             new Sphere(glossy().setColor(BLUE).build()).transform(translate(-2, 0, -15)),
             equilateralTriangle(shiny().setColor(CYAN).build())
