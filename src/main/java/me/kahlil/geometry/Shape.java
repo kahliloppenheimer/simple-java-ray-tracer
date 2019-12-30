@@ -31,7 +31,7 @@ public abstract class Shape implements Cloneable {
             .setRay(ray)
             .setTime(ray.timeToPoint(worldSpaceIntersectionPoint))
             .setNormal(worldSpaceNormal)
-            .setObject(this)
+            .setObject(maybeObjectSpaceIntersection.get().getObject())
             .build());
   }
 

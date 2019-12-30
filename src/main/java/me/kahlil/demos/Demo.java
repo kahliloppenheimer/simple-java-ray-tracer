@@ -6,6 +6,8 @@ import static java.awt.Color.CYAN;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.MAGENTA;
 import static java.awt.Color.RED;
+import static me.kahlil.geometry.ConvexPolygon.cube;
+import static me.kahlil.geometry.LinearTransformation.rotateAboutYAxis;
 import static me.kahlil.geometry.LinearTransformation.rotateAboutZAxis;
 import static me.kahlil.geometry.LinearTransformation.scale;
 import static me.kahlil.geometry.LinearTransformation.translate;
@@ -23,7 +25,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
-import me.kahlil.geometry.ConvexPolygon;
 import me.kahlil.geometry.Plane;
 import me.kahlil.geometry.Shape;
 import me.kahlil.geometry.Sphere;
@@ -59,18 +60,24 @@ public class Demo {
             new Sphere(glossy().setColor(RED).build()).transform(translate(2, 0, -7)),
             new Sphere(shiny().setColor(GREEN).build()).transform(translate(-4, 0, -10)),
             new Sphere(glossy().setColor(BLUE).build()).transform(translate(-2, 0, -15)),
-            equilateralTriangle(shiny().setColor(CYAN).build()).transform(scale(3.0).then(translate(2, 4, -15))),
-            equilateralTriangle(shiny().setColor(CYAN).build()).transform(scale(3.0).then(rotateAboutZAxis(90)).then(translate(2, 4, -15))),
-            equilateralTriangle(shiny().setColor(CYAN).build()).transform(scale(3.0).then(rotateAboutZAxis(180)).then(translate(2, 4, -15))),
-            equilateralTriangle(shiny().setColor(CYAN).build()).transform(scale(3.0).then(rotateAboutZAxis(270)).then(translate(2, 4, -15))),
-            ConvexPolygon.square(glossy().setColor(MAGENTA).build()).transform(scale(5.0).then(translate(1, 5, -20))),
+            equilateralTriangle(shiny().setColor(CYAN).build())
+                .transform(scale(3.0).then(translate(2, 4, -15))),
+            equilateralTriangle(shiny().setColor(CYAN).build())
+                .transform(scale(3.0).then(rotateAboutZAxis(90)).then(translate(2, 4, -15))),
+            equilateralTriangle(shiny().setColor(CYAN).build())
+                .transform(scale(3.0).then(rotateAboutZAxis(180)).then(translate(2, 4, -15))),
+            equilateralTriangle(shiny().setColor(CYAN).build())
+                .transform(scale(3.0).then(rotateAboutZAxis(270)).then(translate(2, 4, -15))),
+            cube(glossy().setColor(MAGENTA).build())
+                .transform(scale(5.0).then(rotateAboutYAxis(30)).then(translate(1, 5, -20))),
             new Sphere(
-                ImmutableMaterial.builder()
-                    .setColor(BLACK)
-                    .setReflectiveness(1.0)
-                    .setHardness(1)
-                    .setSpecularIntensity(0.0)
-                    .build()).transform(translate(0, 0, -10)),
+                    ImmutableMaterial.builder()
+                        .setColor(BLACK)
+                        .setReflectiveness(1.0)
+                        .setHardness(1)
+                        .setSpecularIntensity(0.0)
+                        .build())
+                .transform(translate(0, 0, -10)),
             new Sphere(shiny().setColor(new Color(1.0f, 0.0f, 1.0f)).build())
                 .transform(translate(0, 2, 1)),
             new Plane(

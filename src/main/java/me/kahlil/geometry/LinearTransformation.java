@@ -91,44 +91,44 @@ public class LinearTransformation implements UnaryOperator<Vector> {
   }
 
   /** Returns the rotation of the Vector v about the x axis counterclockwise by theta degrees. */
-  public static LinearTransformation rotateAboutXAxis(double theta) {
+  public static LinearTransformation rotateAboutXAxis(double degrees) {
     // Convert theta from degrees to radians.
-    theta = toRadians(theta);
+    degrees = toRadians(degrees);
     Matrix rotateAboutX =
         new Matrix(
             new double[][] {
               {1, 0, 0, 0},
-              {0, cos(theta), -1.0 * sin(theta), 0},
-              {0, sin(theta), cos(theta), 0},
+              {0, cos(degrees), -1.0 * sin(degrees), 0},
+              {0, sin(degrees), cos(degrees), 0},
               {0, 0, 0, 1}
             });
     return transformationForOrthogonalMatrix(rotateAboutX);
   }
 
   /** Returns the rotation of the Vector v about the x axis counterclockwise by theta degrees. */
-  public static LinearTransformation rotateAboutYAxis(double theta) {
+  public static LinearTransformation rotateAboutYAxis(double degrees) {
     // Convert theta from degrees to radians.
-    theta = toRadians(theta);
+    degrees = toRadians(degrees);
     Matrix rotateAboutY =
         new Matrix(
             new double[][] {
-              {cos(theta), 0, sin(theta), 0},
+              {cos(degrees), 0, sin(degrees), 0},
               {0, 1.0, 0, 0},
-              {-1.0 * sin(theta), 0, cos(theta), 0},
+              {-1.0 * sin(degrees), 0, cos(degrees), 0},
               {0, 0, 0, 1}
             });
     return transformationForOrthogonalMatrix(rotateAboutY);
   }
 
   /** Returns the rotation of the Vector v about the x axis counterclockwise by theta degrees. */
-  public static LinearTransformation rotateAboutZAxis(double theta) {
+  public static LinearTransformation rotateAboutZAxis(double degrees) {
     // Convert theta from degrees to radians.
-    theta = toRadians(theta);
+    degrees = toRadians(degrees);
     Matrix rotateAboutZ =
         new Matrix(
             new double[][] {
-              {cos(theta), -1.0 * sin(theta), 0, 0},
-              {sin(theta), cos(theta), 0, 0},
+              {cos(degrees), -1.0 * sin(degrees), 0, 0},
+              {sin(degrees), cos(degrees), 0, 0},
               {0, 0, 1, 0},
               {0, 0, 0, 1}
             });

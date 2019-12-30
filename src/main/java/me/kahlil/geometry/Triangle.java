@@ -78,4 +78,9 @@ public class Triangle extends Shape {
   public Material getOutsideMaterial() {
     return this.material;
   }
+
+  @Override
+  public String toString() {
+    return String.format("Triangle[%s %s %s]", p0, p1, p2);
+  }
 }

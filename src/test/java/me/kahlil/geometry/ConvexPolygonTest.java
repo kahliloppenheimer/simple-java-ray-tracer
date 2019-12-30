@@ -4,6 +4,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
 import static me.kahlil.geometry.Constants.EPSILON;
 import static me.kahlil.geometry.Constants.ORIGIN;
+import static me.kahlil.geometry.LinearTransformation.translate;
 import static me.kahlil.scene.Materials.BASIC_GREEN;
 
 import java.util.Optional;
@@ -23,22 +24,17 @@ public class ConvexPolygonTest {
 
   @Test
   public void setMaterial_valuePreserved() {
-    ConvexPolygon polygon = new ConvexPolygon(BASIC_GREEN, new Vector[]{ORIGIN, ORIGIN, ORIGIN});
+    ConvexPolygon polygon = ConvexPolygon.cube(BASIC_GREEN).transform(translate(0, 0, -1));
 
     assertThat(polygon.getOutsideMaterial()).isEqualTo(BASIC_GREEN);
   }
 
   @Test
-  public void basicSquare_middleIntersectionIsCorrect() {
-    Vector bottomLeft = new Vector(-1, -1, -1);
-    Vector bottomRight = new Vector(1, -1, -1);
-    Vector topRight = new Vector(1, 1, -1);
-    Vector topLeft = new Vector(-1, 1, -1);
-    ConvexPolygon polygon =
-        new ConvexPolygon(BASIC_GREEN, new Vector[] {bottomLeft, bottomRight, topRight, topLeft});
+  public void basicCube_middleIntersectionIsCorrect() {
+    ConvexPolygon polygon = ConvexPolygon.cube(BASIC_GREEN).transform(translate(0, 0, -1));
 
     Ray downZAxis = new Ray(ORIGIN, new Vector(0, 0, -1));
-    Optional<RayHit> hit = polygon.intersectInObjectSpace(downZAxis);
+    Optional<RayHit> hit = polygon.intersectWith(downZAxis);
     assertThat(hit).isPresent();
     // Check that objects are preserved properly.
     assertThat(hit.get().getRay()).isEqualTo(downZAxis);
@@ -51,86 +47,52 @@ public class ConvexPolygonTest {
   }
 
   @Test
-  public void basicSquare_bottomLeftCorner_intersectionsAreCorrect() {
-    ConvexPolygon polygon =
-        new ConvexPolygon(
-            BASIC_GREEN,
-            new Vector[] {
-                BOTTOM_LEFT,
-                BOTTOM_RIGHT,
-                TOP_RIGHT,
-                TOP_LEFT
-            });
+  public void basicCube_bottomLeftCorner_intersectionsAreCorrect() {
+    ConvexPolygon polygon = ConvexPolygon.cube(BASIC_GREEN).transform(translate(0, 0, -1));
 
     Ray inside = new Ray(ORIGIN, BOTTOM_LEFT.translate(EPSILON, EPSILON));
     Ray leftOf = new Ray(ORIGIN, BOTTOM_LEFT.translate(-1 * EPSILON, EPSILON));
     Ray below = new Ray(ORIGIN, BOTTOM_LEFT.translate(EPSILON, -1 * EPSILON));
 
-    assertThat(polygon.intersectInObjectSpace(inside)).isPresent();
-    assertThat(polygon.intersectInObjectSpace(leftOf)).isEmpty();
-    assertThat(polygon.intersectInObjectSpace(below)).isEmpty();
+    assertThat(polygon.intersectWith(inside)).isPresent();
+    assertThat(polygon.intersectWith(leftOf)).isEmpty();
+    assertThat(polygon.intersectWith(below)).isEmpty();
   }
 
   @Test
-  public void basicSquare_bottomRightCorner_intersectionsAreCorrect() {
-    ConvexPolygon polygon =
-        new ConvexPolygon(
-            BASIC_GREEN,
-            new Vector[] {
-                BOTTOM_LEFT,
-                BOTTOM_RIGHT,
-                TOP_RIGHT,
-                TOP_LEFT
-            });
+  public void basicCube_bottomRightCorner_intersectionsAreCorrect() {
+    ConvexPolygon polygon = ConvexPolygon.cube(BASIC_GREEN).transform(translate(0, 0, -1));
 
     Ray inside = new Ray(ORIGIN, BOTTOM_RIGHT.translate(-1 * EPSILON, EPSILON));
     Ray rightOf = new Ray(ORIGIN, BOTTOM_RIGHT.translate(EPSILON, EPSILON));
     Ray below = new Ray(ORIGIN, BOTTOM_RIGHT.translate(-1 * EPSILON, -1 * EPSILON));
 
-    assertThat(polygon.intersectInObjectSpace(inside)).isPresent();
-    assertThat(polygon.intersectInObjectSpace(rightOf)).isEmpty();
-    assertThat(polygon.intersectInObjectSpace(below)).isEmpty();
+    assertThat(polygon.intersectWith(inside)).isPresent();
+    assertThat(polygon.intersectWith(rightOf)).isEmpty();
+    assertThat(polygon.intersectWith(below)).isEmpty();
   }
 
   @Test
-  public void basicSquare_topRightCorner_intersectionsAreCorrect() {
-    ConvexPolygon polygon =
-        new ConvexPolygon(
-            BASIC_GREEN,
-            new Vector[] {
-                BOTTOM_LEFT,
-                BOTTOM_RIGHT,
-                TOP_RIGHT,
-                TOP_LEFT
-            });
-
+  public void basicCube_topRightCorner_intersectionsAreCorrect() {
+    ConvexPolygon polygon = ConvexPolygon.cube(BASIC_GREEN).transform(translate(0, 0, -1));
     Ray inside = new Ray(ORIGIN, TOP_RIGHT.translate(-1 * EPSILON, -1 * EPSILON));
     Ray rightOf = new Ray(ORIGIN, TOP_RIGHT.translate(EPSILON, -1 * EPSILON));
     Ray above = new Ray(ORIGIN, TOP_RIGHT.translate(-1 * EPSILON, EPSILON));
 
-    assertThat(polygon.intersectInObjectSpace(inside)).isPresent();
-    assertThat(polygon.intersectInObjectSpace(rightOf)).isEmpty();
-    assertThat(polygon.intersectInObjectSpace(above)).isEmpty();
+    assertThat(polygon.intersectWith(inside)).isPresent();
+    assertThat(polygon.intersectWith(rightOf)).isEmpty();
+    assertThat(polygon.intersectWith(above)).isEmpty();
   }
 
   @Test
-  public void basicSquare_topLeftCorner_intersectionsAreCorrect() {
-    ConvexPolygon polygon =
-        new ConvexPolygon(
-            BASIC_GREEN,
-            new Vector[] {
-                BOTTOM_LEFT,
-                BOTTOM_RIGHT,
-                TOP_RIGHT,
-                TOP_LEFT
-            });
-
+  public void basicCube_topLeftCorner_intersectionsAreCorrect() {
+    ConvexPolygon polygon = ConvexPolygon.cube(BASIC_GREEN).transform(translate(0, 0, -1));
     Ray inside = new Ray(ORIGIN, TOP_LEFT.translate(EPSILON, -1 * EPSILON));
-    Ray leftOf = new Ray(ORIGIN, TOP_LEFT.translate(-1 * EPSILON, -1 * EPSILON));
+    Ray leftOf = new Ray(ORIGIN, TOP_LEFT.translate(-1, -1 * EPSILON));
     Ray above = new Ray(ORIGIN, TOP_LEFT.translate(EPSILON, EPSILON));
 
-    assertThat(polygon.intersectInObjectSpace(inside)).isPresent();
-    assertThat(polygon.intersectInObjectSpace(leftOf)).isEmpty();
-    assertThat(polygon.intersectInObjectSpace(above)).isEmpty();
+    assertThat(polygon.intersectWith(inside)).isPresent();
+    assertThat(polygon.intersectWith(leftOf)).isEmpty();
+    assertThat(polygon.intersectWith(above)).isEmpty();
   }
 }
