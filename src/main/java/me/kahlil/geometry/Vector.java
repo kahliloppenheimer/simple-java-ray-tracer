@@ -159,6 +159,19 @@ public class Vector {
     return y;
   }
 
+  public double getComponent(int i) {
+    if (i == 0) {
+      return x;
+    }
+    if (i == 1) {
+      return y;
+    }
+    if (i == 2) {
+      return z;
+    }
+    throw new IllegalArgumentException(String.format("Can only index into vector [0, 1, 2]. Found %d.", i));
+  }
+
   /**
    * Returns z coordinate of point
    *

@@ -2,7 +2,6 @@ package me.kahlil.geometry;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static me.kahlil.config.Counters.NUM_TRIANGLES;
-import static me.kahlil.scene.Materials.NO_MATERIAL;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -23,7 +22,7 @@ public class ConvexPolygon extends Shape {
   private double maxY = Integer.MIN_VALUE;
   private double maxZ = Integer.MIN_VALUE;
 
-  private final Sphere boundingSphere;
+  private final BoundingBox boundingBox;
 
   private ConvexPolygon(
       Material material,
@@ -39,13 +38,12 @@ public class ConvexPolygon extends Shape {
     checkArgument(
         vertexIndexes.length > 0, "A convex polygon must have at least one vertex index.");
     this.material = material;
+
     this.triangles =
         convertVertexesToTriangles(material, vertexes, vertexNormals, faces, vertexIndexes);
-
     NUM_TRIANGLES.getAndAdd(triangles.length);
 
-    this.boundingSphere =
-        computeBoundingSphere();
+    this.boundingBox = new BoundingBox(new Vector(minX, minY, minZ), new Vector(maxX, maxY, maxZ));
   }
 
   public static ConvexPolygon withSurfaceNormals(
@@ -95,9 +93,9 @@ public class ConvexPolygon extends Shape {
   Optional<RayHit> internalIntersectInObjectSpace(Ray ray) {
     double minTime = Integer.MAX_VALUE;
     Optional<RayHit> closestHit = Optional.empty();
-//    if (boundingSphere.intersectInObjectSpace(ray).isEmpty()) {
-//      return Optional.empty();
-//    }
+    if (!boundingBox.intersectsWith(ray)) {
+      return Optional.empty();
+    }
     for (Triangle triangle : triangles) {
       Optional<RayHit> rayHit = triangle.intersectInObjectSpace(ray);
       if (rayHit.isPresent()) {
@@ -233,15 +231,5 @@ public class ConvexPolygon extends Shape {
       if (v.getZ() < minZ) { minZ = v.getZ(); }
       if (v.getZ() > maxZ) { maxZ = v.getZ(); }
     }
-  }
-
-  private Sphere computeBoundingSphere() {
-    Vector min = new Vector(minX, minY, minZ);
-    Vector max = new Vector(maxX, maxY, maxZ);
-
-    Vector middle = min.average(max);
-    double radius = max.subtract(min).magnitude() / 2;
-
-    return new Sphere(middle, radius, NO_MATERIAL);
   }
 }
