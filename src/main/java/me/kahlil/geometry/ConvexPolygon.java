@@ -2,6 +2,7 @@ package me.kahlil.geometry;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static me.kahlil.config.Counters.NUM_TRIANGLES;
+import static me.kahlil.geometry.Constants.EPSILON;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -43,7 +44,11 @@ public class ConvexPolygon extends Shape {
         convertVertexesToTriangles(material, vertexes, vertexNormals, faces, vertexIndexes);
     NUM_TRIANGLES.getAndAdd(triangles.length);
 
-    this.boundingBox = new BoundingBox(new Vector(minX, minY, minZ), new Vector(maxX, maxY, maxZ));
+    // Add a bit of margin around the bounding box to avoid weird edge cases.
+    double boundingMargin = 10 * EPSILON;
+    this.boundingBox = new BoundingBox(
+        new Vector(minX + boundingMargin, minY + boundingMargin, minZ + boundingMargin),
+        new Vector(maxX + boundingMargin, maxY + boundingMargin, maxZ + boundingMargin));
   }
 
   public static ConvexPolygon withSurfaceNormals(

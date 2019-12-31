@@ -4,7 +4,6 @@ import static java.lang.Double.NEGATIVE_INFINITY;
 import static java.lang.Double.POSITIVE_INFINITY;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import static me.kahlil.geometry.Constants.EPSILON;
 
 /**
  * Intersection borrowed from:
@@ -16,9 +15,8 @@ public final class BoundingBox {
   private final Vector maxBound;
 
   public BoundingBox(Vector minBound, Vector maxBound) {
-    double margin = 10 * EPSILON;
-    this.minBound = minBound.add(new Vector(margin, margin, margin));
-    this.maxBound = maxBound.add(new Vector(margin, margin, margin));
+    this.minBound = minBound;
+    this.maxBound = maxBound;
   }
 
   public boolean intersectsWith(Ray ray) {
