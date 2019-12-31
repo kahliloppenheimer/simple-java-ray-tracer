@@ -135,7 +135,7 @@ public class Demo {
     RayTracerCoordinator rt = new RayTracerCoordinator(raster, camera, scene, rayTracer);
 
     long start = System.currentTimeMillis();
-    Raster rendered = rt.render(SHADOWS_ENABLED);
+    Raster rendered = rt.render();
     long end = System.currentTimeMillis();
 
     System.out.println("Rendering took " + (end - start) + " ms");

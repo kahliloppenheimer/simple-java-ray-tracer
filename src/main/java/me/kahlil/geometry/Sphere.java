@@ -29,7 +29,7 @@ public class Sphere extends Shape {
   }
 
   @Override
-  public Optional<RayHit> intersectInObjectSpace(Ray ray) {
+  public Optional<RayHit> internalIntersectInObjectSpace(Ray ray) {
     // coefficients for the quadratic equation we have to solve to find the intersection
     // ax^2 + bx + c = 0
     double a = Math.pow(ray.getDirection().magnitude(), 2);

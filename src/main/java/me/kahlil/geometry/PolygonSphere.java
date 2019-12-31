@@ -31,7 +31,7 @@ public class PolygonSphere extends Shape {
   }
 
   @Override
-  Optional<RayHit> intersectInObjectSpace(Ray ray) {
+  Optional<RayHit> internalIntersectInObjectSpace(Ray ray) {
     return polygon.intersectInObjectSpace(ray);
   }
 

@@ -22,7 +22,7 @@ public class Plane extends Shape {
   }
 
   @Override
-  protected Optional<RayHit> intersectInObjectSpace(Ray ray) {
+  protected Optional<RayHit> internalIntersectInObjectSpace(Ray ray) {
 
     double denominator = ray.getDirection().dot(normal);
     if (Math.abs(denominator) < EPSILON) {

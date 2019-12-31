@@ -1,10 +1,18 @@
 package me.kahlil.scene;
 
+import static java.awt.Color.BLACK;
 import static java.awt.Color.GREEN;
 
 public final class Materials {
 
   private Materials() { }
+
+  public static Material NO_MATERIAL = ImmutableMaterial.builder()
+      .setColor(BLACK)
+      .setHardness(1)
+      .setSpecularIntensity(.01)
+      .setReflectiveness(0.0)
+      .build();
 
   public static Material BASIC_GREEN = ImmutableMaterial.builder()
       .setColor(GREEN)

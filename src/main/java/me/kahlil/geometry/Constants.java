@@ -13,5 +13,5 @@ public final class Constants {
    * Represents the origin of the x, y, z coordinate plane.
    */
   public static final Vector ORIGIN = new Vector(0.0, 0.0, 0.0);
-
 }
+

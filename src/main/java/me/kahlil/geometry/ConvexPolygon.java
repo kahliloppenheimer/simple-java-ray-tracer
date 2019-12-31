@@ -1,6 +1,7 @@
 package me.kahlil.geometry;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static me.kahlil.scene.Materials.NO_MATERIAL;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -11,6 +12,17 @@ public class ConvexPolygon extends Shape {
 
   private final Material material;
   private final Triangle[] triangles;
+
+  // Min/max (x, y, z) that the ConvexPolygon occupies for forming a bounding volume.
+  private double minX = Integer.MAX_VALUE;
+  private double minY = Integer.MAX_VALUE;
+  private double minZ = Integer.MAX_VALUE;
+
+  private double maxX = Integer.MIN_VALUE;
+  private double maxY = Integer.MIN_VALUE;
+  private double maxZ = Integer.MIN_VALUE;
+
+  private final Sphere boundingSphere;
 
   private ConvexPolygon(
       Material material,
@@ -28,6 +40,8 @@ public class ConvexPolygon extends Shape {
     this.material = material;
     this.triangles =
         convertVertexesToTriangles(material, vertexes, vertexNormals, faces, vertexIndexes);
+    this.boundingSphere =
+        computeBoundingSphere();
   }
 
   public static ConvexPolygon withSurfaceNormals(
@@ -74,9 +88,12 @@ public class ConvexPolygon extends Shape {
   }
 
   @Override
-  Optional<RayHit> intersectInObjectSpace(Ray ray) {
+  Optional<RayHit> internalIntersectInObjectSpace(Ray ray) {
     double minTime = Integer.MAX_VALUE;
     Optional<RayHit> closestHit = Optional.empty();
+//    if (boundingSphere.intersectInObjectSpace(ray).isEmpty()) {
+//      return Optional.empty();
+//    }
     for (Triangle triangle : triangles) {
       Optional<RayHit> rayHit = triangle.intersectInObjectSpace(ray);
       if (rayHit.isPresent()) {
@@ -99,7 +116,7 @@ public class ConvexPolygon extends Shape {
    * Converts the given set of vertices into triangles using the simple algorithm described at:
    * https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-polygon-mesh/polygon-to-triangle-mesh
    */
-  private static Triangle[] convertVertexesToTriangles(
+  private Triangle[] convertVertexesToTriangles(
       Material material,
       Vector[] vertexes,
       Vector[] vertexNormals,
@@ -141,7 +158,7 @@ public class ConvexPolygon extends Shape {
    *
    * <p>For efficiency, it mutates the triangle array input.
    */
-  private static void convertFaceToTriangles(
+  private void convertFaceToTriangles(
       Triangle[] triangles,
       Material material,
       Vector[] vertexes,
@@ -169,7 +186,7 @@ public class ConvexPolygon extends Shape {
    * Constructs a triangle with the given parameters, determining to use vertex normals or surface
    * normals based on the size of the {@code vertexNormals} array.
    */
-  private static Triangle constructTriangle(
+  private Triangle constructTriangle(
       Material material,
       Vector[] vertexes,
       Vector[] vertexNormals,
@@ -177,20 +194,21 @@ public class ConvexPolygon extends Shape {
       int secondVertexIndex,
       int thirdVertexIndex) {
     Triangle triangle;
+    Vector[] triangleVertexes = {
+        vertexes[firstVertexIndex],
+        vertexes[secondVertexIndex],
+        vertexes[thirdVertexIndex]};
+    updateMinMaxCoordinates(triangleVertexes);
     if (vertexNormals.length == 0) {
       triangle =
           Triangle.withSurfaceNormals(
               material,
-              vertexes[firstVertexIndex],
-              vertexes[secondVertexIndex],
-              vertexes[thirdVertexIndex]);
+              triangleVertexes);
     } else {
       triangle =
           Triangle.withVertexNormals(
               material,
-              new Vector[] {
-                vertexes[firstVertexIndex], vertexes[secondVertexIndex], vertexes[thirdVertexIndex]
-              },
+              triangleVertexes,
               new Vector[] {
                 vertexNormals[firstVertexIndex],
                 vertexNormals[secondVertexIndex],
@@ -198,5 +216,28 @@ public class ConvexPolygon extends Shape {
               });
     }
     return triangle;
+  }
+
+  private void updateMinMaxCoordinates(Vector[] triangleVertexes) {
+    for (Vector v : triangleVertexes) {
+      if (v.getX() < minX) { minX = v.getX(); }
+      if (v.getX() > maxX) { maxX = v.getX(); }
+
+      if (v.getY() < minY) { minY = v.getY(); }
+      if (v.getY() > maxY) { maxY = v.getY(); }
+
+      if (v.getZ() < minZ) { minZ = v.getZ(); }
+      if (v.getZ() > maxZ) { maxZ = v.getZ(); }
+    }
+  }
+
+  private Sphere computeBoundingSphere() {
+    Vector min = new Vector(minX, minY, minZ);
+    Vector max = new Vector(maxX, maxY, maxZ);
+
+    Vector middle = min.average(max);
+    double radius = max.subtract(min).magnitude() / 2;
+
+    return new Sphere(middle, radius, NO_MATERIAL);
   }
 }

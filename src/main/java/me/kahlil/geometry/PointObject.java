@@ -19,7 +19,7 @@ public class PointObject extends Shape {
   }
 
   @Override
-  protected Optional<RayHit> intersectInObjectSpace(Ray ray) {
+  protected Optional<RayHit> internalIntersectInObjectSpace(Ray ray) {
     return pointSphere.intersectInObjectSpace(ray);
   }
 

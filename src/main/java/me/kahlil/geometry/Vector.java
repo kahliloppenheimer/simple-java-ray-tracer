@@ -115,6 +115,13 @@ public class Vector {
         getX() * q.getY() - getY() * q.getX());
   }
 
+  public Vector average(Vector other) {
+    return new Vector(
+        getX() + other.getX() / 2,
+        getY() + other.getY() / 2,
+        getZ() + other.getZ() / 2);
+  }
+
   /**
    * return the normalization of this vector
    *

@@ -2,6 +2,7 @@ package me.kahlil.geometry;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.Math.abs;
+import static me.kahlil.config.Counters.NUM_TRIANGLE_INTERSECTIONS;
 import static me.kahlil.geometry.Constants.EPSILON;
 
 import java.util.Arrays;
@@ -63,7 +64,9 @@ public class Triangle extends Shape {
    * https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/moller-trumbore-ray-triangle-intersection
    */
   @Override
-  Optional<RayHit> intersectInObjectSpace(Ray ray) {
+  Optional<RayHit> internalIntersectInObjectSpace(Ray ray) {
+    NUM_TRIANGLE_INTERSECTIONS.getAndIncrement();
+
     Vector p0p1 = vertexes[1].subtract(vertexes[0]);
     Vector p0p2 = vertexes[2].subtract(vertexes[0]);
 

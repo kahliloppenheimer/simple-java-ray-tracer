@@ -1,12 +1,10 @@
 package me.kahlil.graphics;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
-import static me.kahlil.config.Counters.NUM_INTERSECTIONS_COMPUTED;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Streams;
 import com.google.common.primitives.Doubles;
-import java.util.List;
 import java.util.Optional;
 import me.kahlil.geometry.LightSphere;
 import me.kahlil.geometry.Ray;
@@ -29,13 +27,10 @@ final class RayIntersections {
 
   /** Returns all intersections the given ray has with the objects in the scene. */
   static ImmutableList<RayHit> findAllIntersections(Ray visionVector, Scene scene) {
-    List<Optional<RayHit>> allIntersectionsConsidered =
-        Streams.concat(scene.getShapes().stream(), scene.getLights().stream().map(LightSphere::new))
-            .map(object -> object.intersectWith(visionVector))
-            .collect(toImmutableList());
-
-    NUM_INTERSECTIONS_COMPUTED.getAndAdd(allIntersectionsConsidered.size());
-
-    return allIntersectionsConsidered.stream().flatMap(Optional::stream).collect(toImmutableList());
+    return Streams.concat(
+            scene.getShapes().stream(), scene.getLights().stream().map(LightSphere::new))
+        .map(object -> object.intersectWith(visionVector)).collect(toImmutableList()).stream()
+        .flatMap(Optional::stream)
+        .collect(toImmutableList());
   }
 }

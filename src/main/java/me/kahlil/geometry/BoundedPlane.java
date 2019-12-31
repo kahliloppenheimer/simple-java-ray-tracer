@@ -18,7 +18,7 @@ public class BoundedPlane extends Plane {
   }
 
   @Override
-  public Optional<RayHit> intersectInObjectSpace(Ray ray) {
+  public Optional<RayHit> internalIntersectInObjectSpace(Ray ray) {
     return super.intersectInObjectSpace(ray)
         .filter(rayHit -> isInBounds(rayHit.getIntersection(), minCoordinates, maxCoordinates));
   }

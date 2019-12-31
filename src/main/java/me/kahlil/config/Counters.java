@@ -14,8 +14,13 @@ public final class Counters {
   public static final AtomicLong NUM_TRACES = new AtomicLong();
 
   /**
-   * Counter of total number of shape-ray intersections computed during the ray tracing algorithm.
+   * Counter of total number of ray-shape intersections computed during the ray tracing algorithm.
    */
-  public static final AtomicLong NUM_INTERSECTIONS_COMPUTED = new AtomicLong();
+  public static final AtomicLong NUM_TOTAL_INTERSECTIONS = new AtomicLong();
+
+  /**
+   * Counter of total number of ray-triangle intersections computed during the ray tracing algorithm.
+   */
+  public static final AtomicLong NUM_TRIANGLE_INTERSECTIONS = new AtomicLong();
 
 }

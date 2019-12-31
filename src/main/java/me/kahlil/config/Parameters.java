@@ -16,4 +16,9 @@ public final class Parameters {
 
   // Maximum ray depth for reflections.
   public static final int MAX_RAY_DEPTH = 1;
+
+  // Number of threads to use during computation.
+//  public static final int NUM_THREADS = Runtime.getRuntime().availableProcessors();
+  public static final int NUM_THREADS = 1;
+
 }

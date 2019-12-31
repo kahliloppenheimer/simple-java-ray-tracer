@@ -1,8 +1,10 @@
 package me.kahlil.graphics;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
-import static me.kahlil.config.Counters.NUM_INTERSECTIONS_COMPUTED;
+import static me.kahlil.config.Counters.NUM_TOTAL_INTERSECTIONS;
 import static me.kahlil.config.Counters.NUM_TRACES;
+import static me.kahlil.config.Counters.NUM_TRIANGLE_INTERSECTIONS;
+import static me.kahlil.config.Parameters.NUM_THREADS;
 
 import com.google.common.collect.ImmutableList;
 import java.util.concurrent.ExecutionException;
@@ -18,7 +20,6 @@ import me.kahlil.scene.Scene;
 public class RayTracerCoordinator {
 
   private final ExecutorService executor;
-  private final int numThreads;
 
   private final Raster raster;
   private final Camera camera;
@@ -30,20 +31,15 @@ public class RayTracerCoordinator {
     this.camera = camera;
     this.scene = scene;
     this.rayTracer = rayTracer;
-    this.numThreads = Runtime.getRuntime().availableProcessors();
-    this.executor = Executors.newFixedThreadPool(this.numThreads);
+    this.executor = Executors.newFixedThreadPool(NUM_THREADS);
   }
 
-  public Raster render(boolean shadowsEnabled)
-      throws InterruptedException, ExecutionException {
+  public Raster render() throws InterruptedException, ExecutionException {
 
     // Construct individual worker threads.
     ImmutableList<RayTracerWorker> rayTracerWorkers =
-        IntStream.range(0, this.numThreads)
-            .mapToObj(
-                i ->
-                    new RayTracerWorker(
-                        rayTracer, raster, i, numThreads))
+        IntStream.range(0, NUM_THREADS)
+            .mapToObj(i -> new RayTracerWorker(rayTracer, raster, i, NUM_THREADS))
             .collect(toImmutableList());
 
     // Start all workers.
@@ -59,7 +55,11 @@ public class RayTracerCoordinator {
     executor.shutdown();
 
     System.out.printf("Total number of rays traced = %d\n", NUM_TRACES.get());
-    System.out.printf("Total number of ray-shape intersections computed = %d\n", NUM_INTERSECTIONS_COMPUTED.get());
+    System.out.printf(
+        "Total number of ray-shape intersections computed = %d\n", NUM_TOTAL_INTERSECTIONS.get());
+    System.out.printf(
+        "Total number of ray-triangle intersections computed = %d\n",
+        NUM_TRIANGLE_INTERSECTIONS.get());
 
     return raster;
   }
