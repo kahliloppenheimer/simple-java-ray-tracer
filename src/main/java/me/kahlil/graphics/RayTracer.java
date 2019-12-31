@@ -1,5 +1,6 @@
 package me.kahlil.graphics;
 
+import static me.kahlil.config.Counters.NUM_PRIMARY_RAYS;
 import static me.kahlil.graphics.CoordinateMapper.convertPixelToCameraSpaceCoordinates;
 
 import java.awt.Color;
@@ -30,6 +31,7 @@ public abstract class RayTracer {
 
   /** Traces a ray through ith and jth pixel, returning a color for that pixel. */
   final Color traceRay(int i, int j) {
+    NUM_PRIMARY_RAYS.getAndIncrement();
     Point2D inCameraSpace = convertPixelToCameraSpaceCoordinates(raster, camera, i, j);
     return traceRay(
         new Ray(

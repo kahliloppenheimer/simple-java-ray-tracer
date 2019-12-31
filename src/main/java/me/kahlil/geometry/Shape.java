@@ -1,6 +1,7 @@
 package me.kahlil.geometry;
 
-import static me.kahlil.config.Counters.NUM_TOTAL_INTERSECTIONS;
+import static me.kahlil.config.Counters.NUM_INTERSECTIONS;
+import static me.kahlil.config.Counters.NUM_INTERSECTION_TESTS;
 
 import java.util.Optional;
 import me.kahlil.scene.Material;
@@ -15,7 +16,9 @@ public abstract class Shape implements Cloneable {
     // We first transform the ray into object space for this given object before computing
     // intersections.
     Ray objectSpaceRay =
-        new Ray(worldToObjectSpace().apply(ray.getStart()), worldToObjectSpace().apply(ray.getDirection()));
+        new Ray(
+            worldToObjectSpace().apply(ray.getStart()),
+            worldToObjectSpace().apply(ray.getDirection()));
 
     Optional<RayHit> maybeObjectSpaceIntersection = intersectInObjectSpace(objectSpaceRay);
     if (maybeObjectSpaceIntersection.isEmpty()) {
@@ -24,8 +27,7 @@ public abstract class Shape implements Cloneable {
     RayHit objectSpaceIntersection = maybeObjectSpaceIntersection.get();
     Vector worldSpaceIntersectionPoint =
         objectToWorldSpace().apply(objectSpaceIntersection.getIntersection());
-    Vector worldSpaceNormal =
-        normalsToWorldSpace().apply(objectSpaceIntersection.getNormal());
+    Vector worldSpaceNormal = normalsToWorldSpace().apply(objectSpaceIntersection.getNormal());
     return Optional.of(
         ImmutableRayHit.builder()
             .setRay(ray)
@@ -35,15 +37,18 @@ public abstract class Shape implements Cloneable {
             .build());
   }
 
-
   /**
-   * Computes the {@link RayHit} with this object and the given ray which is specified in object
-   * by having the inverse transformation of this object applied to it. The resulting RayHit
-   * should also be returned in object space.
+   * Computes the {@link RayHit} with this object and the given ray which is specified in object by
+   * having the inverse transformation of this object applied to it. The resulting RayHit should
+   * also be returned in object space.
    */
   final Optional<RayHit> intersectInObjectSpace(Ray ray) {
-    NUM_TOTAL_INTERSECTIONS.getAndIncrement();
-    return internalIntersectInObjectSpace(ray);
+    NUM_INTERSECTION_TESTS.getAndIncrement();
+    Optional<RayHit> rayHit = internalIntersectInObjectSpace(ray);
+    if (rayHit.isPresent()) {
+      NUM_INTERSECTIONS.getAndIncrement();
+    }
+    return rayHit;
   }
 
   abstract Optional<RayHit> internalIntersectInObjectSpace(Ray ray);
@@ -51,9 +56,7 @@ public abstract class Shape implements Cloneable {
   /** Returns the Material of the outside of the shape */
   public abstract Material getOutsideMaterial();
 
-  /**
-   * Returns the object-to-world space transformation currently applied to this object.
-   */
+  /** Returns the object-to-world space transformation currently applied to this object. */
   LinearTransformation getTransformation() {
     return this.transformation;
   }

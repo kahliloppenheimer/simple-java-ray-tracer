@@ -1,6 +1,7 @@
 package me.kahlil.geometry;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static me.kahlil.config.Counters.NUM_TRIANGLES;
 import static me.kahlil.scene.Materials.NO_MATERIAL;
 
 import java.util.Arrays;
@@ -40,6 +41,9 @@ public class ConvexPolygon extends Shape {
     this.material = material;
     this.triangles =
         convertVertexesToTriangles(material, vertexes, vertexNormals, faces, vertexIndexes);
+
+    NUM_TRIANGLES.getAndAdd(triangles.length);
+
     this.boundingSphere =
         computeBoundingSphere();
   }

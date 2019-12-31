@@ -1,6 +1,6 @@
 package me.kahlil.graphics;
 
-import static me.kahlil.config.Counters.NUM_TRACES;
+import static me.kahlil.config.Counters.NUM_TOTAL_RAYS;
 import static me.kahlil.graphics.RayIntersections.findFirstIntersection;
 
 import java.awt.Color;
@@ -41,7 +41,7 @@ public class ReflectiveRayTracer extends RayTracer {
   }
 
   private Color recursiveTraceRay(Ray ray, int rayDepth) {
-    NUM_TRACES.getAndIncrement();
+    NUM_TOTAL_RAYS.getAndIncrement();
     if (rayDepth > maxRayDepth) {
       return scene.getBackgroundColor();
     }
