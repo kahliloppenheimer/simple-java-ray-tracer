@@ -1,6 +1,8 @@
 package me.kahlil.graphics;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
+import static me.kahlil.config.Counters.NUM_INTERSECTIONS_COMPUTED;
+import static me.kahlil.config.Counters.NUM_TRACES;
 
 import com.google.common.collect.ImmutableList;
 import java.util.concurrent.ExecutionException;
@@ -56,9 +58,8 @@ public class RayTracerCoordinator {
     // Kill executor now that work is done.
     executor.shutdown();
 
-    long totalNumTraces = rayTracerWorkers.stream().mapToLong(RayTracerWorker::getNumTraces).sum();
-
-    System.out.printf("Total number of rays traced = %d\n", totalNumTraces);
+    System.out.printf("Total number of rays traced = %d\n", NUM_TRACES.get());
+    System.out.printf("Total number of ray-shape intersections computed = %d\n", NUM_INTERSECTIONS_COMPUTED.get());
 
     return raster;
   }

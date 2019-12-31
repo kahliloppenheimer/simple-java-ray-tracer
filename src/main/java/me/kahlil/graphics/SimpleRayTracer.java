@@ -1,5 +1,6 @@
 package me.kahlil.graphics;
 
+import static me.kahlil.config.Counters.NUM_TRACES;
 import static me.kahlil.graphics.RayIntersections.findFirstIntersection;
 
 import java.awt.Color;
@@ -25,21 +26,15 @@ class SimpleRayTracer extends RayTracer {
   }
 
   @Override
-  RenderingResult traceRay(Ray ray) {
+  Color traceRay(Ray ray) {
     numTraces.set(numTraces.get() + 1);
     // Cast the ray from the camera to the pixel in the frame we are currently coloring,
     // and color the pixel based on the first object we hit (or the background if we hit none).
     Color shaded = findFirstIntersection(ray, scene)
         .map(shader::shade)
         .orElse(scene.getBackgroundColor());
-    return ImmutableRenderingResult.builder()
-        .setColor(shaded)
-        .setNumRaysTraced(1)
-        .build();
+    NUM_TRACES.getAndIncrement();
+    return shaded;
   }
 
-  @Override
-  long getNumTraces() {
-    return numTraces.get();
-  }
 }

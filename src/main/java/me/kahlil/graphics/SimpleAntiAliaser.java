@@ -36,41 +36,30 @@ public final class SimpleAntiAliaser extends RayTracer {
   }
 
   @Override
-  RenderingResult traceRay(Ray ray) {
+  Color traceRay(Ray ray) {
     Ray[] raysToSample = antiAliasingMethod.getRaysToSample(ray, samplingRadius);
-    RenderingResult[] renderingResults = new RenderingResult[raysToSample.length];
+    Color[] results = new Color[raysToSample.length];
 
     // Trace all the sample rays and count the total number of rays traced.
-    long numTraces = 0;
+    int numTraces = 0;
     for (int i = 0; i < raysToSample.length; i++) {
-      renderingResults[i] = rayTracer.traceRay(raysToSample[i]);
-      numTraces += renderingResults[i].getNumRaysTraced();
+      results[i] = rayTracer.traceRay(raysToSample[i]);
     }
 
     // Average each RGBA component of the color results using an unweighted average.
     // Use pass-by-reference array semantics to avoid excess array allocations.
     float[] currentColor = new float[4];
     float[] runningAverage = new float[4];
-    for (RenderingResult renderingResult : renderingResults) {
-      renderingResult.getColor().getRGBComponents(currentColor);
-      incrementAverages(runningAverage, currentColor, 1.0f / renderingResults.length);
+    for (Color color : results) {
+      color.getRGBComponents(currentColor);
+      incrementAverages(runningAverage, currentColor, 1.0f / results.length);
     }
-
-    return ImmutableRenderingResult.builder()
-        .setColor(
-            new Color(runningAverage[0], runningAverage[1], runningAverage[2], runningAverage[3]))
-        .setNumRaysTraced(numTraces)
-        .build();
+    return new Color(runningAverage[0], runningAverage[1], runningAverage[2], runningAverage[3]);
   }
 
   private void incrementAverages(float[] runningAverage, float[] currentColor, float weight) {
     for (int i = 0; i < 4; i++) {
       runningAverage[i] += currentColor[i] * weight;
     }
-  }
-
-  @Override
-  long getNumTraces() {
-    return numTraces.get();
   }
 }

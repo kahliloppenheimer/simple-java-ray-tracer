@@ -6,6 +6,11 @@ import static java.awt.Color.CYAN;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.MAGENTA;
 import static java.awt.Color.RED;
+import static me.kahlil.config.Parameters.IMAGES_DEMO_PNG_PATH;
+import static me.kahlil.config.Parameters.IMAGE_SIZE;
+import static me.kahlil.config.Parameters.MAX_RAY_DEPTH;
+import static me.kahlil.config.Parameters.NUM_ANTI_ALIASING_SAMPLES;
+import static me.kahlil.config.Parameters.SHADOWS_ENABLED;
 import static me.kahlil.geometry.ConvexPolygon.cube;
 import static me.kahlil.geometry.LinearTransformation.rotateAboutYAxis;
 import static me.kahlil.geometry.LinearTransformation.rotateAboutZAxis;
@@ -47,10 +52,6 @@ import me.kahlil.scene.Scene;
 
 /** A second demo of the ray tracer. */
 public class Demo {
-
-  private static final int IMAGE_SIZE = 400;
-  private static final int NUM_ANTI_ALIASING_SAMPLES = 1;
-  private static final String IMAGES_DEMO_PNG_PATH = "images/tmp/demo.png";
 
   public static void main(String[] args) throws InterruptedException, ExecutionException {
 
@@ -111,14 +112,12 @@ public class Demo {
 
     Camera camera = STANDARD_CAMERA;
 
-    boolean shadowsEnabled = true;
-
     RayTracer rayTracer =
         new SimpleAntiAliaser(
             raster,
             camera,
             new ReflectiveRayTracer(
-                new PhongShading(scene, camera, shadowsEnabled), scene, raster, camera, 16),
+                new PhongShading(scene, camera, SHADOWS_ENABLED), scene, raster, camera, MAX_RAY_DEPTH),
             new RandomAntiAliasingMethod(NUM_ANTI_ALIASING_SAMPLES));
     //    RayTracer rayTracer = new SimpleRayTracer(
     ////        new NoShading(),
@@ -136,7 +135,7 @@ public class Demo {
     RayTracerCoordinator rt = new RayTracerCoordinator(raster, camera, scene, rayTracer);
 
     long start = System.currentTimeMillis();
-    Raster rendered = rt.render(shadowsEnabled);
+    Raster rendered = rt.render(SHADOWS_ENABLED);
     long end = System.currentTimeMillis();
 
     System.out.println("Rendering took " + (end - start) + " ms");

@@ -2,6 +2,7 @@ package me.kahlil.graphics;
 
 import static me.kahlil.graphics.CoordinateMapper.convertPixelToCameraSpaceCoordinates;
 
+import java.awt.Color;
 import me.kahlil.geometry.Ray;
 import me.kahlil.geometry.Vector;
 import me.kahlil.scene.Camera;
@@ -25,13 +26,10 @@ public abstract class RayTracer {
    * Traces the given ray, returning the corresponding color. Note, this is called with a ray that
    * points to the middle of a given pixel during the main ray tracing algorithm.
    */
-  abstract RenderingResult traceRay(Ray ray);
-
-  /** Returns the number of rays traced thus far by this particular ray tracer instance. */
-  abstract long getNumTraces();
+  abstract Color traceRay(Ray ray);
 
   /** Traces a ray through ith and jth pixel, returning a color for that pixel. */
-  final RenderingResult traceRay(int i, int j) {
+  final Color traceRay(int i, int j) {
     Point2D inCameraSpace = convertPixelToCameraSpaceCoordinates(raster, camera, i, j);
     return traceRay(
         new Ray(

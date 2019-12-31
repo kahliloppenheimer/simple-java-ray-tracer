@@ -1,5 +1,6 @@
 package me.kahlil.graphics;
 
+import static me.kahlil.config.Counters.NUM_TRACES;
 import static me.kahlil.graphics.RayIntersections.findFirstIntersection;
 
 import java.awt.Color;
@@ -22,8 +23,6 @@ public class ReflectiveRayTracer extends RayTracer {
   private final Scene scene;
   private final int maxRayDepth;
 
-  private final ThreadLocal<Long> numTraces = ThreadLocal.withInitial(() -> 0L);
-
   /**
    * Constructs a ReflectiveRayTracer with a given maxRayDepth, indicating the maximum number of
    * recursive rays that should be traced for reflections.
@@ -37,20 +36,12 @@ public class ReflectiveRayTracer extends RayTracer {
   }
 
   @Override
-  RenderingResult traceRay(Ray ray) {
-    return ImmutableRenderingResult.builder()
-        .setColor(recursiveTraceRay(ray, 0))
-        .setNumRaysTraced(numTraces.get())
-        .build();
-  }
-
-  @Override
-  long getNumTraces() {
-    return numTraces.get();
+  Color traceRay(Ray ray) {
+    return recursiveTraceRay(ray, 1);
   }
 
   private Color recursiveTraceRay(Ray ray, int rayDepth) {
-    numTraces.set(numTraces.get() + 1);
+    NUM_TRACES.getAndIncrement();
     if (rayDepth > maxRayDepth) {
       return scene.getBackgroundColor();
     }
@@ -59,7 +50,8 @@ public class ReflectiveRayTracer extends RayTracer {
       return scene.getBackgroundColor();
     }
     double reflectiveness = rayHit.get().getObject().getOutsideMaterial().getReflectiveness();
-    if (reflectiveness < EPSILON) {
+    // If surface isn't reflective or we're already at max depth, simply return.
+    if (reflectiveness < EPSILON || rayDepth == maxRayDepth) {
       return shader.shade(rayHit.get());
     }
 
