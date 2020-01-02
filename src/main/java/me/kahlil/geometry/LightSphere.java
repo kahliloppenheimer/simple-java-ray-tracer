@@ -2,7 +2,7 @@ package me.kahlil.geometry;
 
 import static me.kahlil.geometry.LinearTransformation.translate;
 
-import java.awt.Color;
+import me.kahlil.graphics.MutableColor;
 import me.kahlil.scene.ImmutableMaterial;
 import me.kahlil.scene.PointLight;
 
@@ -14,7 +14,7 @@ public class LightSphere extends Sphere {
         light.getLocation(),
         0.5,
         ImmutableMaterial.builder()
-            .setColor(new Color(1.0f, 1.0f, 1.0f))
+            .setColor(new MutableColor(1.0f, 1.0f, 1.0f))
             .setSpecularIntensity(1.0)
             .setHardness(240)
             .build());

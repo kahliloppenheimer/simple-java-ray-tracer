@@ -1,9 +1,9 @@
 package me.kahlil.demos;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.CYAN;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.MAGENTA;
+import static me.kahlil.graphics.Colors.BLUE;
+import static me.kahlil.graphics.Colors.CYAN;
+import static me.kahlil.graphics.Colors.GREEN;
+import static me.kahlil.graphics.Colors.MAGENTA;
 import static me.kahlil.config.Parameters.IMAGES_DEMO_PNG_PATH;
 import static me.kahlil.config.Parameters.IMAGE_SIZE;
 import static me.kahlil.config.Parameters.MAX_RAY_DEPTH;
@@ -21,20 +21,18 @@ import static me.kahlil.scene.Materials.glossy;
 import static me.kahlil.scene.Materials.shiny;
 
 import com.google.common.collect.ImmutableList;
-import java.awt.Color;
+import me.kahlil.graphics.MutableColor;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import javax.imageio.ImageIO;
-import javax.swing.SwingUtilities;
 import me.kahlil.geometry.Plane;
 import me.kahlil.geometry.PolygonSphere;
 import me.kahlil.geometry.Shape;
 import me.kahlil.geometry.Sphere;
 import me.kahlil.geometry.Vector;
-import me.kahlil.graphics.MyCanvas3D;
 import me.kahlil.graphics.PhongShading;
 import me.kahlil.graphics.RandomAntiAliasingMethod;
 import me.kahlil.graphics.RayTracer;
@@ -74,23 +72,23 @@ public class Demo {
                 .transform(scale(5.0).then(rotateAboutYAxis(30)).then(translate(1, 5, -20))),
             new Sphere(REFLECTIVE)
                 .transform(translate(0, 0, -10)),
-            new Sphere(shiny().setColor(new Color(1.0f, 0.0f, 1.0f)).build())
+            new Sphere(shiny().setColor(new MutableColor(1.0f, 0.0f, 1.0f)).build())
                 .transform(translate(0, 2, 1)),
             new Plane(
                 new Vector(0, -1, 0),
                 new Vector(0, 1.0, 0.0),
-                glossy().setColor(new Color(72, 136, 168)).build()));
+                glossy().setColor(new MutableColor(72, 136, 168)).build()));
 
     // Lights in scene
     List<PointLight> lights =
         ImmutableList.of(
             ImmutablePointLight.builder()
                 .setLocation(new Vector(3, 3, 0))
-                .setColor(new Color(115, 115, 115))
+                .setColor(new MutableColor(115, 115, 115))
                 .build(),
             ImmutablePointLight.builder()
                 .setLocation(new Vector(-6, 5, 0))
-                .setColor(new Color(200, 200, 200))
+                .setColor(new MutableColor(200, 200, 200))
                 .build());
 
     // Whole scene
@@ -98,8 +96,8 @@ public class Demo {
         ImmutableScene.builder()
             .setShapes(shapes)
             .setLights(lights)
-            .setBackgroundColor(new Color(.25f, .25f, .25f))
-            .setAmbient(new Color((float) .15, (float) .15, (float) .15))
+            .setBackgroundColor(new MutableColor(.25f, .25f, .25f))
+            .setAmbient(new MutableColor((float) .15, (float) .15, (float) .15))
             .build();
 
     Camera camera = STANDARD_CAMERA;
@@ -139,22 +137,13 @@ public class Demo {
     System.out.println("Painting took " + (end - start) + " ms");
   }
 
-  private static void paintToJFrame(Raster rendered) throws InterruptedException {
-    MyCanvas3D canvas = new MyCanvas3D(rendered.getWidthPx(), rendered.getHeightPx());
-    SwingUtilities.invokeLater(canvas::createAndShowGUI);
-    Thread.sleep(500);
-
-    canvas.paintFrame(rendered);
-    SwingUtilities.invokeLater(canvas::refresh);
-  }
-
   private static void paintToJpeg(String fileName, Raster rendered) {
     int height = rendered.getHeightPx();
     int width = rendered.getWidthPx();
     BufferedImage theImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
-        int value = rendered.getPixel(i, j).getRGB();
+        int value = rendered.getPixel(i, j).toColor().getRGB();
         theImage.setRGB(j, i, value);
       }
     }

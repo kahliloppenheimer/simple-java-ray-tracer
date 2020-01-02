@@ -1,6 +1,6 @@
 package me.kahlil.graphics;
 
-import java.awt.Color;
+import me.kahlil.graphics.MutableColor;
 import me.kahlil.config.JavaStyle;
 import org.immutables.value.Value.Immutable;
 
@@ -9,7 +9,7 @@ import org.immutables.value.Value.Immutable;
 public interface RenderingResult {
 
   // Shaded color of intersection.
-  Color getColor();
+  MutableColor getColor();
   // Number of rays traced during the color computation for this pixel.
   long getNumRaysTraced();
 

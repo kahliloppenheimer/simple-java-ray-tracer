@@ -1,6 +1,6 @@
 package me.kahlil.graphics;
 
-import java.awt.Color;
+import me.kahlil.graphics.MutableColor;
 import me.kahlil.geometry.RayHit;
 
 /**
@@ -8,6 +8,6 @@ import me.kahlil.geometry.RayHit;
  */
 public interface Shader {
 
-  Color shade(RayHit rayHit);
+  MutableColor shade(RayHit rayHit);
 
 }

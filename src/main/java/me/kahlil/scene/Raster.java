@@ -2,7 +2,7 @@ package me.kahlil.scene;
 
 import static com.google.common.base.Preconditions.checkState;
 
-import java.awt.Color;
+import me.kahlil.graphics.MutableColor;
 import me.kahlil.geometry.Vector;
 
 /**
@@ -14,22 +14,22 @@ public class Raster {
   // Number of pixels for width in height of the frame
   private final int widthPx;
   private final int heightPx;
-  private Color[][] pixels;
+  private MutableColor[][] pixels;
 
   public Raster(int widthPx, int heightPx) {
     this.bottomLeftCorner = new Vector(-1, -1, -1);
     this.widthPx = widthPx;
     this.heightPx = heightPx;
-    this.pixels = new Color[heightPx][widthPx];
+    this.pixels = new MutableColor[heightPx][widthPx];
   }
 
   /** Returns the pixel at the specified coordinate */
-  public Color getPixel(int i, int j) {
+  public MutableColor getPixel(int i, int j) {
     return pixels[i][j];
   }
 
   /** Sets the pixel at the specified coorindate */
-  public void setPixel(int i, int j, Color c) {
+  public void setPixel(int i, int j, MutableColor c) {
     checkState(pixels[i][j] == null, "Same pixel should not be modified twice: (%d, %d)", i, j);
     pixels[i][j] = c;
   }

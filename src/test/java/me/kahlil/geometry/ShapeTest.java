@@ -2,8 +2,8 @@ package me.kahlil.geometry;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
-import static java.awt.Color.BLACK;
-import static java.awt.Color.WHITE;
+import static me.kahlil.graphics.Colors.BLACK;
+import static me.kahlil.graphics.Colors.WHITE;
 import static me.kahlil.geometry.Constants.EPSILON;
 import static me.kahlil.geometry.Constants.ORIGIN;
 import static me.kahlil.geometry.LinearTransformation.IDENTITY;
@@ -14,7 +14,7 @@ import static me.kahlil.geometry.LinearTransformation.translate;
 import static me.kahlil.scene.Cameras.STANDARD_CAMERA;
 import static me.kahlil.scene.Materials.BASIC_GREEN;
 
-import java.awt.Color;
+import me.kahlil.graphics.MutableColor;
 import java.util.Arrays;
 import java.util.Optional;
 import me.kahlil.graphics.PhongShading;
@@ -110,10 +110,10 @@ public class ShapeTest {
     Ray towardsSphere = new Ray(new Vector(0, 0, 0), new Vector(-0.25, -0.50, -1.0));
 
     // Compute Phong shading for both and compare.
-    Color expectedColor =
+    MutableColor expectedColor =
         new PhongShading(simpleScene(notRotated), STANDARD_CAMERA, true)
             .shade(notRotated.intersectWith(towardsSphere).get());
-    Color actualColor =
+    MutableColor actualColor =
         new PhongShading(simpleScene(rotated), STANDARD_CAMERA, true)
             .shade(rotated.intersectWith(towardsSphere).get());
     assertThat(actualColor).isEqualTo(expectedColor);

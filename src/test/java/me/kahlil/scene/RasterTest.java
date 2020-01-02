@@ -2,7 +2,7 @@ package me.kahlil.scene;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import java.awt.Color;
+import me.kahlil.graphics.MutableColor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -26,9 +26,9 @@ public class RasterTest {
     for (int i = 0; i < raster.getHeightPx(); i++) {
       for (int j = 0; j < raster.getWidthPx(); j++) {
         float colorVal = (i + j) / (1.0f * raster.getHeightPx() * raster.getWidthPx());
-        raster.setPixel(i, j, new Color(colorVal, colorVal, colorVal, colorVal));
+        raster.setPixel(i, j, new MutableColor(colorVal, colorVal, colorVal));
         assertThat(raster.getPixel(i, j))
-            .isEqualTo(new Color(colorVal, colorVal, colorVal, colorVal));
+            .isEqualTo(new MutableColor(colorVal, colorVal, colorVal));
       }
     }
   }

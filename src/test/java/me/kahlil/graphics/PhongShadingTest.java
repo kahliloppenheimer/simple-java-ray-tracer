@@ -2,9 +2,9 @@ package me.kahlil.graphics;
 
 import static com.google.common.truth.Truth.assertThat;
 import static me.kahlil.geometry.Constants.ORIGIN;
+import static me.kahlil.graphics.Colors.RED;
 import static me.kahlil.scene.Materials.BASIC_GREEN;
 
-import java.awt.Color;
 import me.kahlil.geometry.ImmutableRayHit;
 import me.kahlil.geometry.Ray;
 import me.kahlil.geometry.RayHit;
@@ -30,7 +30,7 @@ public class PhongShadingTest {
   @Test
   public void diffuseLightingIsZeroWhenSurfaceNormalDotLightIsNegative() {
     PointLight light =
-        ImmutablePointLight.builder().setLocation(ORIGIN).setColor(Color.RED).build();
+        ImmutablePointLight.builder().setLocation(ORIGIN).setColor(RED).build();
     RayHit rayHit =
         ImmutableRayHit.builder()
             // Unused for this test but required by builder to be set

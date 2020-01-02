@@ -1,9 +1,9 @@
 package me.kahlil.graphics;
 
 import static me.kahlil.config.Counters.NUM_TOTAL_RAYS;
+import static me.kahlil.geometry.Constants.EPSILON;
 import static me.kahlil.graphics.RayIntersections.findFirstIntersection;
 
-import java.awt.Color;
 import java.util.Optional;
 import me.kahlil.geometry.Ray;
 import me.kahlil.geometry.RayHit;
@@ -18,7 +18,6 @@ import me.kahlil.scene.Scene;
  */
 public class ReflectiveRayTracer extends RayTracer {
 
-  private static final double EPSILON = 0.0000000001;
   private final Shader shader;
   private final Scene scene;
   private final int maxRayDepth;
@@ -36,11 +35,11 @@ public class ReflectiveRayTracer extends RayTracer {
   }
 
   @Override
-  Color traceRay(Ray ray) {
+  MutableColor traceRay(Ray ray) {
     return recursiveTraceRay(ray, 1);
   }
 
-  private Color recursiveTraceRay(Ray ray, int rayDepth) {
+  private MutableColor recursiveTraceRay(Ray ray, int rayDepth) {
     NUM_TOTAL_RAYS.getAndIncrement();
     if (rayDepth > maxRayDepth) {
       return scene.getBackgroundColor();
@@ -55,7 +54,7 @@ public class ReflectiveRayTracer extends RayTracer {
       return shader.shade(rayHit.get());
     }
 
-    Color reflectedRayColor =
+    MutableColor reflectedRayColor =
         ColorComputation.of(recursiveTraceRay(computeReflectionRay(rayHit.get()), rayDepth + 1))
             // Reduce effect of reflection by 20% to mimic imperfect reflection.
             .scaleFloat(0.8f)

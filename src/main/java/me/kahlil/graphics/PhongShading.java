@@ -4,7 +4,6 @@ import static me.kahlil.graphics.RayIntersections.findAllIntersections;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
-import java.awt.Color;
 import me.kahlil.geometry.LightSphere;
 import me.kahlil.geometry.Ray;
 import me.kahlil.geometry.RayHit;
@@ -31,18 +30,18 @@ public final class PhongShading implements Shader {
   }
 
   @Override
-  public Color shade(RayHit rayHit) {
+  public MutableColor shade(RayHit rayHit) {
     // Perform custom logic for LightSpheres since they are exceptional
     if (rayHit.getObject() instanceof LightSphere) {
-      return shadeLightSphere(rayHit);
+      return shadeLightSphere();
     }
     Material material = rayHit.getObject().getOutsideMaterial();
     // Initialize color with ambient light
-    Color lighted = ColorComputation.of(scene.getAmbient()).multiply(material.getColor()).compute();
+    MutableColor lighted = ColorComputation.of(scene.getAmbient()).multiply(material.getColor()).compute();
     for (PointLight light : scene.getLights()) {
       // Check to see if shadow should be cast
       if (!shadowsEnabled || !isObjectBetweenLightAndPoint(light, rayHit.getIntersection())) {
-        lighted = ColorComputation.of(lighted)
+        lighted = ColorComputation.modifyingInPlace(lighted)
             .add(phongIllumination(light, rayHit, camera.getLocation()))
             .compute();
       }
@@ -55,7 +54,7 @@ public final class PhongShading implements Shader {
    * Returns the new color of a pixel given the color of the pixel that this light hits and the
    * diffuseCoefficient of that collision.
    */
-  private static Color phongIllumination(PointLight light, RayHit rayHit, Vector cameraPosition) {
+  private static MutableColor phongIllumination(PointLight light, RayHit rayHit, Vector cameraPosition) {
     double diffuse = diffuse(light, rayHit);
     double specular = specular(light, cameraPosition, rayHit);
 
@@ -99,8 +98,8 @@ public final class PhongShading implements Shader {
         rayHit.getObject().getOutsideMaterial().getHardness());
   }
 
-  private static Color shadeLightSphere(RayHit rayHit) {
-    return new Color(1.0f, 1.0f, 1.0f);
+  private static MutableColor shadeLightSphere() {
+    return Colors.WHITE;
   }
 
   /** Returns true iff there is an object in the scene between the light and the given point. */

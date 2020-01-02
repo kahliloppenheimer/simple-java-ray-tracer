@@ -1,6 +1,6 @@
 package me.kahlil.scene;
 
-import java.awt.Color;
+import me.kahlil.graphics.MutableColor;
 import me.kahlil.config.JavaStyle;
 import me.kahlil.geometry.Vector;
 import org.immutables.value.Value.Immutable;
@@ -14,5 +14,5 @@ public interface PointLight {
   Vector getLocation();
 
   /** Returns the color that this light emanates. */
-  Color getColor();
+  MutableColor getColor();
 }

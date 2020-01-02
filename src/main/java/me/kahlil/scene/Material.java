@@ -2,8 +2,8 @@ package me.kahlil.scene;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import java.awt.Color;
 import me.kahlil.config.JavaStyle;
+import me.kahlil.graphics.MutableColor;
 import org.immutables.value.Value.Check;
 import org.immutables.value.Value.Default;
 import org.immutables.value.Value.Immutable;
@@ -14,7 +14,7 @@ import org.immutables.value.Value.Immutable;
 public interface Material {
 
   /** The color of the material. */
-  Color getColor();
+  MutableColor getColor();
 
   /**
    * An integer between 1 (inclusive) and 511 (inclusive) indicating the "hardness" of a meterial,
