@@ -1,11 +1,9 @@
 package me.kahlil.demos;
 
-import static java.awt.Color.BLACK;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.CYAN;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.MAGENTA;
-import static java.awt.Color.RED;
 import static me.kahlil.config.Parameters.IMAGES_DEMO_PNG_PATH;
 import static me.kahlil.config.Parameters.IMAGE_SIZE;
 import static me.kahlil.config.Parameters.MAX_RAY_DEPTH;
@@ -18,6 +16,7 @@ import static me.kahlil.geometry.LinearTransformation.scale;
 import static me.kahlil.geometry.LinearTransformation.translate;
 import static me.kahlil.geometry.Triangle.equilateralTriangle;
 import static me.kahlil.scene.Cameras.STANDARD_CAMERA;
+import static me.kahlil.scene.Materials.REFLECTIVE;
 import static me.kahlil.scene.Materials.glossy;
 import static me.kahlil.scene.Materials.shiny;
 
@@ -43,7 +42,6 @@ import me.kahlil.graphics.RayTracerCoordinator;
 import me.kahlil.graphics.ReflectiveRayTracer;
 import me.kahlil.graphics.SimpleAntiAliaser;
 import me.kahlil.scene.Camera;
-import me.kahlil.scene.ImmutableMaterial;
 import me.kahlil.scene.ImmutablePointLight;
 import me.kahlil.scene.ImmutableScene;
 import me.kahlil.scene.PointLight;
@@ -59,8 +57,8 @@ public class Demo {
 
     ImmutableList<Shape> shapes =
         ImmutableList.of(
-            PolygonSphere.withVertexNormals(glossy().setColor(RED).build(), 16).transform(translate(2, 0, -7)),
-            PolygonSphere.withSurfaceNormals(glossy().setColor(RED).build(), 16).transform(translate(-2, 0, -7)),
+            PolygonSphere.withVertexNormals(REFLECTIVE, 16).transform(translate(2, 0, -7)),
+            PolygonSphere.withSurfaceNormals(REFLECTIVE, 16).transform(translate(-2, 0, -7)),
 //            new Sphere(glossy().setColor(RED).build()).transform(translate(2, 0, -7)),
             new Sphere(shiny().setColor(GREEN).build()).transform(translate(-4, 0, -10)),
             new Sphere(glossy().setColor(BLUE).build()).transform(translate(-2, 0, -15)),
@@ -74,13 +72,7 @@ public class Demo {
                 .transform(scale(3.0).then(rotateAboutZAxis(270)).then(translate(2, 4, -15))),
             cube(glossy().setColor(MAGENTA).build())
                 .transform(scale(5.0).then(rotateAboutYAxis(30)).then(translate(1, 5, -20))),
-            new Sphere(
-                    ImmutableMaterial.builder()
-                        .setColor(BLACK)
-                        .setReflectiveness(1.0)
-                        .setHardness(1)
-                        .setSpecularIntensity(0.0)
-                        .build())
+            new Sphere(REFLECTIVE)
                 .transform(translate(0, 0, -10)),
             new Sphere(shiny().setColor(new Color(1.0f, 0.0f, 1.0f)).build())
                 .transform(translate(0, 2, 1)),

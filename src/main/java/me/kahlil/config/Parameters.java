@@ -15,7 +15,7 @@ public final class Parameters {
   public static final boolean SHADOWS_ENABLED = true;
 
   // Maximum ray depth for reflections.
-  public static final int MAX_RAY_DEPTH = 1;
+  public static final int MAX_RAY_DEPTH = 3;
 
   // Number of threads to use during computation.
 //  public static final int NUM_THREADS = Runtime.getRuntime().availableProcessors();

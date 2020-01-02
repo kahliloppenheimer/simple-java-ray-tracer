@@ -7,11 +7,11 @@ public final class Materials {
 
   private Materials() { }
 
-  public static Material NO_MATERIAL = ImmutableMaterial.builder()
+  public static Material REFLECTIVE = ImmutableMaterial.builder()
       .setColor(BLACK)
-      .setHardness(1)
-      .setSpecularIntensity(.01)
-      .setReflectiveness(0.0)
+      .setReflectiveness(1.0)
+      .setHardness(250)
+      .setSpecularIntensity(1.0)
       .build();
 
   public static Material BASIC_GREEN = ImmutableMaterial.builder()
@@ -40,4 +40,5 @@ public final class Materials {
         .setSpecularIntensity(1.0)
         .setReflectiveness(0.55);
   }
+
 }
