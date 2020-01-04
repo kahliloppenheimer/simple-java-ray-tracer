@@ -16,7 +16,7 @@ import static me.kahlil.geometry.Constants.EPSILON;
  *
  * <p>https://www.scratchapixel.com/lessons/advanced-rendering/introduction-acceleration-structure/bounding-volume-hierarchy-BVH-part1
  */
-public class BoundingPlanarVolume {
+public class BoundingPlanarVolume implements BoundingVolume {
 
   private static final double A = sqrt(3) / 3;
   private static final double B = -1.0 * A;
@@ -46,7 +46,8 @@ public class BoundingPlanarVolume {
   /**
    * Returns if the ray intersects the bounding volume.
    */
-  boolean intersectsWith(Ray ray) {
+  @Override
+  public boolean intersectsWith(Ray ray) {
     NUM_BOUNDING_INTERSECTION_TESTS.getAndIncrement();
     double timeNearMax = NEGATIVE_INFINITY;
     double timeFarMin = POSITIVE_INFINITY;

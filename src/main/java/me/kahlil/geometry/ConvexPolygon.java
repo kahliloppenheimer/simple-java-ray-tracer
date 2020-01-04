@@ -11,7 +11,7 @@ import me.kahlil.scene.Material;
 public class ConvexPolygon extends Shape {
 
   private final Triangle[] triangles;
-  private final BoundingPlanarVolume boundingVolume;
+  private final BoundingVolume boundingVolume;
 
   // Min/max (x, y, z) that the ConvexPolygon occupies for forming a bounding volume.
   private double minX = Integer.MAX_VALUE;

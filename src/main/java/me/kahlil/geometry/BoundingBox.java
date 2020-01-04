@@ -9,7 +9,7 @@ import static java.lang.Math.min;
  * Intersection borrowed from:
  * https://tavianator.com/fast-branchless-raybounding-box-intersections-part-2-nans/
  * */
-public final class BoundingBox {
+public final class BoundingBox implements BoundingVolume {
 
   private final Vector minBound;
   private final Vector maxBound;
@@ -19,6 +19,7 @@ public final class BoundingBox {
     this.maxBound = maxBound;
   }
 
+  @Override
   public boolean intersectsWith(Ray ray) {
     double tmin = NEGATIVE_INFINITY, tmax = POSITIVE_INFINITY;
 
