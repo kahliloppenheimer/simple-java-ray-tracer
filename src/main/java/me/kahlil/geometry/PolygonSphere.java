@@ -8,7 +8,7 @@ import me.kahlil.scene.Material;
  *
  * https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-polygon-mesh/Ray-Tracing%20a%20Polygon%20Mesh-part-1
  */
-public class PolygonSphere extends Shape implements Polygon {
+public class PolygonSphere extends Shape {
 
   private final Material material;
   private final int numDivisions;
@@ -33,11 +33,6 @@ public class PolygonSphere extends Shape implements Polygon {
   @Override
   Optional<RayHit> internalIntersectInObjectSpace(Ray ray) {
     return polygon.intersectInObjectSpace(ray);
-  }
-
-  @Override
-  public Triangle[] getTriangles() {
-    return polygon.getTriangles();
   }
 
   /**
@@ -109,7 +104,7 @@ public class PolygonSphere extends Shape implements Polygon {
   private void generateVertexes(Vector[] vertexes, Vector[] normals,
       Vector[] barycentricCoordinates) {
     double u = -1 * Math.PI / 2;
-    double v = -1 * Math.PI;
+    double v;
     double du = Math.PI / numDivisions;
     double dv = 2 * Math.PI / numDivisions;
 

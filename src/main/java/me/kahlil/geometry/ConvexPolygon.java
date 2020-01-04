@@ -2,16 +2,14 @@ package me.kahlil.geometry;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static me.kahlil.config.Counters.NUM_TRIANGLES;
-import static me.kahlil.geometry.Constants.EPSILON;
 
 import java.util.Arrays;
 import java.util.Optional;
 import me.kahlil.scene.Material;
 
 /** Shape representing a convex polygon. */
-public class ConvexPolygon extends Shape implements Polygon {
+public class ConvexPolygon extends Shape {
 
-  private final Material material;
   private final Triangle[] triangles;
   private final BoundingPlanarVolume boundingVolume;
 
@@ -37,17 +35,11 @@ public class ConvexPolygon extends Shape implements Polygon {
     checkArgument(faces.length > 0, "A convex polygon must have at least one face.");
     checkArgument(
         vertexIndexes.length > 0, "A convex polygon must have at least one vertex index.");
-    this.material = material;
 
     this.triangles =
         convertVertexesToTriangles(material, vertexes, vertexNormals, faces, vertexIndexes);
     NUM_TRIANGLES.getAndAdd(triangles.length);
 
-    // Add a bit of margin around the bounding box to avoid weird edge cases.
-    double boundingMargin = 10 * EPSILON;
-//    this.boundingBox = new BoundingBox(
-//        new Vector(minX + boundingMargin, minY + boundingMargin, minZ + boundingMargin),
-//        new Vector(maxX + boundingMargin, maxY + boundingMargin, maxZ + boundingMargin));
     this.boundingVolume = new BoundingPlanarVolume(this);
   }
 
@@ -114,7 +106,6 @@ public class ConvexPolygon extends Shape implements Polygon {
     return closestHit;
   }
 
-  @Override
   public Triangle[] getTriangles() {
     return this.triangles;
   }
