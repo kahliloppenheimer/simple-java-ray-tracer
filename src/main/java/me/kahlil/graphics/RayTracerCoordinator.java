@@ -1,6 +1,8 @@
 package me.kahlil.graphics;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
+import static me.kahlil.config.Counters.NUM_BOUNDING_INTERSECTIONS;
+import static me.kahlil.config.Counters.NUM_BOUNDING_INTERSECTION_TESTS;
 import static me.kahlil.config.Counters.NUM_INTERSECTIONS;
 import static me.kahlil.config.Counters.NUM_PRIMARY_RAYS;
 import static me.kahlil.config.Counters.NUM_INTERSECTION_TESTS;
@@ -70,6 +72,12 @@ public class RayTracerCoordinator {
         "# ray-triangle actual intersections = %s (%s%%)\n",
         numberFormat.format(NUM_TRIANGLE_INTERSECTIONS.get()),
         numberFormat.format(100.0 * NUM_TRIANGLE_INTERSECTIONS.get() / NUM_TRIANGLE_TESTS.get()));
+    System.out.printf(
+        "# ray-bounding-volume intersection tests = %s\n", numberFormat.format(NUM_BOUNDING_INTERSECTION_TESTS.get()));
+    System.out.printf(
+        "# ray-bounding-volume actual intersections = %s (%s%%)\n",
+        numberFormat.format(NUM_BOUNDING_INTERSECTIONS.get()),
+        numberFormat.format(100.0 * NUM_BOUNDING_INTERSECTIONS.get() / NUM_BOUNDING_INTERSECTION_TESTS.get()));
     System.out.printf(
         "# ray-shape intersection tests = %s\n", numberFormat.format(NUM_INTERSECTION_TESTS.get()));
     System.out.printf(

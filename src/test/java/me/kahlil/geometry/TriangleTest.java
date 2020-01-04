@@ -107,10 +107,4 @@ public class TriangleTest {
     assertThat(almostOnXzPlane2.intersectInObjectSpace(downZAxis)).isPresent();
   }
 
-  @Test
-  public void getOutsideMaterial_preservedProperly() {
-    Triangle triangle = Triangle.withSurfaceNormals(BASIC_GREEN, ORIGIN, ORIGIN, ORIGIN);
-
-    assertThat(triangle.getOutsideMaterial()).isEqualTo(BASIC_GREEN);
-  }
 }

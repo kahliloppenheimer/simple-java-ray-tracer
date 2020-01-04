@@ -8,7 +8,7 @@ import me.kahlil.scene.Material;
  *
  * https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-polygon-mesh/Ray-Tracing%20a%20Polygon%20Mesh-part-1
  */
-public class PolygonSphere extends Shape {
+public class PolygonSphere extends Shape implements Polygon {
 
   private final Material material;
   private final int numDivisions;
@@ -36,8 +36,8 @@ public class PolygonSphere extends Shape {
   }
 
   @Override
-  public Material getOutsideMaterial() {
-    return material;
+  public Triangle[] getTriangles() {
+    return polygon.getTriangles();
   }
 
   /**

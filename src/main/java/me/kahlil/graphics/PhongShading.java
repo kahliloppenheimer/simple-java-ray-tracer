@@ -35,7 +35,7 @@ public final class PhongShading implements Shader {
     if (rayHit.getObject() instanceof LightSphere) {
       return shadeLightSphere();
     }
-    Material material = rayHit.getObject().getOutsideMaterial();
+    Material material = rayHit.getMaterial();
     // Initialize color with ambient light
     MutableColor lighted = ColorComputation.of(scene.getAmbient()).multiply(material.getColor()).compute();
     for (PointLight light : scene.getLights()) {
@@ -58,7 +58,7 @@ public final class PhongShading implements Shader {
     double diffuse = diffuse(light, rayHit);
     double specular = specular(light, cameraPosition, rayHit);
 
-    Material material = rayHit.getObject().getOutsideMaterial();
+    Material material = rayHit.getMaterial();
     return ColorComputation.of(light.getColor())
         .multiply(material.getColor())
         .scaleFloat((float) diffuse)
@@ -95,7 +95,7 @@ public final class PhongShading implements Shader {
     Vector reflectedLight = lightVec.subtract(lProjectedOntoPlane.scale(2)).normalize();
     return Math.pow(
         Math.max(reflectedLight.dot(eyeVec), 0),
-        rayHit.getObject().getOutsideMaterial().getHardness());
+        rayHit.getMaterial().getHardness());
   }
 
   private static MutableColor shadeLightSphere() {

@@ -16,7 +16,7 @@ public class Sphere extends Shape {
   private final Vector center;
   private final double radius;
   // Material of the outside of the sphere
-  private final Material outside;
+  private final Material material;
 
   public Sphere(Material material) {
     this(ORIGIN, 1.0, material);
@@ -25,7 +25,7 @@ public class Sphere extends Shape {
   Sphere(Vector center, double radius, Material material) {
     this.center = center;
     this.radius = radius;
-    this.outside = material;
+    this.material = material;
   }
 
   @Override
@@ -58,14 +58,11 @@ public class Sphere extends Shape {
               .setTime(timeOfFirstIntersection)
               .setNormal(normal)
               .setObject(this)
+              .setMaterial(material)
               .build());
     } else {
       return Optional.empty();
     }
   }
 
-  @Override
-  public Material getOutsideMaterial() {
-    return this.outside;
-  }
 }

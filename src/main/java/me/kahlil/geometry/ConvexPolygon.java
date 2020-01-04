@@ -9,10 +9,11 @@ import java.util.Optional;
 import me.kahlil.scene.Material;
 
 /** Shape representing a convex polygon. */
-public class ConvexPolygon extends Shape {
+public class ConvexPolygon extends Shape implements Polygon {
 
   private final Material material;
   private final Triangle[] triangles;
+  private final BoundingPlanarVolume boundingVolume;
 
   // Min/max (x, y, z) that the ConvexPolygon occupies for forming a bounding volume.
   private double minX = Integer.MAX_VALUE;
@@ -22,8 +23,6 @@ public class ConvexPolygon extends Shape {
   private double maxX = Integer.MIN_VALUE;
   private double maxY = Integer.MIN_VALUE;
   private double maxZ = Integer.MIN_VALUE;
-
-  private final BoundingBox boundingBox;
 
   private ConvexPolygon(
       Material material,
@@ -46,9 +45,10 @@ public class ConvexPolygon extends Shape {
 
     // Add a bit of margin around the bounding box to avoid weird edge cases.
     double boundingMargin = 10 * EPSILON;
-    this.boundingBox = new BoundingBox(
-        new Vector(minX + boundingMargin, minY + boundingMargin, minZ + boundingMargin),
-        new Vector(maxX + boundingMargin, maxY + boundingMargin, maxZ + boundingMargin));
+//    this.boundingBox = new BoundingBox(
+//        new Vector(minX + boundingMargin, minY + boundingMargin, minZ + boundingMargin),
+//        new Vector(maxX + boundingMargin, maxY + boundingMargin, maxZ + boundingMargin));
+    this.boundingVolume = new BoundingPlanarVolume(this);
   }
 
   public static ConvexPolygon withSurfaceNormals(
@@ -98,7 +98,7 @@ public class ConvexPolygon extends Shape {
   Optional<RayHit> internalIntersectInObjectSpace(Ray ray) {
     double minTime = Integer.MAX_VALUE;
     Optional<RayHit> closestHit = Optional.empty();
-    if (!boundingBox.intersectsWith(ray)) {
+    if (!boundingVolume.intersectsWith(ray)) {
       return Optional.empty();
     }
     for (Triangle triangle : triangles) {
@@ -115,8 +115,8 @@ public class ConvexPolygon extends Shape {
   }
 
   @Override
-  public Material getOutsideMaterial() {
-    return this.material;
+  public Triangle[] getTriangles() {
+    return this.triangles;
   }
 
   /**

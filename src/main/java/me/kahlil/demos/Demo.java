@@ -1,9 +1,5 @@
 package me.kahlil.demos;
 
-import static me.kahlil.graphics.Colors.BLUE;
-import static me.kahlil.graphics.Colors.CYAN;
-import static me.kahlil.graphics.Colors.GREEN;
-import static me.kahlil.graphics.Colors.MAGENTA;
 import static me.kahlil.config.Parameters.IMAGES_DEMO_PNG_PATH;
 import static me.kahlil.config.Parameters.IMAGE_SIZE;
 import static me.kahlil.config.Parameters.MAX_RAY_DEPTH;
@@ -15,13 +11,16 @@ import static me.kahlil.geometry.LinearTransformation.rotateAboutZAxis;
 import static me.kahlil.geometry.LinearTransformation.scale;
 import static me.kahlil.geometry.LinearTransformation.translate;
 import static me.kahlil.geometry.Triangle.equilateralTriangle;
+import static me.kahlil.graphics.Colors.BLUE;
+import static me.kahlil.graphics.Colors.CYAN;
+import static me.kahlil.graphics.Colors.GREEN;
+import static me.kahlil.graphics.Colors.MAGENTA;
 import static me.kahlil.scene.Cameras.STANDARD_CAMERA;
 import static me.kahlil.scene.Materials.REFLECTIVE;
 import static me.kahlil.scene.Materials.glossy;
 import static me.kahlil.scene.Materials.shiny;
 
 import com.google.common.collect.ImmutableList;
-import me.kahlil.graphics.MutableColor;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +32,7 @@ import me.kahlil.geometry.PolygonSphere;
 import me.kahlil.geometry.Shape;
 import me.kahlil.geometry.Sphere;
 import me.kahlil.geometry.Vector;
+import me.kahlil.graphics.MutableColor;
 import me.kahlil.graphics.PhongShading;
 import me.kahlil.graphics.RandomAntiAliasingMethod;
 import me.kahlil.graphics.RayTracer;
@@ -55,8 +55,8 @@ public class Demo {
 
     ImmutableList<Shape> shapes =
         ImmutableList.of(
-            PolygonSphere.withVertexNormals(REFLECTIVE, 16).transform(translate(2, 0, -7)),
-            PolygonSphere.withSurfaceNormals(REFLECTIVE, 16).transform(translate(-2, 0, -7)),
+            PolygonSphere.withVertexNormals(glossy().setColor(GREEN).build(), 16).transform(translate(2, 0, -7)),
+            PolygonSphere.withSurfaceNormals(glossy().setColor(BLUE).build(), 16).transform(translate(-2, 0, -7)),
 //            new Sphere(glossy().setColor(RED).build()).transform(translate(2, 0, -7)),
             new Sphere(shiny().setColor(GREEN).build()).transform(translate(-4, 0, -10)),
             new Sphere(glossy().setColor(BLUE).build()).transform(translate(-2, 0, -15)),

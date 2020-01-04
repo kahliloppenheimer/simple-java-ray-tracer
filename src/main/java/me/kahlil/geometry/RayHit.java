@@ -1,6 +1,7 @@
 package me.kahlil.geometry;
 
 import me.kahlil.config.JavaStyle;
+import me.kahlil.scene.Material;
 import org.immutables.value.Value.Derived;
 import org.immutables.value.Value.Immutable;
 
@@ -17,6 +18,9 @@ public abstract class RayHit {
 
   // Object that the ray intersects.
   public abstract Shape getObject();
+
+  // Material at point of intersection.
+  public abstract Material getMaterial();
 
   // Normal at the point of intersection.
   public abstract Vector getNormal();

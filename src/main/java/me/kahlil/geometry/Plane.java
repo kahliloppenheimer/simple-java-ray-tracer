@@ -44,11 +44,8 @@ public class Plane extends Shape {
             .setTime(time)
             .setNormal(adjustedNormal)
             .setObject(this)
+            .setMaterial(material)
             .build());
   }
 
-  @Override
-  public Material getOutsideMaterial() {
-    return material;
-  }
 }

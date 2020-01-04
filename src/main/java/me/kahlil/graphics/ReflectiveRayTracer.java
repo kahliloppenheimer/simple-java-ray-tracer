@@ -48,7 +48,7 @@ public class ReflectiveRayTracer extends RayTracer {
     if (!rayHit.isPresent()) {
       return scene.getBackgroundColor();
     }
-    double reflectiveness = rayHit.get().getObject().getOutsideMaterial().getReflectiveness();
+    double reflectiveness = rayHit.get().getMaterial().getReflectiveness();
     // If surface isn't reflective or we're already at max depth, simply return.
     if (reflectiveness < EPSILON || rayDepth == maxRayDepth) {
       return shader.shade(rayHit.get());

@@ -4,7 +4,6 @@ import static me.kahlil.geometry.Constants.EPSILON;
 import static me.kahlil.scene.Materials.BASIC_GREEN;
 
 import java.util.Optional;
-import me.kahlil.scene.Material;
 
 /**
  * Represents an object which is a single point. Only used for testing various properties of objects
@@ -23,8 +22,4 @@ public class PointObject extends Shape {
     return pointSphere.intersectInObjectSpace(ray);
   }
 
-  @Override
-  public Material getOutsideMaterial() {
-    return BASIC_GREEN;
-  }
 }

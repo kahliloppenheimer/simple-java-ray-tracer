@@ -23,13 +23,6 @@ public class ConvexPolygonTest {
   private static final Vector TOP_LEFT = new Vector(-1, 1, -1);
 
   @Test
-  public void setMaterial_valuePreserved() {
-    ConvexPolygon polygon = ConvexPolygon.cube(BASIC_GREEN).transform(translate(0, 0, -1));
-
-    assertThat(polygon.getOutsideMaterial()).isEqualTo(BASIC_GREEN);
-  }
-
-  @Test
   public void basicCube_middleIntersectionIsCorrect() {
     ConvexPolygon polygon = ConvexPolygon.cube(BASIC_GREEN).transform(translate(0, 0, -1));
 

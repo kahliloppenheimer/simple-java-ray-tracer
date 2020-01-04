@@ -106,18 +106,18 @@ public class Triangle extends Shape {
         .setObject(this)
         .setTime(t)
         .setNormal(normal)
+        .setMaterial(material)
         .setRay(ray)
         .build());
   }
 
   @Override
-  public Material getOutsideMaterial() {
-    return this.material;
-  }
-
-  @Override
   public String toString() {
     return String.format("Triangle[%s %s %s]", vertexes[0], vertexes[1], vertexes[2]);
+  }
+
+  public Vector[] getVertexes() {
+    return this.vertexes;
   }
 
   private static Vector interpolateNormals(Vector[] normals, double u, double v) {

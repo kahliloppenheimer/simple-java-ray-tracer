@@ -34,6 +34,16 @@ public final class Counters {
   public static final AtomicLong NUM_INTERSECTIONS = new AtomicLong();
 
   /**
+   * Counter of total number of bounding volume intersection tests.
+   */
+  public static final AtomicLong NUM_BOUNDING_INTERSECTION_TESTS = new AtomicLong();
+
+  /**
+   * Counter of total number of bounding volume intersections.
+   */
+  public static final AtomicLong NUM_BOUNDING_INTERSECTIONS = new AtomicLong();
+
+  /**
    * Counter of total number of ray-triangle tests computed during the ray tracing algorithm.
    */
   public static final AtomicLong NUM_TRIANGLE_TESTS = new AtomicLong();

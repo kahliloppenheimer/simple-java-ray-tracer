@@ -4,7 +4,6 @@ import static me.kahlil.config.Counters.NUM_INTERSECTIONS;
 import static me.kahlil.config.Counters.NUM_INTERSECTION_TESTS;
 
 import java.util.Optional;
-import me.kahlil.scene.Material;
 
 /** A representation of a 3D object in the scene. */
 public abstract class Shape implements Cloneable {
@@ -34,6 +33,7 @@ public abstract class Shape implements Cloneable {
             .setTime(ray.timeToPoint(worldSpaceIntersectionPoint))
             .setNormal(worldSpaceNormal)
             .setObject(maybeObjectSpaceIntersection.get().getObject())
+            .setMaterial(maybeObjectSpaceIntersection.get().getMaterial())
             .build());
   }
 
@@ -52,9 +52,6 @@ public abstract class Shape implements Cloneable {
   }
 
   abstract Optional<RayHit> internalIntersectInObjectSpace(Ray ray);
-
-  /** Returns the Material of the outside of the shape */
-  public abstract Material getOutsideMaterial();
 
   /** Returns the object-to-world space transformation currently applied to this object. */
   LinearTransformation getTransformation() {
