@@ -9,6 +9,7 @@ import static java.lang.Math.sqrt;
 import static me.kahlil.config.Counters.NUM_BOUNDING_INTERSECTIONS;
 import static me.kahlil.config.Counters.NUM_BOUNDING_INTERSECTION_TESTS;
 import static me.kahlil.geometry.Constants.EPSILON;
+import static me.kahlil.scene.Materials.DUMMY_MATERIAL;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -86,10 +87,11 @@ public class Extents implements BoundingVolume, Intersectable {
    * describing the intersection with the original bounded shape.
    */
   @Override
-  public boolean intersectsWithBoundingVolume(Ray ray) {
+  public Optional<RayHit> intersectWithBoundingVolume(Ray ray) {
     NUM_BOUNDING_INTERSECTION_TESTS.getAndIncrement();
     double timeNearMax = NEGATIVE_INFINITY;
     double timeFarMin = POSITIVE_INFINITY;
+    int closestPlaneNormal = 0;
     for (int i = 0; i < PLANE_SET_NORMALS.length; i++) {
       double numerator = PLANE_SET_NORMALS[i].dot(ray.getStart());
       double denominator = PLANE_SET_NORMALS[i].dot(ray.getDirection());
@@ -102,15 +104,26 @@ public class Extents implements BoundingVolume, Intersectable {
       double timeNear = (dNear[i] - numerator) / denominator;
       double timeFar = (dFar[i] - numerator) / denominator;
 
-      timeNearMax = max(timeNearMax, min(timeNear, timeFar));
+      double actualTimeNear = min(timeNear, timeFar);
       timeFarMin = min(timeFarMin, max(timeNear, timeFar));
+      if (actualTimeNear > timeNearMax) {
+        closestPlaneNormal = i;
+        timeNearMax = actualTimeNear;
+      }
 
       if (timeNearMax > timeFarMin) {
-        return false;
+        return Optional.empty();
       }
     }
     NUM_BOUNDING_INTERSECTIONS.getAndIncrement();
-    return true;
+    return Optional.of(ImmutableRayHit.builder()
+        .setRay(ray)
+        .setObject(this)
+        .setTime(timeNearMax)
+        .setMaterial(DUMMY_MATERIAL)
+        .setNormal(PLANE_SET_NORMALS[closestPlaneNormal])
+        .build()
+    );
   }
 
   /** Returns an {@link Extents} bounding the union of the two volumes. */

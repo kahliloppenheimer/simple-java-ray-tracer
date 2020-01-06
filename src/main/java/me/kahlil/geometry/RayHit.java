@@ -17,7 +17,7 @@ public abstract class RayHit {
   public abstract double getTime();
 
   // Object that the ray intersects.
-  public abstract Shape getObject();
+  public abstract Intersectable getObject();
 
   // Material at point of intersection.
   public abstract Material getMaterial();

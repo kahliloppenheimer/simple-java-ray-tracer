@@ -1,7 +1,9 @@
 package me.kahlil.geometry;
 
+import java.util.Optional;
+
 public interface BoundingVolume {
 
-   boolean intersectsWithBoundingVolume(Ray ray);
+   Optional<RayHit> intersectWithBoundingVolume(Ray ray);
 
 }

@@ -1,6 +1,7 @@
 package me.kahlil.octree;
 
 import static com.google.common.base.Preconditions.checkState;
+import static java.util.Comparator.comparingDouble;
 import static me.kahlil.config.Counters.NUM_OCTREE_CHILD_INSERTIONS;
 import static me.kahlil.config.Counters.NUM_OCTREE_INTERNAL_INSERTIONS;
 
@@ -8,8 +9,12 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.PriorityQueue;
 import me.kahlil.geometry.Extents;
 import me.kahlil.geometry.Intersectable;
 import me.kahlil.geometry.Polygon;
@@ -58,7 +63,7 @@ final class OctreeNode<T extends Polygon> implements Intersectable {
   @Override
   public Optional<RayHit> intersectWith(Ray ray) {
     // Return empty if ray does not intersect with net extents at all for this node.
-    if (!totalExtents.intersectsWithBoundingVolume(ray)) {
+    if (totalExtents.intersectWithBoundingVolume(ray).isEmpty()) {
       return Optional.empty();
     }
     // Otherwise, see if this node stores any local polygons we need to check against.
@@ -67,14 +72,44 @@ final class OctreeNode<T extends Polygon> implements Intersectable {
     if (!boundPolygons.isEmpty()) {
       closest = currExtents.intersectWith(ray);
     }
-    // Finally, recursively check the intersections of all children.
+    // Finally, intersections of all children. But, do so according in the order of closest-children
+    // first by computing the intersection distance to each child extents, as the closer bounding
+    // distances will be more likely to contain the correct triangle.
+    Map<OctreeNode<T>, RayHit> childExtentsIntersections = intersectWithChildExtents(ray);
+    if (childExtentsIntersections.isEmpty()) {
+      return closest;
+    }
+
+    PriorityQueue<OctreeNode<T>> childrenQueue = new PriorityQueue<>(
+        childExtentsIntersections.size(),
+        comparingDouble(child -> childExtentsIntersections.get(child).getTime()));
+    childrenQueue.addAll(childExtentsIntersections.keySet());
+
+    while (!childrenQueue.isEmpty()) {
+      OctreeNode<T> child = childrenQueue.remove();
+      Optional<RayHit> shapeHit = child.intersectWith(ray);
+      closest = pickHitWithLowestTime(closest, shapeHit);
+      if (closest.isPresent() && !childrenQueue.isEmpty() && closest.get().getTime() < childExtentsIntersections.get(childrenQueue.peek()).getTime()) {
+        return closest;
+      }
+    }
+    return closest;
+  }
+
+  private Map<OctreeNode<T>, RayHit> intersectWithChildExtents(Ray ray) {
+    Map<OctreeNode<T>, RayHit> childrenToExtentsIntersections = new HashMap<>();
     for (OctreeNode<T> child : children) {
       if (child == null) {
         continue;
       }
-      closest = pickHitWithLowestTime(closest, child.intersectWith(ray));
+      child.intersectWithExtents(ray)
+          .ifPresent(rayHit -> childrenToExtentsIntersections.put(child, rayHit));
     }
-    return closest;
+    return childrenToExtentsIntersections;
+  }
+
+  Optional<RayHit> intersectWithExtents(Ray ray) {
+    return totalExtents.intersectWithBoundingVolume(ray);
   }
 
   /**
@@ -267,12 +302,39 @@ final class OctreeNode<T extends Polygon> implements Intersectable {
     return concatenate(allTriangles);
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    OctreeNode<?> that = (OctreeNode<?>) o;
+    return depth == that.depth &&
+        isLeafNode == that.isLeafNode &&
+        min.equals(that.min) &&
+        max.equals(that.max) &&
+        Arrays.equals(children, that.children) &&
+        Objects.equals(boundPolygons, that.boundPolygons) &&
+        Objects.equals(currExtents, that.currExtents) &&
+        Objects.equals(totalExtents, that.totalExtents);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = Objects
+        .hash(depth, min, max, isLeafNode, boundPolygons, currExtents, totalExtents);
+    result = 31 * result + Arrays.hashCode(children);
+    return result;
+  }
+
   /**
    * Concatenates multiple arrays.
    *
    * <p>From https://stackoverflow.com/questions/80476/how-can-i-concatenate-two-arrays-in-java
    */
-  public static <T> T[] concatenate(T[]... arrays)
+  private static <T> T[] concatenate(T[]... arrays)
   {
     int finalLength = 0;
     for (T[] array : arrays) {

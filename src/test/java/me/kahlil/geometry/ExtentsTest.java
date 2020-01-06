@@ -1,12 +1,11 @@
 package me.kahlil.geometry;
 
-import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth8.assertThat;
 import static me.kahlil.geometry.Constants.EPSILON;
 import static me.kahlil.geometry.ConvexPolygon.cube;
 import static me.kahlil.geometry.LinearTransformation.translate;
 import static me.kahlil.scene.Materials.DUMMY_MATERIAL;
 
-import com.google.common.truth.Truth;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -30,7 +29,7 @@ public class ExtentsTest {
   public void basicCube_middleIntersectionIsCorrect() {
     Ray downZAxis = new Ray(RAY_ORIGIN, new Vector(0, 0, -1));
 
-    Truth.assertThat(BOX.intersectsWithBoundingVolume(downZAxis)).isTrue();
+    assertThat(BOX.intersectWithBoundingVolume(downZAxis)).isPresent();
   }
 
   @Test
@@ -39,9 +38,9 @@ public class ExtentsTest {
     Ray leftOf = new Ray(RAY_ORIGIN, BOTTOM_LEFT.translate(-1 * EPSILON, EPSILON));
     Ray below = new Ray(RAY_ORIGIN, BOTTOM_LEFT.translate(EPSILON, -1 * EPSILON));
 
-    assertThat(BOX.intersectsWithBoundingVolume(inside)).isTrue();
-    assertThat(BOX.intersectsWithBoundingVolume(leftOf)).isFalse();
-    assertThat(BOX.intersectsWithBoundingVolume(below)).isFalse();
+    assertThat(BOX.intersectWithBoundingVolume(inside)).isPresent();
+    assertThat(BOX.intersectWithBoundingVolume(leftOf)).isEmpty();
+    assertThat(BOX.intersectWithBoundingVolume(below)).isEmpty();
   }
 
   @Test
@@ -50,9 +49,9 @@ public class ExtentsTest {
     Ray rightOf = new Ray(RAY_ORIGIN, BOTTOM_RIGHT.translate(EPSILON, EPSILON));
     Ray below = new Ray(RAY_ORIGIN, BOTTOM_RIGHT.translate(-1 * EPSILON, -1 * EPSILON));
 
-    assertThat(BOX.intersectsWithBoundingVolume(inside)).isTrue();
-    assertThat(BOX.intersectsWithBoundingVolume(rightOf)).isFalse();
-    assertThat(BOX.intersectsWithBoundingVolume(below)).isFalse();
+    assertThat(BOX.intersectWithBoundingVolume(inside)).isPresent();
+    assertThat(BOX.intersectWithBoundingVolume(rightOf)).isEmpty();
+    assertThat(BOX.intersectWithBoundingVolume(below)).isEmpty();
   }
 
   @Test
@@ -61,9 +60,9 @@ public class ExtentsTest {
     Ray rightOf = new Ray(RAY_ORIGIN, TOP_RIGHT.translate(EPSILON, -1 * EPSILON));
     Ray above = new Ray(RAY_ORIGIN, TOP_RIGHT.translate(-1 * EPSILON, EPSILON));
 
-    assertThat(BOX.intersectsWithBoundingVolume(inside)).isTrue();
-    assertThat(BOX.intersectsWithBoundingVolume(rightOf)).isFalse();
-    assertThat(BOX.intersectsWithBoundingVolume(above)).isFalse();
+    assertThat(BOX.intersectWithBoundingVolume(inside)).isPresent();
+    assertThat(BOX.intersectWithBoundingVolume(rightOf)).isEmpty();
+    assertThat(BOX.intersectWithBoundingVolume(above)).isEmpty();
   }
 
   @Test
@@ -72,8 +71,8 @@ public class ExtentsTest {
     Ray leftOf = new Ray(RAY_ORIGIN, TOP_LEFT.translate(-1, -1 * EPSILON));
     Ray above = new Ray(RAY_ORIGIN, TOP_LEFT.translate(EPSILON, EPSILON));
 
-    assertThat(BOX.intersectsWithBoundingVolume(inside)).isTrue();
-    assertThat(BOX.intersectsWithBoundingVolume(leftOf)).isFalse();
-    assertThat(BOX.intersectsWithBoundingVolume(above)).isFalse();
+    assertThat(BOX.intersectWithBoundingVolume(inside)).isPresent();
+    assertThat(BOX.intersectWithBoundingVolume(leftOf)).isEmpty();
+    assertThat(BOX.intersectWithBoundingVolume(above)).isEmpty();
   }
 }
