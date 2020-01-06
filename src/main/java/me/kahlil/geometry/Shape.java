@@ -6,11 +6,12 @@ import static me.kahlil.config.Counters.NUM_INTERSECTION_TESTS;
 import java.util.Optional;
 
 /** A representation of a 3D object in the scene. */
-public abstract class Shape implements Cloneable {
+public abstract class Shape implements Cloneable, Intersectable {
 
   private LinearTransformation transformation = LinearTransformation.IDENTITY;
 
   /** Finds the intersection of the given ray with this potentially transformed object */
+  @Override
   public Optional<RayHit> intersectWith(Ray ray) {
     // We first transform the ray into object space for this given object before computing
     // intersections.

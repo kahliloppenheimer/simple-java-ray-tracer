@@ -2,28 +2,25 @@ package me.kahlil.geometry;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static me.kahlil.config.Counters.NUM_TRIANGLES;
+import static me.kahlil.config.Parameters.OCTREE_ENABLED;
+import static me.kahlil.config.Parameters.OCTREE_MAX_DEPTH;
+import static me.kahlil.config.Parameters.OCTREE_MAX_SHAPES_PER_LEAF;
 
 import java.util.Arrays;
 import java.util.Optional;
 import me.kahlil.octree.BoundsHelper;
+import me.kahlil.octree.Octree;
 import me.kahlil.scene.Material;
 
 /** Shape representing a convex polygon. */
 public class ConvexPolygon extends Shape implements Polygon {
 
   private final Triangle[] triangles;
-  private final BoundingVolume boundingVolume;
+  private final Octree<Triangle> octree;
 
   // Min/max (x, y, z) that the ConvexPolygon occupies for forming a bounding volume.
   private final Vector minBound;
   private final Vector maxBound;
-  private double minX = Integer.MAX_VALUE;
-  private double minY = Integer.MAX_VALUE;
-  private double minZ = Integer.MAX_VALUE;
-
-  private double maxX = Integer.MIN_VALUE;
-  private double maxY = Integer.MIN_VALUE;
-  private double maxZ = Integer.MIN_VALUE;
 
   private ConvexPolygon(
       Material material,
@@ -47,7 +44,8 @@ public class ConvexPolygon extends Shape implements Polygon {
     this.minBound = minMaxBounds[0];
     this.maxBound = minMaxBounds[1];
 
-    this.boundingVolume = Extents.fromTriangles(getTriangles());
+    this.octree =
+        new Octree(getTriangles(), OCTREE_MAX_SHAPES_PER_LEAF, OCTREE_MAX_DEPTH);
   }
 
   public static ConvexPolygon withSurfaceNormals(
@@ -97,8 +95,8 @@ public class ConvexPolygon extends Shape implements Polygon {
   Optional<RayHit> internalIntersectInObjectSpace(Ray ray) {
     double minTime = Integer.MAX_VALUE;
     Optional<RayHit> closestHit = Optional.empty();
-    if (!boundingVolume.intersectsWith(ray)) {
-      return Optional.empty();
+    if (OCTREE_ENABLED) {
+      return octree.intersectWith(ray);
     }
     for (Triangle triangle : triangles) {
       Optional<RayHit> rayHit = triangle.intersectInObjectSpace(ray);
@@ -120,12 +118,12 @@ public class ConvexPolygon extends Shape implements Polygon {
 
   @Override
   public Vector minBound() {
-    return new Vector(minX, minY, minZ);
+    return minBound;
   }
 
   @Override
   public Vector maxBound() {
-    return new Vector(maxX, maxY, maxZ);
+    return maxBound;
   }
 
   /**
@@ -211,14 +209,10 @@ public class ConvexPolygon extends Shape implements Polygon {
       int thirdVertexIndex) {
     Triangle triangle;
     Vector[] triangleVertexes = {
-        vertexes[firstVertexIndex],
-        vertexes[secondVertexIndex],
-        vertexes[thirdVertexIndex]};
+      vertexes[firstVertexIndex], vertexes[secondVertexIndex], vertexes[thirdVertexIndex]
+    };
     if (vertexNormals.length == 0) {
-      triangle =
-          Triangle.withSurfaceNormals(
-              material,
-              triangleVertexes);
+      triangle = Triangle.withSurfaceNormals(material, triangleVertexes);
     } else {
       triangle =
           Triangle.withVertexNormals(
@@ -232,5 +226,4 @@ public class ConvexPolygon extends Shape implements Polygon {
     }
     return triangle;
   }
-
 }

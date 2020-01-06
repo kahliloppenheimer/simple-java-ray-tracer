@@ -30,7 +30,7 @@ public class ExtentsTest {
   public void basicCube_middleIntersectionIsCorrect() {
     Ray downZAxis = new Ray(RAY_ORIGIN, new Vector(0, 0, -1));
 
-    Truth.assertThat(BOX.intersectsWith(downZAxis)).isTrue();
+    Truth.assertThat(BOX.intersectsWithBoundingVolume(downZAxis)).isTrue();
   }
 
   @Test
@@ -39,9 +39,9 @@ public class ExtentsTest {
     Ray leftOf = new Ray(RAY_ORIGIN, BOTTOM_LEFT.translate(-1 * EPSILON, EPSILON));
     Ray below = new Ray(RAY_ORIGIN, BOTTOM_LEFT.translate(EPSILON, -1 * EPSILON));
 
-    assertThat(BOX.intersectsWith(inside)).isTrue();
-    assertThat(BOX.intersectsWith(leftOf)).isFalse();
-    assertThat(BOX.intersectsWith(below)).isFalse();
+    assertThat(BOX.intersectsWithBoundingVolume(inside)).isTrue();
+    assertThat(BOX.intersectsWithBoundingVolume(leftOf)).isFalse();
+    assertThat(BOX.intersectsWithBoundingVolume(below)).isFalse();
   }
 
   @Test
@@ -50,9 +50,9 @@ public class ExtentsTest {
     Ray rightOf = new Ray(RAY_ORIGIN, BOTTOM_RIGHT.translate(EPSILON, EPSILON));
     Ray below = new Ray(RAY_ORIGIN, BOTTOM_RIGHT.translate(-1 * EPSILON, -1 * EPSILON));
 
-    assertThat(BOX.intersectsWith(inside)).isTrue();
-    assertThat(BOX.intersectsWith(rightOf)).isFalse();
-    assertThat(BOX.intersectsWith(below)).isFalse();
+    assertThat(BOX.intersectsWithBoundingVolume(inside)).isTrue();
+    assertThat(BOX.intersectsWithBoundingVolume(rightOf)).isFalse();
+    assertThat(BOX.intersectsWithBoundingVolume(below)).isFalse();
   }
 
   @Test
@@ -61,9 +61,9 @@ public class ExtentsTest {
     Ray rightOf = new Ray(RAY_ORIGIN, TOP_RIGHT.translate(EPSILON, -1 * EPSILON));
     Ray above = new Ray(RAY_ORIGIN, TOP_RIGHT.translate(-1 * EPSILON, EPSILON));
 
-    assertThat(BOX.intersectsWith(inside)).isTrue();
-    assertThat(BOX.intersectsWith(rightOf)).isFalse();
-    assertThat(BOX.intersectsWith(above)).isFalse();
+    assertThat(BOX.intersectsWithBoundingVolume(inside)).isTrue();
+    assertThat(BOX.intersectsWithBoundingVolume(rightOf)).isFalse();
+    assertThat(BOX.intersectsWithBoundingVolume(above)).isFalse();
   }
 
   @Test
@@ -72,8 +72,8 @@ public class ExtentsTest {
     Ray leftOf = new Ray(RAY_ORIGIN, TOP_LEFT.translate(-1, -1 * EPSILON));
     Ray above = new Ray(RAY_ORIGIN, TOP_LEFT.translate(EPSILON, EPSILON));
 
-    assertThat(BOX.intersectsWith(inside)).isTrue();
-    assertThat(BOX.intersectsWith(leftOf)).isFalse();
-    assertThat(BOX.intersectsWith(above)).isFalse();
+    assertThat(BOX.intersectsWithBoundingVolume(inside)).isTrue();
+    assertThat(BOX.intersectsWithBoundingVolume(leftOf)).isFalse();
+    assertThat(BOX.intersectsWithBoundingVolume(above)).isFalse();
   }
 }

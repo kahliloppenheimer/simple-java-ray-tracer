@@ -20,7 +20,7 @@ public final class BoundingBox implements BoundingVolume {
   }
 
   @Override
-  public boolean intersectsWith(Ray ray) {
+  public boolean intersectsWithBoundingVolume(Ray ray) {
     double tmin = NEGATIVE_INFINITY, tmax = POSITIVE_INFINITY;
 
     for (int i = 0; i < 3; ++i) {

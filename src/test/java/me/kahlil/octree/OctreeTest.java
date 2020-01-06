@@ -5,6 +5,7 @@ import static me.kahlil.octree.BoundsHelper.computeGlobalMinAndMax;
 import static me.kahlil.scene.Materials.DUMMY_MATERIAL;
 
 import com.google.common.collect.ImmutableList;
+import me.kahlil.geometry.Extents;
 import me.kahlil.geometry.Triangle;
 import me.kahlil.geometry.Vector;
 import org.junit.Test;
@@ -138,5 +139,39 @@ public class OctreeTest {
     assertThat(tree.root.isLeafNode).isFalse();
     assertThat(tree.root.boundPolygons).hasSize(1);
     assertThat(triangles[tree.root.boundPolygons.get(0)]).isEqualTo(OVERLAPPING_FIRST_AND_SECOND);
+  }
+
+  @Test
+  public void octreeWithThreeNodes_extentsAreCorrect() {
+    Triangle[] triangles = {IN_FIRST_QUADRANT, IN_SECOND_QUADRANT, IN_THIRD_QUADRANT_BACK};
+    Octree<Triangle> tree = new Octree<>(triangles, 2, 2);
+
+    OctreeNode<Triangle> firstQuadrantNode = tree.root.children[0];
+    OctreeNode<Triangle> secondQuadrantNode = tree.root.children[4];
+    OctreeNode<Triangle> thirdQuadrantNode = tree.root.children[7];
+
+    assertThat(tree.extents).isEqualTo(tree.root.totalExtents);
+    assertThat(tree.root.currExtents.isEmpty()).isTrue();
+    assertThat(tree.extents).isEqualTo(Extents.fromTriangles(triangles));
+
+    assertThat(firstQuadrantNode.totalExtents).isEqualTo(firstQuadrantNode.currExtents);
+    assertThat(firstQuadrantNode.totalExtents).isEqualTo(Extents.fromTriangles(new Triangle[]{IN_FIRST_QUADRANT}));
+
+    assertThat(secondQuadrantNode.totalExtents).isEqualTo(secondQuadrantNode.currExtents);
+    assertThat(secondQuadrantNode.totalExtents).isEqualTo(Extents.fromTriangles(new Triangle[]{IN_SECOND_QUADRANT}));
+
+    assertThat(thirdQuadrantNode.totalExtents).isEqualTo(thirdQuadrantNode.currExtents);
+    assertThat(thirdQuadrantNode.totalExtents).isEqualTo(Extents.fromTriangles(new Triangle[]{IN_THIRD_QUADRANT_BACK}));
+  }
+
+  @Test
+  public void octreeWithFourNodes_oneOverlapping_extentsAreCorrect() {
+    Triangle[] triangles = {IN_FIRST_QUADRANT, IN_SECOND_QUADRANT, IN_THIRD_QUADRANT_BACK, OVERLAPPING_FIRST_AND_SECOND};
+    Octree<Triangle> tree = new Octree<>(triangles, 2, 2);
+
+    assertThat(tree.extents).isEqualTo(tree.root.totalExtents);
+    assertThat(tree.root.currExtents.isEmpty()).isFalse();
+    assertThat(tree.root.currExtents).isEqualTo(Extents.fromTriangles(new Triangle[]{OVERLAPPING_FIRST_AND_SECOND}));
+    assertThat(tree.extents).isEqualTo(Extents.fromTriangles(triangles));
   }
 }

@@ -34,6 +34,7 @@ public class PhongShadingTest {
     RayHit rayHit =
         ImmutableRayHit.builder()
             // Unused for this test but required by builder to be set
+            .setMaterial(DUMMY_MATERIAL)
             .setObject(DUMMY_SPHERE)
             .setTime(1)
             .setRay(new Ray(new Vector(0, 0, 0), new Vector(1, 0, 0)))

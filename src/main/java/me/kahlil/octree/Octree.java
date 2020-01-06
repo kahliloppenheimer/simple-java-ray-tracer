@@ -3,16 +3,18 @@ package me.kahlil.octree;
 import static me.kahlil.octree.BoundsHelper.computeGlobalMinAndMax;
 
 import com.google.common.annotations.VisibleForTesting;
-import me.kahlil.geometry.BoundingVolume;
+import java.util.Optional;
 import me.kahlil.geometry.Extents;
+import me.kahlil.geometry.Intersectable;
 import me.kahlil.geometry.Polygon;
 import me.kahlil.geometry.Ray;
+import me.kahlil.geometry.RayHit;
 import me.kahlil.geometry.Vector;
 
 /**
  * Implementation of an Octree.
  */
-public class Octree<T extends Polygon> implements BoundingVolume {
+public class Octree<T extends Polygon> implements Intersectable {
 
   @VisibleForTesting
   final OctreeNode<T> root;
@@ -37,7 +39,8 @@ public class Octree<T extends Polygon> implements BoundingVolume {
   }
 
   @Override
-  public boolean intersectsWith(Ray ray) {
-    return root.intersectsWith(ray);
+  public Optional<RayHit> intersectWith(Ray ray) {
+    return root.intersectWith(ray);
   }
+
 }

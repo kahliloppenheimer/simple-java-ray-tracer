@@ -1,28 +1,29 @@
 package me.kahlil.octree;
 
 import static com.google.common.base.Preconditions.checkState;
+import static me.kahlil.config.Counters.NUM_OCTREE_CHILD_INSERTIONS;
+import static me.kahlil.config.Counters.NUM_OCTREE_INTERNAL_INSERTIONS;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import me.kahlil.geometry.BoundingVolume;
+import java.util.Optional;
 import me.kahlil.geometry.Extents;
+import me.kahlil.geometry.Intersectable;
 import me.kahlil.geometry.Polygon;
 import me.kahlil.geometry.Ray;
+import me.kahlil.geometry.RayHit;
 import me.kahlil.geometry.Triangle;
 import me.kahlil.geometry.Vector;
 
-/**
- * A representation of a single node within an Octree.
- */
-final class OctreeNode<T extends Polygon> implements BoundingVolume {
+/** A representation of a single node within an Octree. */
+final class OctreeNode<T extends Polygon> implements Intersectable {
 
   // Array containing all original shapes stored in the octree. This way, each node need only
   // maintain indexes to shapes within the array.
-  @VisibleForTesting
-  T[] allPolygons;
+  @VisibleForTesting T[] allPolygons;
   final int depth;
 
   final int maxObjectsPerLeaf;
@@ -34,14 +35,17 @@ final class OctreeNode<T extends Polygon> implements BoundingVolume {
 
   // This is a List, even though it's fixed size, because Java Arrays don't handle generic
   // type parameters well.
-  @VisibleForTesting
-  final OctreeNode<T>[] children = new OctreeNode[8];
+  @VisibleForTesting final OctreeNode<T>[] children = new OctreeNode[8];
 
   // This is a list, rather than an array, because it is dynamically sized.
   final List<Integer> boundPolygons;
-  private Extents extents;
+  // Extents that bound the polygons stored in this node. Only present for nodes with triangles.
+  Extents currExtents;
+  // Extents that bound the polygons in this node and its children.
+  Extents totalExtents;
 
-  OctreeNode(T[] allPolygons, int maxObjectsPerLeaf, int maxDepth, Vector min, Vector max, int depth) {
+  OctreeNode(
+      T[] allPolygons, int maxObjectsPerLeaf, int maxDepth, Vector min, Vector max, int depth) {
     this.maxObjectsPerLeaf = maxObjectsPerLeaf;
     this.maxDepth = maxDepth;
     this.min = min;
@@ -52,8 +56,39 @@ final class OctreeNode<T extends Polygon> implements BoundingVolume {
   }
 
   @Override
-  public boolean intersectsWith(Ray ray) {
-    return extents.intersectsWith(ray);
+  public Optional<RayHit> intersectWith(Ray ray) {
+    // Return empty if ray does not intersect with net extents at all for this node.
+    if (!totalExtents.intersectsWithBoundingVolume(ray)) {
+      return Optional.empty();
+    }
+    // Otherwise, see if this node stores any local polygons we need to check against.
+    // This will be true for both leaf nodes and internal nodes which store polygons.
+    Optional<RayHit> closest = Optional.empty();
+    if (!boundPolygons.isEmpty()) {
+      closest = currExtents.intersectWith(ray);
+    }
+    // Finally, recursively check the intersections of all children.
+    for (OctreeNode<T> child : children) {
+      if (child == null) {
+        continue;
+      }
+      closest = pickHitWithLowestTime(closest, child.intersectWith(ray));
+    }
+    return closest;
+  }
+
+  /**
+   * Returns the ray hit with the lowest time if both are present, the ray hit that is present if
+   * one is empty, or empty if both are empty.
+   */
+  private Optional<RayHit> pickHitWithLowestTime(Optional<RayHit> hit1, Optional<RayHit> hit2) {
+    if (hit1.isEmpty()) {
+      return hit2;
+    }
+    if (hit2.isEmpty()) {
+      return hit1;
+    }
+    return hit1.get().getTime() < hit2.get().getTime() ? hit1 : hit2;
   }
 
   /**
@@ -88,63 +123,66 @@ final class OctreeNode<T extends Polygon> implements BoundingVolume {
   /**
    * Performs a bottom-up traversal of the {@link Octree} to initialize the extents at each node.
    *
-   * The {@link Extents} of a leaf node are simply the bounding extent of the shapes it holds. The
-   * extents of an internal node are the union of the extents of its leaf nodes, along with any
+   * <p>The {@link Extents} of a leaf node are simply the bounding extent of the shapes it holds.
+   * The extents of an internal node are the union of the extents of its leaf nodes, along with any
    * shapes it holds.
    */
   Extents computeExtents() {
     // Check if value has already been computed and memoized.
-    if (extents != null) {
-      return extents;
+    if (totalExtents != null && currExtents != null) {
+      return totalExtents;
     }
 
     // Otherwise, recompute by first checking the shapes bound within this node.
-    Extents extents = Extents.fromTriangles(getAllBoundTriangles());
+    currExtents = Extents.empty();
+    Triangle[] allBoundTriangles = getAllBoundTriangles();
+    if (allBoundTriangles.length > 0) {
+      currExtents = Extents.fromTriangles(allBoundTriangles);
+    }
 
+    totalExtents = currExtents;
     // Then, union that extent with any present children.
     if (!isLeafNode) {
       for (OctreeNode<T> child : children) {
         if (child == null) {
           continue;
         }
-        extents = extents.union(child.computeExtents());
+        totalExtents = totalExtents.union(child.computeExtents());
       }
     }
 
     // Finally, memoize the result so we need not do this again.
-    this.extents = extents;
-    return extents;
+    return totalExtents;
   }
 
-
-  /**
-   * Inserts the given shape index into the correct child, based on its index.
-   */
+  /** Inserts the given shape index into the correct child, based on its index. */
   private void insertIntoCorrectChild(int shapeIndex) {
     int childIndex = computeChildIndex(allPolygons[shapeIndex].minBound());
 
     // Check if shape spans multiple child cells.
     if (childIndex != computeChildIndex(allPolygons[shapeIndex].maxBound())) {
       // If so, store it in this internal node and return.
+      NUM_OCTREE_INTERNAL_INSERTIONS.getAndIncrement();
       boundPolygons.add(shapeIndex);
       return;
     }
+
+    NUM_OCTREE_CHILD_INSERTIONS.getAndIncrement();
 
     // Otherwise, first check if the correct child exists.
     if (children[childIndex] == null) {
       Vector min = getMinBoundForChild(childIndex);
       Vector max = getMaxBoundForChild(childIndex);
 
-      children[childIndex] = new OctreeNode<T>(allPolygons, maxObjectsPerLeaf, maxDepth, min, max, depth + 1);
+      children[childIndex] =
+          new OctreeNode<T>(allPolygons, maxObjectsPerLeaf, maxDepth, min, max, depth + 1);
     }
 
     // Then, recursively insert into the child.
     children[childIndex].insert(shapeIndex);
   }
 
-  /**
-   * Computes min bounds for the child cell index.
-   */
+  /** Computes min bounds for the child cell index. */
   private Vector getMinBoundForChild(int childIndex) {
     Vector centroid = min.average(max);
     return new Vector(
@@ -153,9 +191,7 @@ final class OctreeNode<T extends Polygon> implements BoundingVolume {
         isBackCell(childIndex) ? min.getZ() : centroid.getZ());
   }
 
-  /**
-   * Computes max bounds for the child cell index.
-   */
+  /** Computes max bounds for the child cell index. */
   private Vector getMaxBoundForChild(int childIndex) {
     Vector centroid = min.average(max);
     return new Vector(
@@ -167,7 +203,7 @@ final class OctreeNode<T extends Polygon> implements BoundingVolume {
   /**
    * Use funky bitwise math to compute the child index of the point.
    *
-   * Form of index is comparable to how the linux `chmod` command works, e.g. `chmod 755 ...`.
+   * <p>Form of index is comparable to how the linux `chmod` command works, e.g. `chmod 755 ...`.
    */
   private int computeChildIndex(Vector point) {
     Vector nodeCentroid = min.average(max);
@@ -179,33 +215,25 @@ final class OctreeNode<T extends Polygon> implements BoundingVolume {
     return (isLeftCell ? 4 : 0) | (isBottomCell ? 2 : 0) | (isBackCell ? 1 : 0);
   }
 
-  /**
-   * Uses funky bitwise math to check if child cell represents negtive X values.
-   */
+  /** Uses funky bitwise math to check if child cell represents negtive X values. */
   private boolean isLeftCell(int childIndex) {
     // Check if third bit is set.
     return (childIndex & 4) == 4;
   }
 
-  /**
-   * Uses funky bitwise math to check if child cell represents negative Y values.
-   */
+  /** Uses funky bitwise math to check if child cell represents negative Y values. */
   private boolean isBottomCell(int childIndex) {
     // Check if second bit is set.
     return (childIndex & 2) == 2;
   }
 
-  /**
-   * Uses funky bitwise math to check if child cell represents negative Z values.
-   */
+  /** Uses funky bitwise math to check if child cell represents negative Z values. */
   private boolean isBackCell(int childIndex) {
     // Check if first bit is set.
     return (childIndex & 1) == 1;
   }
 
-  /**
-   * Asserts that the given shape is within bounds of this node.
-   */
+  /** Asserts that the given shape is within bounds of this node. */
   private void checkInBounds(T shape) {
     checkState(
         shapeIsInBounds(shape),
@@ -214,9 +242,7 @@ final class OctreeNode<T extends Polygon> implements BoundingVolume {
         ImmutableList.of(shape.minBound(), shape.maxBound()));
   }
 
-  /**
-   * Returns whether or not the given shape is within the bounds defined by this cell.
-   */
+  /** Returns whether or not the given shape is within the bounds defined by this cell. */
   private boolean shapeIsInBounds(T shape) {
     for (int i = 0; i < 3; i++) {
       if (shape.minBound().getComponent(i) < min.getComponent(i)) {
@@ -229,37 +255,43 @@ final class OctreeNode<T extends Polygon> implements BoundingVolume {
     return true;
   }
 
-  /**
-   * Returns all triangles bound within the polygons contained in the current node.
-   */
+  /** Returns all triangles bound within the polygons contained in the current node. */
   private Triangle[] getAllBoundTriangles() {
     if (boundPolygons.isEmpty()) {
-      return new Triangle[]{};
+      return new Triangle[] {};
     }
-    Triangle[] firstSet = allPolygons[boundPolygons.get(0)].getTriangles();
-    Triangle[][] remainingTriangles = new Triangle[boundPolygons.size() - 1][];
-    for (int i = 1; i < boundPolygons.size(); i++) {
-      remainingTriangles[i] = allPolygons[boundPolygons.get(i)].getTriangles();
+    Triangle[][] allTriangles = new Triangle[boundPolygons.size()][];
+    for (int i = 0; i < boundPolygons.size(); i++) {
+      allTriangles[i] = allPolygons[boundPolygons.get(i)].getTriangles();
     }
-    return concatAll(firstSet, remainingTriangles);
+    return concatenate(allTriangles);
   }
 
   /**
    * Concatenates multiple arrays.
    *
-   * From https://stackoverflow.com/questions/80476/how-can-i-concatenate-two-arrays-in-java
+   * <p>From https://stackoverflow.com/questions/80476/how-can-i-concatenate-two-arrays-in-java
    */
-  private static <T> T[] concatAll(T[] first, T[]... rest) {
-    int totalLength = 0;
-    for (T[] array : rest) {
-      totalLength += array.length;
+  public static <T> T[] concatenate(T[]... arrays)
+  {
+    int finalLength = 0;
+    for (T[] array : arrays) {
+      finalLength += array.length;
     }
-    T[] result = Arrays.copyOf(first, totalLength);
-    int offset = first.length;
-    for (T[] array : rest) {
-      System.arraycopy(array, 0, result, offset, array.length);
-      offset += array.length;
+
+    T[] dest = null;
+    int destPos = 0;
+
+    for (T[] array : arrays)
+    {
+      if (dest == null) {
+        dest = Arrays.copyOf(array, finalLength);
+        destPos = array.length;
+      } else {
+        System.arraycopy(array, 0, dest, destPos, array.length);
+        destPos += array.length;
+      }
     }
-    return result;
+    return dest;
   }
 }

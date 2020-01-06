@@ -24,6 +24,7 @@ public class PlaneTest {
     RayHit expected =
         ImmutableRayHit.builder()
             .setObject(xzPlane)
+            .setMaterial(DUMMY_MATERIAL)
             .setNormal(new Vector(0, 1, 0))
             .setRay(directlyAbove)
             .setTime(1)

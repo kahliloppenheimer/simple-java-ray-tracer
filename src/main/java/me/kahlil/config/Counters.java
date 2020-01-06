@@ -52,4 +52,14 @@ public final class Counters {
    * Counter of total number of ray-triangle intersections computed during the ray tracing algorithm.
    */
   public static final AtomicLong NUM_TRIANGLE_INTERSECTIONS = new AtomicLong();
+
+  /**
+   * Counter of the total number of polygons stored in the octree that overlap between cells.
+   */
+  public static final AtomicLong NUM_OCTREE_INTERNAL_INSERTIONS = new AtomicLong();
+
+  /**
+   * Counter of the total number of polygons stored in the leaves of the Octree.
+   */
+  public static final AtomicLong NUM_OCTREE_CHILD_INSERTIONS = new AtomicLong();
 }

@@ -4,6 +4,8 @@ import static com.google.common.collect.ImmutableList.toImmutableList;
 import static me.kahlil.config.Counters.NUM_BOUNDING_INTERSECTIONS;
 import static me.kahlil.config.Counters.NUM_BOUNDING_INTERSECTION_TESTS;
 import static me.kahlil.config.Counters.NUM_INTERSECTIONS;
+import static me.kahlil.config.Counters.NUM_OCTREE_INTERNAL_INSERTIONS;
+import static me.kahlil.config.Counters.NUM_OCTREE_CHILD_INSERTIONS;
 import static me.kahlil.config.Counters.NUM_PRIMARY_RAYS;
 import static me.kahlil.config.Counters.NUM_INTERSECTION_TESTS;
 import static me.kahlil.config.Counters.NUM_TOTAL_RAYS;
@@ -84,6 +86,10 @@ public class RayTracerCoordinator {
         "# ray-shape actual intersections = %s (%s%%)\n",
         numberFormat.format(NUM_INTERSECTIONS.get()),
         numberFormat.format(100.0 * NUM_INTERSECTIONS.get() / NUM_INTERSECTION_TESTS.get()));
+    System.out.printf(
+        "# octree internal insertions = %s\n", numberFormat.format(NUM_OCTREE_INTERNAL_INSERTIONS.get()));
+    System.out.printf(
+        "# octree child insertions = %s\n", numberFormat.format(NUM_OCTREE_CHILD_INSERTIONS.get()));
 
     return raster;
   }
