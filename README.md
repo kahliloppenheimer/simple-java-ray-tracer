@@ -18,20 +18,21 @@ Then execute `demo.java` and take a look at images/tmp.
 - Spheres
 - Planes
 - Triangles
-- Polygons
+- Arbitrary Polygons Meshes
 
 ## Implemented Features
-- Anti-aliasing (with specifiable number of samples per pixel)
-- Shadows (with toggle)
-- Colored materials and colored lighting
-- Diffuse, Specular, and Ambient lighting (all very basic and following Phong model)
+- Anti-aliasing
+- Shadows
+- Diffuse, Specular, and Ambient lighting (Phong model)
 - Reflections
-- Multi-threaded rendering (with specifiable number of threads)
-- Affine transformations (or any linear transformations)
+- Linear transformations of objects
+- Multi-threaded rendering
+- Octree bounding hierarchical volume acceleration structure
 
 ## Developing Features
+- Custom textures
 - Dynamic/soft shadows (sample randomly-distributed rays to determine shading)
-- Dynamic ambient lighting (sample randomly-distributed rays to determine ambient light at point)
-- More objects (cones, cylinders, etc.)
+- Global illumination
 - Refractions
 - Reading standard polygon mesh file formats
+- Optimizations (reducing # ray-triangle intersection tests)
