@@ -2,19 +2,18 @@ package me.kahlil.geometry;
 
 import static com.google.common.truth.Truth.assertThat;
 import static me.kahlil.geometry.Constants.EPSILON;
+import static me.kahlil.geometry.ConvexPolygon.cube;
 import static me.kahlil.geometry.LinearTransformation.translate;
-import static me.kahlil.scene.Materials.BASIC_GREEN;
+import static me.kahlil.scene.Materials.DUMMY_MATERIAL;
 
 import com.google.common.truth.Truth;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-/**
- * Unit tests for {@link BoundingBox}.
- */
+/** Unit tests for {@link BoundingBox}. */
 @RunWith(JUnit4.class)
-public class BoundingPlanarVolumeTest {
+public class ExtentsTest {
 
   private static final Vector RAY_ORIGIN = new Vector(0, 0, 1);
 
@@ -24,7 +23,8 @@ public class BoundingPlanarVolumeTest {
   private static final Vector TOP_RIGHT = new Vector(1, 1, -1);
   private static final Vector TOP_LEFT = new Vector(-1, 1, -1);
 
-  private static final BoundingPlanarVolume BOX = new BoundingPlanarVolume(ConvexPolygon.cube(BASIC_GREEN).transform(translate(0, 0, -1)));
+  private static final Extents BOX =
+      Extents.fromPolygon(cube(DUMMY_MATERIAL).transform(translate(0, 0, -1)));
 
   @Test
   public void basicCube_middleIntersectionIsCorrect() {
@@ -76,5 +76,4 @@ public class BoundingPlanarVolumeTest {
     assertThat(BOX.intersectsWith(leftOf)).isFalse();
     assertThat(BOX.intersectsWith(above)).isFalse();
   }
-
 }

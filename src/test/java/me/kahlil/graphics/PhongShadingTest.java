@@ -3,7 +3,7 @@ package me.kahlil.graphics;
 import static com.google.common.truth.Truth.assertThat;
 import static me.kahlil.geometry.Constants.ORIGIN;
 import static me.kahlil.graphics.Colors.RED;
-import static me.kahlil.scene.Materials.BASIC_GREEN;
+import static me.kahlil.scene.Materials.DUMMY_MATERIAL;
 
 import me.kahlil.geometry.ImmutableRayHit;
 import me.kahlil.geometry.Ray;
@@ -20,7 +20,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class PhongShadingTest {
 
-  private static final Sphere DUMMY_SPHERE = new Sphere(BASIC_GREEN);
+  private static final Sphere DUMMY_SPHERE = new Sphere(DUMMY_MATERIAL);
 
   /**
    * When computing the diffuse light at a point, it is possible that the dot product of the surface

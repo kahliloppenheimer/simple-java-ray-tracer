@@ -21,4 +21,9 @@ public final class Parameters {
 //  public static final int NUM_THREADS = Runtime.getRuntime().availableProcessors();
   public static final int NUM_THREADS = 1;
 
+  // Maximum number of shapes that can occur on a leaf.
+  public static final int OCTREE_MAX_SHAPES_PER_LEAF = 100;
+
+  // Maximum depth of the Octree.
+  public static final int OCTREE_MAX_DEPTH = 100;
 }

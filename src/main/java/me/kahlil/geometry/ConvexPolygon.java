@@ -5,15 +5,18 @@ import static me.kahlil.config.Counters.NUM_TRIANGLES;
 
 import java.util.Arrays;
 import java.util.Optional;
+import me.kahlil.octree.BoundsHelper;
 import me.kahlil.scene.Material;
 
 /** Shape representing a convex polygon. */
-public class ConvexPolygon extends Shape {
+public class ConvexPolygon extends Shape implements Polygon {
 
   private final Triangle[] triangles;
   private final BoundingVolume boundingVolume;
 
   // Min/max (x, y, z) that the ConvexPolygon occupies for forming a bounding volume.
+  private final Vector minBound;
+  private final Vector maxBound;
   private double minX = Integer.MAX_VALUE;
   private double minY = Integer.MAX_VALUE;
   private double minZ = Integer.MAX_VALUE;
@@ -40,7 +43,11 @@ public class ConvexPolygon extends Shape {
         convertVertexesToTriangles(material, vertexes, vertexNormals, faces, vertexIndexes);
     NUM_TRIANGLES.getAndAdd(triangles.length);
 
-    this.boundingVolume = new BoundingPlanarVolume(this);
+    Vector[] minMaxBounds = BoundsHelper.computeGlobalMinAndMax(triangles);
+    this.minBound = minMaxBounds[0];
+    this.maxBound = minMaxBounds[1];
+
+    this.boundingVolume = Extents.fromTriangles(getTriangles());
   }
 
   public static ConvexPolygon withSurfaceNormals(
@@ -106,8 +113,19 @@ public class ConvexPolygon extends Shape {
     return closestHit;
   }
 
+  @Override
   public Triangle[] getTriangles() {
     return this.triangles;
+  }
+
+  @Override
+  public Vector minBound() {
+    return new Vector(minX, minY, minZ);
+  }
+
+  @Override
+  public Vector maxBound() {
+    return new Vector(maxX, maxY, maxZ);
   }
 
   /**
@@ -196,7 +214,6 @@ public class ConvexPolygon extends Shape {
         vertexes[firstVertexIndex],
         vertexes[secondVertexIndex],
         vertexes[thirdVertexIndex]};
-    updateMinMaxCoordinates(triangleVertexes);
     if (vertexNormals.length == 0) {
       triangle =
           Triangle.withSurfaceNormals(
@@ -216,16 +233,4 @@ public class ConvexPolygon extends Shape {
     return triangle;
   }
 
-  private void updateMinMaxCoordinates(Vector[] triangleVertexes) {
-    for (Vector v : triangleVertexes) {
-      if (v.getX() < minX) { minX = v.getX(); }
-      if (v.getX() > maxX) { maxX = v.getX(); }
-
-      if (v.getY() < minY) { minY = v.getY(); }
-      if (v.getY() > maxY) { maxY = v.getY(); }
-
-      if (v.getZ() < minZ) { minZ = v.getZ(); }
-      if (v.getZ() > maxZ) { maxZ = v.getZ(); }
-    }
-  }
 }

@@ -4,7 +4,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
 import static me.kahlil.geometry.Constants.EPSILON;
 import static me.kahlil.geometry.LinearTransformation.translate;
-import static me.kahlil.scene.Materials.BASIC_GREEN;
+import static me.kahlil.scene.Materials.DUMMY_MATERIAL;
 
 import java.util.Optional;
 import java.util.Random;
@@ -16,7 +16,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class PolygonSphereTest {
 
-  private static final PolygonSphere unitSphere = PolygonSphere.withSurfaceNormals(BASIC_GREEN, 16);
+  private static final PolygonSphere unitSphere = PolygonSphere.withSurfaceNormals(DUMMY_MATERIAL, 16);
 
   @Test
   public void testRayIntersectFromInside() {

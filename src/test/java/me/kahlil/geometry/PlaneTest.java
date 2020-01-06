@@ -2,7 +2,7 @@ package me.kahlil.geometry;
 
 import static com.google.common.truth.Truth8.assertThat;
 import static com.google.common.truth.Truth.assertThat;
-import static me.kahlil.scene.Materials.BASIC_GREEN;
+import static me.kahlil.scene.Materials.DUMMY_MATERIAL;
 
 import java.util.Optional;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import org.junit.runners.JUnit4;
 public class PlaneTest {
 
   private static final Plane xzPlane =
-      new Plane(new Vector(0, 0, 0), new Vector(0, 1, 0), BASIC_GREEN);
+      new Plane(new Vector(0, 0, 0), new Vector(0, 1, 0), DUMMY_MATERIAL);
 
   @Test
   public void testPerfectlyNormalIntersection() {

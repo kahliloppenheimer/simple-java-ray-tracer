@@ -1,6 +1,8 @@
 package me.kahlil.geometry;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static java.lang.Double.NEGATIVE_INFINITY;
+import static java.lang.Double.POSITIVE_INFINITY;
 import static java.lang.Math.abs;
 import static me.kahlil.config.Counters.NUM_TRIANGLE_INTERSECTIONS;
 import static me.kahlil.config.Counters.NUM_TRIANGLE_TESTS;
@@ -10,7 +12,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import me.kahlil.scene.Material;
 
-public class Triangle extends Shape {
+public class Triangle extends Shape implements Polygon {
 
   private final Material material;
 
@@ -19,6 +21,9 @@ public class Triangle extends Shape {
 
   // Array of size 3 containing the vertex normals of the triangle.
   private final Vector[] vertexNormals;
+
+  private final Vector minBound;
+  private final Vector maxBound;
 
   private Triangle(
       Material material,
@@ -29,6 +34,10 @@ public class Triangle extends Shape {
     this.material = material;
     this.vertexes = vertexes;
     this.vertexNormals = vertexNormals;
+
+    double[][] minMaxBounds = computeMinMaxBounds();
+    this.minBound = new Vector(minMaxBounds[0][0], minMaxBounds[0][1], minMaxBounds[0][2]);
+    this.maxBound = new Vector(minMaxBounds[1][0], minMaxBounds[1][1], minMaxBounds[1][2]);
   }
 
   public static Triangle withSurfaceNormals(
@@ -112,6 +121,21 @@ public class Triangle extends Shape {
   }
 
   @Override
+  public Triangle[] getTriangles() {
+    return new Triangle[]{this};
+  }
+
+  @Override
+  public Vector minBound() {
+    return this.minBound;
+  }
+
+  @Override
+  public Vector maxBound() {
+    return this.maxBound;
+  }
+
+  @Override
   public String toString() {
     return String.format("Triangle[%s %s %s]", vertexes[0], vertexes[1], vertexes[2]);
   }
@@ -125,5 +149,45 @@ public class Triangle extends Shape {
     checkArgument(0 <= w && w <= 1);
 
     return normals[0].scale(w).add(normals[1].scale(u)).add(normals[2].scale(v));
+  }
+
+
+  private double[][] computeMinMaxBounds() {
+    double[] minXyz = new double[3];
+    Arrays.fill(minXyz, POSITIVE_INFINITY);
+    double[] maxXyz = new double[3];
+    Arrays.fill(maxXyz, NEGATIVE_INFINITY);
+
+    for (Vector vertex : vertexes) {
+      for (int i = 0; i < 3; i++) {
+        if (vertex.getComponent(i) < minXyz[i]) {
+          minXyz[i] = vertex.getComponent(i);
+        }
+        if (vertex.getComponent(i) > maxXyz[i]) {
+          maxXyz[i] = vertex.getComponent(i);
+        }
+      }
+    }
+    return new double[][]{minXyz, maxXyz};
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Triangle triangle = (Triangle) o;
+    return Arrays.equals(vertexes, triangle.vertexes) &&
+        Arrays.equals(vertexNormals, triangle.vertexNormals);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = Arrays.hashCode(vertexes);
+    result = 31 * result + Arrays.hashCode(vertexNormals);
+    return result;
   }
 }

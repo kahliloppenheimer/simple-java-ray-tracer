@@ -117,9 +117,9 @@ public class Vector {
 
   public Vector average(Vector other) {
     return new Vector(
-        getX() + other.getX() / 2,
-        getY() + other.getY() / 2,
-        getZ() + other.getZ() / 2);
+        (getX() + other.getX()) * 0.5,
+        (getY() + other.getY()) * 0.5,
+        (getZ() + other.getZ()) * 0.5);
   }
 
   /**

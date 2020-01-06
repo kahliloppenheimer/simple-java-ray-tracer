@@ -5,7 +5,7 @@ import static com.google.common.truth.Truth8.assertThat;
 import static me.kahlil.geometry.Constants.EPSILON;
 import static me.kahlil.geometry.Constants.ORIGIN;
 import static me.kahlil.geometry.LinearTransformation.translate;
-import static me.kahlil.scene.Materials.BASIC_GREEN;
+import static me.kahlil.scene.Materials.DUMMY_MATERIAL;
 
 import java.util.Optional;
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class ConvexPolygonTest {
 
   @Test
   public void basicCube_middleIntersectionIsCorrect() {
-    ConvexPolygon polygon = ConvexPolygon.cube(BASIC_GREEN).transform(translate(0, 0, -1));
+    ConvexPolygon polygon = ConvexPolygon.cube(DUMMY_MATERIAL).transform(translate(0, 0, -1));
 
     Ray downZAxis = new Ray(ORIGIN, new Vector(0, 0, -1));
     Optional<RayHit> hit = polygon.intersectWith(downZAxis);
@@ -41,7 +41,7 @@ public class ConvexPolygonTest {
 
   @Test
   public void basicCube_bottomLeftCorner_intersectionsAreCorrect() {
-    ConvexPolygon polygon = ConvexPolygon.cube(BASIC_GREEN).transform(translate(0, 0, -1));
+    ConvexPolygon polygon = ConvexPolygon.cube(DUMMY_MATERIAL).transform(translate(0, 0, -1));
 
     Ray inside = new Ray(ORIGIN, BOTTOM_LEFT.translate(EPSILON, EPSILON));
     Ray leftOf = new Ray(ORIGIN, BOTTOM_LEFT.translate(-1 * EPSILON, EPSILON));
@@ -54,7 +54,7 @@ public class ConvexPolygonTest {
 
   @Test
   public void basicCube_bottomRightCorner_intersectionsAreCorrect() {
-    ConvexPolygon polygon = ConvexPolygon.cube(BASIC_GREEN).transform(translate(0, 0, -1));
+    ConvexPolygon polygon = ConvexPolygon.cube(DUMMY_MATERIAL).transform(translate(0, 0, -1));
 
     Ray inside = new Ray(ORIGIN, BOTTOM_RIGHT.translate(-1 * EPSILON, EPSILON));
     Ray rightOf = new Ray(ORIGIN, BOTTOM_RIGHT.translate(EPSILON, EPSILON));
@@ -67,7 +67,7 @@ public class ConvexPolygonTest {
 
   @Test
   public void basicCube_topRightCorner_intersectionsAreCorrect() {
-    ConvexPolygon polygon = ConvexPolygon.cube(BASIC_GREEN).transform(translate(0, 0, -1));
+    ConvexPolygon polygon = ConvexPolygon.cube(DUMMY_MATERIAL).transform(translate(0, 0, -1));
     Ray inside = new Ray(ORIGIN, TOP_RIGHT.translate(-1 * EPSILON, -1 * EPSILON));
     Ray rightOf = new Ray(ORIGIN, TOP_RIGHT.translate(EPSILON, -1 * EPSILON));
     Ray above = new Ray(ORIGIN, TOP_RIGHT.translate(-1 * EPSILON, EPSILON));
@@ -79,7 +79,7 @@ public class ConvexPolygonTest {
 
   @Test
   public void basicCube_topLeftCorner_intersectionsAreCorrect() {
-    ConvexPolygon polygon = ConvexPolygon.cube(BASIC_GREEN).transform(translate(0, 0, -1));
+    ConvexPolygon polygon = ConvexPolygon.cube(DUMMY_MATERIAL).transform(translate(0, 0, -1));
     Ray inside = new Ray(ORIGIN, TOP_LEFT.translate(EPSILON, -1 * EPSILON));
     Ray leftOf = new Ray(ORIGIN, TOP_LEFT.translate(-1, -1 * EPSILON));
     Ray above = new Ray(ORIGIN, TOP_LEFT.translate(EPSILON, EPSILON));

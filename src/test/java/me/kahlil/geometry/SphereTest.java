@@ -4,7 +4,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
 import static me.kahlil.geometry.Constants.EPSILON;
 import static me.kahlil.geometry.LinearTransformation.translate;
-import static me.kahlil.scene.Materials.BASIC_GREEN;
+import static me.kahlil.scene.Materials.DUMMY_MATERIAL;
 
 import java.util.Optional;
 import java.util.Random;
@@ -16,7 +16,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class SphereTest {
 
-  private static final Sphere unitSphere = new Sphere(BASIC_GREEN);
+  private static final Sphere unitSphere = new Sphere(DUMMY_MATERIAL);
 
   @Test
   public void testRayIntersectFromInside() {
@@ -56,7 +56,7 @@ public class SphereTest {
 
   @Test
   public void edgeTest() {
-    Sphere sphere = new Sphere(BASIC_GREEN).transform(translate(1.0, 0.0, -1.0));
+    Sphere sphere = new Sphere(DUMMY_MATERIAL).transform(translate(1.0, 0.0, -1.0));
 
     Ray towardsMiddle = new Ray(new Vector(0, 0, 0), new Vector(1.0, 0.0, -1.0));
     Ray insideEdge = new Ray(

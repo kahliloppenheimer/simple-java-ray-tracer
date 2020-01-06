@@ -14,7 +14,7 @@ public final class Materials {
       .setSpecularIntensity(1.0)
       .build();
 
-  public static Material BASIC_GREEN = ImmutableMaterial.builder()
+  public static Material DUMMY_MATERIAL = ImmutableMaterial.builder()
       .setColor(GREEN)
       .setHardness(200)
       .setSpecularIntensity(0.5f)

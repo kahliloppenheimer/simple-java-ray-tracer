@@ -12,7 +12,7 @@ import static me.kahlil.geometry.LinearTransformation.rotateAboutZAxis;
 import static me.kahlil.geometry.LinearTransformation.scale;
 import static me.kahlil.geometry.LinearTransformation.translate;
 import static me.kahlil.scene.Cameras.STANDARD_CAMERA;
-import static me.kahlil.scene.Materials.BASIC_GREEN;
+import static me.kahlil.scene.Materials.DUMMY_MATERIAL;
 
 import me.kahlil.graphics.MutableColor;
 import java.util.Arrays;
@@ -78,10 +78,10 @@ public class ShapeTest {
 
   @Test
   public void sphereRotationDoesNotAffectRayNormal() {
-    Sphere notRotated = new Sphere(BASIC_GREEN).transform(translate(0.0, 0.0, -2.0));
+    Sphere notRotated = new Sphere(DUMMY_MATERIAL).transform(translate(0.0, 0.0, -2.0));
 
     Sphere rotated =
-        new Sphere(BASIC_GREEN)
+        new Sphere(DUMMY_MATERIAL)
             .transform(rotateAboutXAxis(90))
             .transform(translate(0.0, 0.0, -2.0));
 
@@ -100,10 +100,10 @@ public class ShapeTest {
 
   @Test
   public void sphereRotationDoesNotAffectShading() {
-    Sphere notRotated = new Sphere(BASIC_GREEN).transform(translate(0.0, 0.0, -2.0));
+    Sphere notRotated = new Sphere(DUMMY_MATERIAL).transform(translate(0.0, 0.0, -2.0));
 
     Sphere rotated =
-        new Sphere(BASIC_GREEN)
+        new Sphere(DUMMY_MATERIAL)
             .transform(rotateAboutXAxis(90))
             .transform(translate(0.0, 0.0, -2.0));
 
@@ -122,7 +122,7 @@ public class ShapeTest {
   @Test
   public void sphereScaling() {
     Sphere scaled =
-        new Sphere(BASIC_GREEN)
+        new Sphere(DUMMY_MATERIAL)
             .transform(translate(1.0, 0.0, -1.0))
             .transform(scale(0.1));
 

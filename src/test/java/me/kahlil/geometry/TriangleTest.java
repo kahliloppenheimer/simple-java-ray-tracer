@@ -3,7 +3,7 @@ package me.kahlil.geometry;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
 import static me.kahlil.geometry.Constants.ORIGIN;
-import static me.kahlil.scene.Materials.BASIC_GREEN;
+import static me.kahlil.scene.Materials.DUMMY_MATERIAL;
 
 import java.util.Optional;
 import junitparams.JUnitParamsRunner;
@@ -21,11 +21,11 @@ public class TriangleTest {
   // Triangle placed 1 unit backwards down the z axis and centered around it.
   private static final Triangle CENTERED_ON_NEGATIVE_Z_AXIS =
       Triangle.withSurfaceNormals(
-          BASIC_GREEN, vertexes);
+          DUMMY_MATERIAL, vertexes);
 
   private static final Triangle WITH_VERTEX_NORMALS =
       Triangle.withVertexNormals(
-          BASIC_GREEN, vertexes, vertexes);
+          DUMMY_MATERIAL, vertexes, vertexes);
 
   // JUnitParamsRunner way of providing both triangles (with surface and vertex normals) to be
   // passed along to tests, since all should perform equivalently, with the exception of normal
@@ -79,12 +79,12 @@ public class TriangleTest {
     Vector[] vertexes = {new Vector(-1, 0, -1), new Vector(0, 0, -2), new Vector(1, 0, -1)};
     Triangle onXZPlane =
         Triangle.withSurfaceNormals(
-            BASIC_GREEN,
+            DUMMY_MATERIAL,
             vertexes);
 
     Triangle onXZPlane2 =
         Triangle.withVertexNormals(
-            BASIC_GREEN, vertexes, vertexes);
+            DUMMY_MATERIAL, vertexes, vertexes);
 
     assertThat(onXZPlane.intersectInObjectSpace(downZAxis)).isEmpty();
     assertThat(onXZPlane2.intersectInObjectSpace(downZAxis)).isEmpty();
@@ -97,14 +97,23 @@ public class TriangleTest {
     Vector[] vertexes = {new Vector(-1, 0.1, -1), new Vector(0, -0.1, -2), new Vector(1, 0, -1)};
     Triangle almostOnXzPlane =
         Triangle.withSurfaceNormals(
-            BASIC_GREEN,
+            DUMMY_MATERIAL,
             vertexes);
 
     Triangle almostOnXzPlane2 =
-        Triangle.withVertexNormals(BASIC_GREEN, vertexes, vertexes);
+        Triangle.withVertexNormals(DUMMY_MATERIAL, vertexes, vertexes);
 
     assertThat(almostOnXzPlane.intersectInObjectSpace(downZAxis)).isPresent();
     assertThat(almostOnXzPlane2.intersectInObjectSpace(downZAxis)).isPresent();
+  }
+
+  @Test
+  public void boundsComputedCorrectly() {
+    Triangle t = Triangle.withSurfaceNormals(
+        DUMMY_MATERIAL, new Vector(-5, 0, 2), new Vector(-3, 3, 3), new Vector(8, 2, 5));
+
+    assertThat(t.minBound()).isEqualTo(new Vector(-5, 0, 2));
+    assertThat(t.maxBound()).isEqualTo(new Vector(8, 3, 5));
   }
 
 }

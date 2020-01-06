@@ -9,6 +9,8 @@ import static me.kahlil.config.Counters.NUM_BOUNDING_INTERSECTIONS;
 import static me.kahlil.config.Counters.NUM_BOUNDING_INTERSECTION_TESTS;
 import static me.kahlil.geometry.Constants.EPSILON;
 
+import java.util.Arrays;
+
 /**
  * Bounding volume for containing any amount of polygons.
  *
@@ -16,7 +18,7 @@ import static me.kahlil.geometry.Constants.EPSILON;
  *
  * <p>https://www.scratchapixel.com/lessons/advanced-rendering/introduction-acceleration-structure/bounding-volume-hierarchy-BVH-part1
  */
-public class BoundingPlanarVolume implements BoundingVolume {
+public class Extents implements BoundingVolume {
 
   private static final double A = sqrt(3) / 3;
   private static final double B = -1.0 * A;
@@ -36,11 +38,18 @@ public class BoundingPlanarVolume implements BoundingVolume {
   private final double[] dNear;
   private final double[] dFar;
 
-  public BoundingPlanarVolume(ConvexPolygon polygon) {
-    dNear = new double[PLANE_SET_NORMALS.length];
-    dFar = new double[PLANE_SET_NORMALS.length];
+  public static Extents fromPolygon(Polygon polygon) {
+    return Extents.fromTriangles(polygon.getTriangles());
+  }
 
-    initializeBoundingDistances(polygon, dNear, dFar);
+  public static Extents fromTriangles(Triangle[] triangles) {
+    double[][] dNearAndDFar = computeDNearAndDFar(triangles);
+    return new Extents(dNearAndDFar[0], dNearAndDFar[1]);
+  }
+
+  private Extents(double[] dNear, double[] dFar) {
+    this.dNear = dNear;
+    this.dFar = dFar;
   }
 
   /**
@@ -74,11 +83,33 @@ public class BoundingPlanarVolume implements BoundingVolume {
     return true;
   }
 
-  private static void initializeBoundingDistances(
-      ConvexPolygon polygon, double[] dNear, double[] dFar) {
+  /**
+   * Returns an {@link Extents} bounding the union of the two volumes.
+   */
+  public Extents union(Extents other) {
+    double[] dNear = new double[PLANE_SET_NORMALS.length];
+    double[] dFar = new double[PLANE_SET_NORMALS.length];
+    for (int i = 0; i < PLANE_SET_NORMALS.length; i++) {
+      dNear[i] = Math.min(this.dNear[i], other.dNear[i]);
+      dFar[i] = Math.max(this.dFar[i], other.dFar[i]);
+    }
+    return new Extents(dNear, dFar);
+  }
+
+  /**
+   * Returns the d-near and d-far computation necessary to represent the extents. The first element
+   * in the returned array is d-near and the second is d-far.
+   */
+  private static double[][] computeDNearAndDFar(
+      Triangle[] triangles) {
+    double[] dNear = new double[PLANE_SET_NORMALS.length];
+    Arrays.fill(dNear, POSITIVE_INFINITY);
+    double[] dFar = new double[PLANE_SET_NORMALS.length];
+    Arrays.fill(dFar, NEGATIVE_INFINITY);
+
     for (int i = 0; i < PLANE_SET_NORMALS.length; i++) {
       Vector planeNormal = PLANE_SET_NORMALS[i];
-      for (Triangle triangle : polygon.getTriangles()) {
+      for (Triangle triangle : triangles) {
         for (Vector vertex : triangle.getVertexes()) {
           double d = vertex.dot(planeNormal);
           if (d < dNear[i]) {
@@ -90,5 +121,6 @@ public class BoundingPlanarVolume implements BoundingVolume {
         }
       }
     }
+    return new double[][]{dNear, dFar};
   }
 }
