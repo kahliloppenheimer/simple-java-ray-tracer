@@ -1,9 +1,10 @@
 package me.kahlil.geometry;
 
-import java.util.Optional;
-
 public interface BoundingVolume {
 
-   Optional<RayHit> intersectWithBoundingVolume(Ray ray);
+   /**
+    * Returns time of intersection with bounding volume. -1 if no intersection occurs.
+    */
+   double intersectWithBoundingVolume(Ray ray);
 
 }

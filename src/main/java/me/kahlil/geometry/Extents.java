@@ -9,7 +9,6 @@ import static java.lang.Math.sqrt;
 import static me.kahlil.config.Counters.NUM_BOUNDING_INTERSECTIONS;
 import static me.kahlil.config.Counters.NUM_BOUNDING_INTERSECTION_TESTS;
 import static me.kahlil.geometry.Constants.EPSILON;
-import static me.kahlil.scene.Materials.DUMMY_MATERIAL;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -23,7 +22,7 @@ import java.util.Optional;
  */
 public class Extents implements BoundingVolume, Intersectable {
 
-  private static final Extents EMPTY = new Extents(new double[]{}, new double[]{});
+  private static final Extents EMPTY = new Extents(new double[] {}, new double[] {});
 
   private static final double A = sqrt(3) / 3;
   private static final double B = -1.0 * A;
@@ -87,11 +86,10 @@ public class Extents implements BoundingVolume, Intersectable {
    * describing the intersection with the original bounded shape.
    */
   @Override
-  public Optional<RayHit> intersectWithBoundingVolume(Ray ray) {
+  public double intersectWithBoundingVolume(Ray ray) {
     NUM_BOUNDING_INTERSECTION_TESTS.getAndIncrement();
     double timeNearMax = NEGATIVE_INFINITY;
     double timeFarMin = POSITIVE_INFINITY;
-    int closestPlaneNormal = 0;
     for (int i = 0; i < PLANE_SET_NORMALS.length; i++) {
       double numerator = PLANE_SET_NORMALS[i].dot(ray.getStart());
       double denominator = PLANE_SET_NORMALS[i].dot(ray.getDirection());
@@ -107,23 +105,15 @@ public class Extents implements BoundingVolume, Intersectable {
       double actualTimeNear = min(timeNear, timeFar);
       timeFarMin = min(timeFarMin, max(timeNear, timeFar));
       if (actualTimeNear > timeNearMax) {
-        closestPlaneNormal = i;
         timeNearMax = actualTimeNear;
       }
 
       if (timeNearMax > timeFarMin) {
-        return Optional.empty();
+        return -1;
       }
     }
     NUM_BOUNDING_INTERSECTIONS.getAndIncrement();
-    return Optional.of(ImmutableRayHit.builder()
-        .setRay(ray)
-        .setObject(this)
-        .setTime(timeNearMax)
-        .setMaterial(DUMMY_MATERIAL)
-        .setNormal(PLANE_SET_NORMALS[closestPlaneNormal])
-        .build()
-    );
+    return timeNearMax;
   }
 
   /** Returns an {@link Extents} bounding the union of the two volumes. */

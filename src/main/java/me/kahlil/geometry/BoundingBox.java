@@ -4,16 +4,12 @@ import static java.lang.Double.NEGATIVE_INFINITY;
 import static java.lang.Double.POSITIVE_INFINITY;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import static me.kahlil.geometry.Constants.ORIGIN;
-import static me.kahlil.scene.Materials.DUMMY_MATERIAL;
-
-import java.util.Optional;
 
 /**
  * Intersection borrowed from:
  * https://tavianator.com/fast-branchless-raybounding-box-intersections-part-2-nans/
  * */
-public final class BoundingBox implements BoundingVolume, Intersectable {
+public final class BoundingBox implements BoundingVolume {
 
   private final Vector minBound;
   private final Vector maxBound;
@@ -24,12 +20,7 @@ public final class BoundingBox implements BoundingVolume, Intersectable {
   }
 
   @Override
-  public Optional<RayHit> intersectWith(Ray ray) {
-    return intersectWithBoundingVolume(ray);
-  }
-
-  @Override
-  public Optional<RayHit> intersectWithBoundingVolume(Ray ray) {
+  public double intersectWithBoundingVolume(Ray ray) {
     double tmin = NEGATIVE_INFINITY, tmax = POSITIVE_INFINITY;
 
     for (int i = 0; i < 3; ++i) {
@@ -40,15 +31,8 @@ public final class BoundingBox implements BoundingVolume, Intersectable {
       tmax = min(tmax, max(t1, t2));
     }
     if (tmax < max(tmin, 0.0)) {
-      return Optional.empty();
+      return -1;
     }
-    return Optional.of(ImmutableRayHit.builder()
-        .setRay(ray)
-        // Dummy value until I figure out how to compute this.
-        .setNormal(ORIGIN)
-        .setTime(tmin)
-        .setObject(this)
-        .setMaterial(DUMMY_MATERIAL)
-        .build());
+    return tmin;
   }
 }

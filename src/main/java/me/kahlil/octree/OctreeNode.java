@@ -9,9 +9,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.PriorityQueue;
@@ -63,7 +61,7 @@ final class OctreeNode<T extends Polygon> implements Intersectable {
   @Override
   public Optional<RayHit> intersectWith(Ray ray) {
     // Return empty if ray does not intersect with net extents at all for this node.
-    if (totalExtents.intersectWithBoundingVolume(ray).isEmpty()) {
+    if (totalExtents.intersectWithBoundingVolume(ray) < 0) {
       return Optional.empty();
     }
     // Otherwise, see if this node stores any local polygons we need to check against.
@@ -75,40 +73,53 @@ final class OctreeNode<T extends Polygon> implements Intersectable {
     // Finally, intersections of all children. But, do so according in the order of closest-children
     // first by computing the intersection distance to each child extents, as the closer bounding
     // distances will be more likely to contain the correct triangle.
-    Map<OctreeNode<T>, RayHit> childExtentsIntersections = intersectWithChildExtents(ray);
-    if (childExtentsIntersections.isEmpty()) {
+    double[] childExtentsIntersections = intersectWithChildExtents(ray);
+    int numIntersections = 0;
+    for (double t : childExtentsIntersections) {
+      if (t > 0) {
+        numIntersections++;
+      }
+    }
+    if (numIntersections == 0) {
       return closest;
     }
+    PriorityQueue<Integer> childrenQueue = new PriorityQueue<>(
+        numIntersections,
+        comparingDouble(childIndex -> childExtentsIntersections[childIndex]));
 
-    PriorityQueue<OctreeNode<T>> childrenQueue = new PriorityQueue<>(
-        childExtentsIntersections.size(),
-        comparingDouble(child -> childExtentsIntersections.get(child).getTime()));
-    childrenQueue.addAll(childExtentsIntersections.keySet());
+    for (int i = 0; i < children.length; i++) {
+      if (children[i] != null) {
+        childrenQueue.add(i);
+      }
+    }
 
     while (!childrenQueue.isEmpty()) {
-      OctreeNode<T> child = childrenQueue.remove();
-      Optional<RayHit> shapeHit = child.intersectWith(ray);
+      int childIndex = childrenQueue.remove();
+      Optional<RayHit> shapeHit = children[childIndex].intersectWith(ray);
       closest = pickHitWithLowestTime(closest, shapeHit);
-      if (closest.isPresent() && !childrenQueue.isEmpty() && closest.get().getTime() < childExtentsIntersections.get(childrenQueue.peek()).getTime()) {
+      if (closest.isPresent() && !childrenQueue.isEmpty() && closest.get().getTime() < childExtentsIntersections[childrenQueue.peek()]) {
         return closest;
       }
     }
     return closest;
   }
 
-  private Map<OctreeNode<T>, RayHit> intersectWithChildExtents(Ray ray) {
-    Map<OctreeNode<T>, RayHit> childrenToExtentsIntersections = new HashMap<>();
-    for (OctreeNode<T> child : children) {
-      if (child == null) {
+  /**
+   * Returns a double[] where the value at index i is the time of intersection with the child at
+   * index i in children.
+   */
+  private double[] intersectWithChildExtents(Ray ray) {
+    double[] childExtentsIntersections = new double[children.length];
+    for (int i = 0; i < children.length; i++) {
+      if (children[i] == null) {
         continue;
       }
-      child.intersectWithExtents(ray)
-          .ifPresent(rayHit -> childrenToExtentsIntersections.put(child, rayHit));
+      childExtentsIntersections[i] = children[i].intersectWithExtents(ray);
     }
-    return childrenToExtentsIntersections;
+    return childExtentsIntersections;
   }
 
-  Optional<RayHit> intersectWithExtents(Ray ray) {
+  double intersectWithExtents(Ray ray) {
     return totalExtents.intersectWithBoundingVolume(ray);
   }
 
